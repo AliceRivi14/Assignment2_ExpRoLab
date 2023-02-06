@@ -37,7 +37,7 @@ Robot = 'Robot1'
 class Topological_Map:
     def __init__(self):
 
-        # Initialisation service and client
+        # Initialisation service and subscriber
         rospy.Subscriber("/MarkerList", Int32MultiArray, self.IDCallback)
         Map_srv = rospy.Service('/Mapping_Switch', SetBool, self.MappingSwitchCB)
 
@@ -51,7 +51,7 @@ class Topological_Map:
         self.LocationCoord = {}
         self.CoordinatesLoc = {}
 
-
+    # Service callback
     def MappingSwitchCB(self,req):
         """
         Function to load the topological map using the aRMOR client.
@@ -113,9 +113,12 @@ class Topological_Map:
 
         res = SetBoolResponse()
         res.message = 'MAP BUILT'
-        res.success = True # Service enable
+        res.success = True
 
-        #rospy.loginfo('MAP BUILT')
+        rospy.loginfo(f'{res.message}')
+
+        Active = False
+
         return res
 
     # Marker service callback
@@ -137,10 +140,7 @@ if __name__ == "__main__":
         if Active == False:
             #print('PROBLEMI')
             continue
-        else:
-            rospy.loginfo('I NEED A TOPOLOGICAL MAP')
-            #TopMap.LoadMap()
-            Active = False
+
 
         # Wait for ctrl-c to stop the application
         rospy.spin()

@@ -59,7 +59,7 @@ def Update_Time():
 # REASONER
 def MoveRobot(Location):
     """
-    Function to move the robot to the chosen location.
+    Function to update information about the chosen location where the robot is to move.
 
     Args:
         Location (string): location where the robot is to move
@@ -70,7 +70,7 @@ def MoveRobot(Location):
     # Replacing the previous location with the one the robot moved to
     Armor_Client.call('REPLACE', 'OBJECTPROP', 'IND', ['isIn', Robot, Location, Old_Loc])
     # Time when the robot visited the last location
-    Old = str(CleanList(self.Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['visitedAt', Location]))[0])
+    Old = str(CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['visitedAt', Location]))[0])
     # Time in which the robot visits the current location
     New = str(round(time.time()))
 

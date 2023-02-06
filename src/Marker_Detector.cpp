@@ -138,10 +138,9 @@ int main(int argc, char **argv){
       MarkDetectClass.DetectMarker();
     }
     std_msgs::Int32MultiArray ArrList;
-    for (int const &i: List){
+    for(int const &i: List){
       ArrList.data.push_back(i);
     }
-    cout << MarkDetectClass.TotMarket << endl;
     MarkDetectClass.Pub_MList.publish(ArrList);
 
     ros::AsyncSpinner spinner(1);

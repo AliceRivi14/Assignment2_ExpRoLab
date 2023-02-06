@@ -56,10 +56,10 @@ def Battery_State(req):
     """
     global B_Low
 
+    rospy.loginfo('RECHARGE REQUEST')
     B_Low = req.B_Low
     res = BatteryLowResponse()
     res.B_State = True  # Full battery
-    rospy.loginfo('RECHARGE REQUEST')
     return res
 
 def ChangeState(State):
@@ -120,13 +120,13 @@ class TOPOLOGICAL_MAP(smach.State):
         """
         rospy.loginfo('Executing state TOPOLOGICAL_MAP')
         ChangeState(1)
-        time.sleep(5)
+        time.sleep(3)
         resp = Map_Client()
-        #if resp.success == True:
-        #    return 'map_OK'
-        #else:
-        time.sleep(5)
-        return 'wait'
+        if resp.success == True:
+            return 'map_OK'
+        else:
+            time.sleep(5)
+            return 'wait'
 
 # State RANDOM_MOVEMENT
 class CHOOSE_DESTINATION(smach.State):
@@ -175,7 +175,7 @@ class RANDOM_MOVEMENT(smach.State):
 
         """
         smach.State.__init__(self,
-                            outcomes = ['b_low', 'move'])
+                            outcomes = ['b_low', 'move', 'wait'])
     # Execution function
     def execute(self, userdata):
         """
@@ -192,10 +192,14 @@ class RANDOM_MOVEMENT(smach.State):
         rospy.loginfo('Executing state RANDOM_MOVEMENT')
         ChangeState(2)
         time.sleep(5)
+        resp = Movement_Client()
         if B_Low == True:   # Recharging required
             return 'b_low'
+        #elif resp.success == True:
+        #    return 'move'
         else:
-            return 'move'
+            time.sleep(5)
+            return 'wait'
 
 # State ROOM_E
 class ROOM_E(smach.State):
@@ -269,7 +273,8 @@ def main():
 
             smach.StateMachine.add('RANDOM_MOVEMENT', RANDOM_MOVEMENT(),
                                     transitions = {'b_low': 'recharging',
-                                                   'move': 'CHOOSE_DESTINATION'})
+                                                   'move': 'CHOOSE_DESTINATION',
+                                                   'wait': 'RANDOM_MOVEMENT'})
 
         smach.StateMachine.add('SURVEILLANCE', SubSM,
                                 transitions = {'recharging': 'ROOM_E'})

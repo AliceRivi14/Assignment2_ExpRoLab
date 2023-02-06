@@ -25,13 +25,16 @@ import rospy
 import time
 import random
 from std_srvs.srv import *
-from assignment1.srv import BatteryLow, BatteryLowResponse
+from std_msgs.msg import Int32MultiArray
+from assignment2.srv import *
 from armor_api.armor_client import ArmorClient
 
 import Functions as F
+import RandomMovement as RM
 
 B_Client = None
 Active = False
+BLev = 100
 
 # Service callback
 def BatterySwitchCB(req):
@@ -54,6 +57,13 @@ def BatterySwitchCB(req):
     res.success = True # Service enable
     return res
 
+def B_LevelCB(data):
+
+    global BLev
+    BLev -= data
+
+    return BLev
+
 def main():
     """
     This function initializes the ROS node, client and service.
@@ -63,29 +73,34 @@ def main():
     When the service /Recharging_Switch is called, battery charging is simulated.
     """
     global B_Client
-    global Active
+    global Active, BLev
 
     # Initialisation node
     rospy.init_node('Battery')
 
-    # Initialisation clients and service
-    srv = rospy.Service('/Recharging_Switch', SetBool, BatterySwitchCB)
+    # Initialisation
+    Batt_srv = rospy.Service('/Recharging_Switch', SetBool, BatterySwitchCB)
     B_Client = rospy.ServiceProxy('/B_Switch', BatteryLow)
 
+    Sub_BLevel = rospy.Subscriber('/B_Level', Int32MultiArray, B_LevelCB)
 
-# MODIFICARE CODICE PER SIMULARE SCARICA DELLA BATTERIA IN MODO PIÙ REALISTICO
-# IN BASE AL TEMPO OPPURE AL MOVIMENTO
+    Mov = RM.RandomMovement()
+
     while not rospy.is_shutdown():
 
         if Active == False:
-            time.sleep(random.uniform(5.0, 10.0))
-            resp = B_Client(True) # Recharging required
-            rospy.loginfo('I NEED TO BE RECHARGED')
+            if BLev <= 10:
+                rospy.loginfo(f'Battery level = {BLev}%')
+                rospy.loginfo('I NEED TO BE RECHARGED')
+                resp = B_Client(True)                      # Recharging required
             continue
         else:
             rospy.loginfo('BATTERY LOW')
-            F.MoveRobot('E')
-            time.sleep(1.5)
+            Mov.MoveBaseA('E')
+            while (BLev != 100):
+                rospy.loginfo(f'Battery_level = {BLev}%')
+                BLev += 10
+                rospy.loginfo(f'Battery_level = {BLev}%')
             rospy.loginfo(f'BATTERY FULL')
             resp = B_Client(False)
 
