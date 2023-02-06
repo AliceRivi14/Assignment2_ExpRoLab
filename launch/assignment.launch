@@ -1,0 +1,13 @@
+<launch>
+
+  <!-- MarkerDetector -->
+ <node name="marker_server" pkg="assignment2" type="marker_server" />
+ <node name="Marker_Detector" pkg="assignment2" type="Marker_Detector" launch-prefix="gnome-terminal --command"   output = "screen"/>
+
+ <!-- StateMachine -->
+ <node name = "TopologicalMap" pkg = "assignment2" type = "TopologicalMap.py" launch-prefix="gnome-terminal --command" output = "screen" />
+ <node name = "RandomMovement" pkg = "assignment2" type = "RandomMovement.py" launch-prefix="gnome-terminal --command" output = "screen" />
+ <node name = "Battery" pkg = "assignment2" type = "Battery.py" launch-prefix="gnome-terminal --command" output = "screen" />
+ <node name = "StateMachine" pkg = "assignment2" type = "StateMachine.py" launch-prefix="gnome-terminal --command" output = "screen" />
+
+</launch>
