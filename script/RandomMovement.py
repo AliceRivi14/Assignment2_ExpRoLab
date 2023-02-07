@@ -159,7 +159,6 @@ if __name__ == "__main__":
     # When the service /Movement_Switch is called, node manager class is instantiated
     while not rospy.is_shutdown():
         if Active == False:
-            print("M")
             continue
 
         # Wait for ctrl-c to stop the application
