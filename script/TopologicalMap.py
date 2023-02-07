@@ -45,13 +45,13 @@ class Topological_Map:
         self.Armor_ReferenceName = 'Ref'
         self.Armor_Client = ArmorClient(self.Armor_Client_ID, self.Armor_ReferenceName)
 
-        self.IdList = []
-        self.Location = []
-        self.LocationDict = {}
-        self.LocationCoord = {}
-        self.CoordinatesLoc = {}
+        self.IdList = []            # List of markers
+        self.Location = []          # List of rooms
+        self.LocationDict = {}      # Dictionary of rooms and their connections
+        self.LocationCoord = {}     # Dictionary of rooms and their coordinates
+        self.CoordinatesLoc = {}    # Dictionary of coordinates and their rooms    
 
-    # Service callback
+    # /Mapping_Swit service callback
     def MappingSwitchCB(self,req):
         """
         Function to load the topological map using the aRMOR client.
@@ -135,10 +135,10 @@ if __name__ == "__main__":
     rospy.init_node('TopologicalMap')
 
     TopMap = Topological_Map()
+
     # When the service /Mapping_Switch is called, node manager class is instantiated
     while not rospy.is_shutdown():
         if Active == False:
-            #print('PROBLEMI')
             continue
 
 

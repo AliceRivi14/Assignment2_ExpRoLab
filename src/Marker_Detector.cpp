@@ -89,19 +89,21 @@ void MarkerDetectorClass::DetectMarker(){
 
   std_msgs::Float64 Omega;
 
+  cout << "SONO QUA" << endl;
+
   Group.setNamedTarget("HomePose");
   Group.move();
-  sleep(5);
   cout << "HomePose" << endl;
   // RGB camera rotation around the z-axis
   for(Omega.data = 0.0; Omega.data <= 2*M_PI; Omega.data += M_PI/12){
+    cout << "OMEGA: " << Omega.data << endl;
     Pub_PoseCamera.publish(Omega);
   }
   cout << "Marker found: " << TotMarket << endl;
 
-  Group.setNamedTarget("LowPose");
+  Group.setNamedTarget("LowPose");  // PROBLEMA COLLISIONE??
   Group.move();
-  sleep(5);
+  sleep(0.5);
   cout << "LowPose" << endl;
   // RGB camera rotation around the z-axis
   for(Omega.data = 0.0; Omega.data <= 2*M_PI; Omega.data += M_PI/12){
@@ -111,7 +113,7 @@ void MarkerDetectorClass::DetectMarker(){
 
   Group.setNamedTarget("GroundPose");
   Group.move();
-  sleep(5);
+  sleep(0.5);
   cout << "GroundPose" << endl;
   // Arm Chassis rotation around the z-axis
   for(Omega.data = 0.0; Omega.data <= 2*M_PI; Omega.data += M_PI/12){
@@ -121,7 +123,7 @@ void MarkerDetectorClass::DetectMarker(){
 
   Group.setNamedTarget("HomePose");
   Group.move();
-  sleep(5);
+  sleep(0.5);
 }
 
 int main(int argc, char **argv){
@@ -131,9 +133,11 @@ int main(int argc, char **argv){
 
   MarkerDetectorClass MarkDetectClass(&nh_);
 
-  ros::Rate loop_rate(1000);
+  ros::AsyncSpinner spinner(1);
+  spinner.start();
 
   while(ros::ok()){
+
     while(MarkDetectClass.TotMarket != 7){
       MarkDetectClass.DetectMarker();
     }
@@ -143,10 +147,9 @@ int main(int argc, char **argv){
     }
     MarkDetectClass.Pub_MList.publish(ArrList);
 
-    ros::AsyncSpinner spinner(1);
-    spinner.start();
+    
     ros::waitForShutdown();
-    loop_rate.sleep();
+    
   }
 
   return 0;

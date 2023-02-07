@@ -28,7 +28,7 @@ import time
 import random
 
 from assignment2.srv import *
-from armor_api.armor_client import ArmorClient
+# from armor_api.armor_client import ArmorClient
 from std_srvs.srv import *
 
 import Functions as F
@@ -120,9 +120,9 @@ class TOPOLOGICAL_MAP(smach.State):
         """
         rospy.loginfo('Executing state TOPOLOGICAL_MAP')
         ChangeState(1)
-        time.sleep(3)
+        time.sleep(1)
         resp = Map_Client()
-        if resp.success == True:
+        if resp.success == True:    # Map construction ends
             return 'map_OK'
         else:
             time.sleep(5)
@@ -158,7 +158,7 @@ class CHOOSE_DESTINATION(smach.State):
         rospy.loginfo('Executing state CHOOSE_DESTINATION')
         F.Destination()
         time.sleep(5)
-        if B_Low == True:   # Recharging required
+        if B_Low == True:           # Recharging required
             return 'b_low'
         else:
             return 'destination'
@@ -186,17 +186,17 @@ class RANDOM_MOVEMENT(smach.State):
             Transition of the FSM to be carried out
                 - *b_low*: if the robot needs to be recharged
                 - *move*: if the robot can move between the rooms
-
+                - *wait*: if the room is not reached yet or the goal has been cancelled
         """
         global B_Low
         rospy.loginfo('Executing state RANDOM_MOVEMENT')
         ChangeState(2)
         time.sleep(5)
         resp = Movement_Client()
-        if B_Low == True:   # Recharging required
+        if B_Low == True:               # Recharging required
             return 'b_low'
-        #elif resp.success == True:
-        #    return 'move'
+        elif resp.success == True:      # Room reached
+            return 'move'
         else:
             time.sleep(5)
             return 'wait'
@@ -230,7 +230,7 @@ class ROOM_E(smach.State):
         rospy.loginfo('Executing state ROOM_E')
         ChangeState(3)
         time.sleep(5)
-        if B_Low == True:   # Recharging required
+        if B_Low == True:       # Recharging required
             return 'b_low'
         else:
             return 'move'
@@ -250,7 +250,7 @@ def main():
     Battery_Client = rospy.ServiceProxy('/Recharging_Switch', SetBool)
     Movement_Client = rospy.ServiceProxy('/Movement_Switch', SetBool)
     Map_Client = rospy.ServiceProxy('/Mapping_Switch', SetBool)
-    srv = rospy.Service('/B_Switch', BatteryLow, Battery_State)
+    B_srv = rospy.Service('/B_Switch', BatteryLow, Battery_State)
 
     # Create a SMACH state machine
     SM = smach.StateMachine(outcomes = ['Container'])

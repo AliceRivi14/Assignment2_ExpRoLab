@@ -34,7 +34,7 @@ import RandomMovement as RM
 
 B_Client = None
 Active = False
-BLev = 100
+BLev = 100  
 
 # Service callback
 def BatterySwitchCB(req):
@@ -78,7 +78,7 @@ def main():
     # Initialisation node
     rospy.init_node('Battery')
 
-    # Initialisation
+    # Initialisation service, client and subscriber
     Batt_srv = rospy.Service('/Recharging_Switch', SetBool, BatterySwitchCB)
     B_Client = rospy.ServiceProxy('/B_Switch', BatteryLow)
 
@@ -88,8 +88,8 @@ def main():
 
     while not rospy.is_shutdown():
 
-        if Active == False:
-            if BLev <= 10:
+        if Active == False: # False
+            if BLev <= 20:
                 rospy.loginfo(f'Battery level = {BLev}%')
                 rospy.loginfo('I NEED TO BE RECHARGED')
                 resp = B_Client(True)                      # Recharging required
