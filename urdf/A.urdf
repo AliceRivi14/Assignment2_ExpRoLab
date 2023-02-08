@@ -33,7 +33,7 @@
                 <box size="0.4 0.3 0.1" />
             </geometry>
         </collision>
-
+        
 <inertial>
             <mass value="0.5" />
             <inertia ixx="0.004166666666666667" ixy="0.0" ixz="0.0" iyy="0.007083333333333335" iyz="0.0" izz="0.010416666666666666" />
@@ -61,7 +61,7 @@
                 <cylinder length="0.05" radius="0.1" />
             </geometry>
         </collision>
-
+        
 <inertial>
             <mass value="0.1" />
             <inertia ixx="0.0002708333333333334" ixy="0.0" ixz="0.0" iyy="0.0002708333333333334" iyz="0.0" izz="0.0005000000000000001" />
@@ -112,7 +112,7 @@
                 <cylinder length="0.05" radius="0.1" />
             </geometry>
         </collision>
-
+        
 <inertial>
             <mass value="0.1" />
             <inertia ixx="0.0002708333333333334" ixy="0.0" ixz="0.0" iyy="0.0002708333333333334" iyz="0.0" izz="0.0005000000000000001" />
@@ -163,7 +163,7 @@
                 <cylinder length="0.05" radius="0.1" />
             </geometry>
         </collision>
-
+        
 <inertial>
             <mass value="0.1" />
             <inertia ixx="0.0002708333333333334" ixy="0.0" ixz="0.0" iyy="0.0002708333333333334" iyz="0.0" izz="0.0005000000000000001" />
@@ -214,7 +214,7 @@
                 <cylinder length="0.05" radius="0.1" />
             </geometry>
         </collision>
-
+        
 <inertial>
             <mass value="0.1" />
             <inertia ixx="0.0002708333333333334" ixy="0.0" ixz="0.0" iyy="0.0002708333333333334" iyz="0.0" izz="0.0005000000000000001" />
@@ -253,7 +253,7 @@
     </transmission>
     <!-- Arm-Chassis -->
     <link name="arm_chassis">
-
+        
 <inertial>
             <mass value="0.1" />
             <origin rpy="0 0 0" xyz="0 0 0" />
@@ -287,7 +287,7 @@
     <joint name="arm_chassis_joint" type="continuous">
         <axis xyz="0 0 1" />
         <!-- Yaw -->
-        <origin rpy="0 0 0" xyz="0 0 0.05" />
+        <origin rpy="0 0 0" xyz="0 0 0.08" />
         <parent link="chassis" />
         <child link="arm_chassis" />
     </joint>
@@ -308,7 +308,7 @@
                 <cylinder length="0.5" radius="0.04" />
             </geometry>
         </collision>
-
+        
 <inertial>
             <mass value="0.01" />
             <inertia ixx="0.000010279" ixy="0.0" ixz="0.0" iyy="0.000010279" iyz="0.0" izz="0.000007225" />
@@ -350,7 +350,7 @@
                 <cylinder length="0.5" radius="0.04" />
             </geometry>
         </collision>
-
+        
 <inertial>
             <mass value="0.01" />
             <inertia ixx="0.000010279" ixy="0.0" ixz="0.0" iyy="0.000010279" iyz="0.0" izz="0.000007225" />
@@ -377,6 +377,7 @@
         <parent link="arm_1" />
         <child link="arm_2" />
     </joint>
+
     <link name="LaserScan">
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0" />
@@ -390,14 +391,14 @@
                 <cylinder length="0.04" radius="0.04" />
             </geometry>
         </visual>
-        <!--
+        <!--       
 <inertial>
         <mass value="0.01" />
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <inertia ixx="5.3e-8" ixy="0" ixz="0" iyy="6.7e-9" iyz="0" izz="6.7e-9" />
       </inertial>
  -->
-
+        
 <inertial>
             <mass value="0.1" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
@@ -445,6 +446,7 @@
             </plugin>
         </sensor>
     </gazebo>
+
     <link name="RGB">
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0" />
@@ -458,14 +460,14 @@
                 <box size="0.08 0.08 0.08" />
             </geometry>
         </visual>
-        <!--
+        <!-- 
 <inertial>
         <mass value="0.01" />
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <inertia ixx="5.3e-8" ixy="0" ixz="0" iyy="6.7e-9" iyz="0" izz="6.7e-9" />
       </inertial>
  -->
-
+        
 <inertial>
             <mass value="0.1" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
@@ -475,7 +477,7 @@
     <joint name="RGB_joint" type="continuous">
         <axis xyz="0 0 1" />
         <!-- Yaw -->
-        <origin rpy="0 0 0" xyz="0 0 0.5" />
+        <origin rpy="0 0 0" xyz="0 0 0.54" />
         <parent link="arm_2" />
         <child link="RGB" />
     </joint>

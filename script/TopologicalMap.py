@@ -70,19 +70,14 @@ class Topological_Map:
         CurrentTime = int(time.time())
 
         # Construct lists and dictionaries from infos retrived from the room_info srv
-        for i in self.IdList:
+        for i in range(12, 18):#self.IdList:
             resp = RoomClient(i)
             self.Location.append(resp.room)
             self.LocationDict[resp.room] = resp.connections
             self.LocationCoord[resp.room] = [resp.x,resp.y]
             self.CoordinatesLoc[str(resp.x) + ',' + str(resp.y)] = resp.room
-            rospy.loginfo(f'{resp.room} has coordinates ({resp.x},{resp.y})')
 
-            time.sleep(0.5)
-
-        # Load dictionaries
-        rospy.set_param('Ids',self.LocationCoord)           # Room coordinates
-        rospy.set_param('Coordinate',self.CoordinatesLoc)   # Coordinates of each room
+        time.sleep(0.5)
 
         # Load ontology
         self.Armor_Client.utils.load_ref_from_file(Path, IRI, buffered_manipulation=False, reasoner='PELLET', buffered_reasoner=False, mounted=False)
@@ -91,21 +86,25 @@ class Topological_Map:
 
         for i in self.Location:
             Connections = self.LocationDict[i]
-            print(i)
+            Coordinates = self.LocationCoord[i]
+            rospy.loginfo(f'{i} coordinates are {Coordinates}')
+            self.Armor_Client.call('ADD', 'OBJECTPROP', 'IND', ['hasCoordinates', i, str(Coordinates[0]) + ',' + str(Coordinates[1])])
             for j in Connections:
-                print(j.through_door)
+                rospy.loginfo(f'{i} connected through door {j.through_door}')
                 self.Armor_Client.call('ADD', 'OBJECTPROP', 'IND', ['hasDoor', i, j.through_door])
+
 
         # Robot starting room
         self.Armor_Client.call('ADD', 'OBJECTPROP', 'IND', ['isIn', Robot, 'E'])
         rospy.loginfo(f'{Robot} starting room is ROOM E')
 
-        # Set all rooms visited at CurrentTime time instant
-        for room in self.Location:
-            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['visitedAt', room, 'Long', str(CurrentTime)])
+        # Set all rooms and corridors visited at CurrentTime time instant
+        for RC in self.Location:
+            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['visitedAt', RC, 'Long', str(CurrentTime)])
 
         # Disjoint for Individuals understanding
         self.Armor_Client.call('DISJOINT','IND','',self.Location)
+        self.Armor_Client.call('DISJOINT','IND','',self.LocationDict)
 
         # First Reasoning
         self.Armor_Client.utils.apply_buffered_changes()

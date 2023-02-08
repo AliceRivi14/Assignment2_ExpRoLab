@@ -18,14 +18,11 @@ public:
 
   ros::NodeHandle nh;
 
-  ros::Publisher Pub_PoseJoint0;
-  ros::Publisher Pub_PoseJoint1;
-  ros::Publisher Pub_PoseJoint2;
   ros::Publisher Pub_PoseCamera;
-
   ros::Publisher Pub_MList;
-
   ros::Subscriber Sub_Camera;
+
+  ros::ServiceClient IDClient;
 
   void DetectMarker();
   void CallbackCamera(const sensor_msgs::Image::ConstPtr& msg);

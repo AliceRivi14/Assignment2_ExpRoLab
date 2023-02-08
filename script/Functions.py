@@ -86,7 +86,7 @@ def Destination():
     Function to decide in which location the robot should move according to the Urgency.
 
     Returns:
-        Target (string): location where the robot is to move
+        A number that corresponds to the marker id associated with the location Target
     """
 
     rospy.loginfo('Waiting for the Armor server ...')
@@ -94,8 +94,8 @@ def Destination():
 
     Rooms = CleanList(Armor_Client.call('QUERY', 'IND', 'CLASS', ['ROOM']))
     Corridors = CleanList(Armor_Client.call('QUERY', 'IND', 'CLASS', ['CORRIDOR']))
-
     Urgent = CleanList(Armor_Client.call('QUERY', 'IND', 'CLASS', ['URGENT']))
+
     # Urgent rooms
     Urgent = [Idx for Idx in Urgent if Idx not in Corridors]
     # Location reachable by the robot
@@ -115,6 +115,7 @@ def Destination():
         else:
             Target = random.choice(Reachable)
             if not Target:
-                print('ERROR')
+                rospy.loginfo('ERROR')
 
     return Target
+

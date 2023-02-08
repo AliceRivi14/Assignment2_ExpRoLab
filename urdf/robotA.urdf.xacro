@@ -223,7 +223,7 @@
   </transmission>
   <joint name="arm_chassis_joint" type="continuous">
       <axis xyz="0 0 1" /> <!-- Yaw -->
-      <origin rpy="0 0 0" xyz="0 0 0.05" />
+      <origin rpy="0 0 0" xyz="0 0 0.08" />
       <parent link="chassis" />
       <child link="arm_chassis" />
   </joint>

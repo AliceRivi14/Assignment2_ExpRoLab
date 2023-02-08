@@ -15,6 +15,7 @@
 
 #include <opencv2/highgui/highgui.hpp>
 
+#include <assignment2/RoomInformation.h>
 #include "Marker_Detector.h"
 #include <cmath>
 #include <list>
@@ -28,14 +29,12 @@ list<int> List;
 
 MarkerDetectorClass::MarkerDetectorClass(ros::NodeHandle* nodehandle):nh(*nodehandle){
 
-  Pub_PoseJoint0 = nh.advertise<std_msgs::Float64>("/A/joint0_position_controller/command",1000);
-  Pub_PoseJoint1 = nh.advertise<std_msgs::Float64>("/A/joint1_position_controller/command",1000);
-  Pub_PoseJoint2 = nh.advertise<std_msgs::Float64>("/A/joint2_position_controller/command",1000);
+  // Inizialization publisher and subscriber
   Pub_PoseCamera = nh.advertise<std_msgs::Float64>("/A/jointC_position_controller/command",1000);
-
   Pub_MList = nh.advertise<std_msgs::Int32MultiArray>("/MarkerList",1000);
-
   Sub_Camera = nh.subscribe("RGB/RGB/image_raw", 1000, &MarkerDetectorClass::CallbackCamera, this);
+  // Inizialization client
+  IDClient = nh.serviceClient<assignment2::RoomInformation>("/room_info");
 
   TotMarket = 0;
 }
@@ -61,12 +60,16 @@ void MarkerDetectorClass::CallbackCamera(const sensor_msgs::Image::ConstPtr& msg
   // Detect new marker
   MDetector.detect(inImage, Markers, CamParam, MSize, false);
 
-  cout << "ID marker detected: ";
+  // Print the ID of the detected marker
+  assignment2::RoomInformation srv;
   for (size_t i = 0; i<Markers.size(); i++){
+    cout << "ID marker detected: ";
     int Id = Markers.at(i).id;
     cout << Id << " ";
-    if(!(std::find(List.begin(), List.end(), Id) != List.end()))
+    if(!(find(List.begin(), List.end(), Id) != List.end())){
       List.push_back(Id);
+    }
+    if (Id = srv.request.id)
       TotMarket++;
   }
   cout << endl;
@@ -89,19 +92,17 @@ void MarkerDetectorClass::DetectMarker(){
 
   std_msgs::Float64 Omega;
 
-  cout << "SONO QUA" << endl;
-
   Group.setNamedTarget("HomePose");
   Group.move();
+  sleep(0.5);
   cout << "HomePose" << endl;
   // RGB camera rotation around the z-axis
   for(Omega.data = 0.0; Omega.data <= 2*M_PI; Omega.data += M_PI/12){
-    cout << "OMEGA: " << Omega.data << endl;
     Pub_PoseCamera.publish(Omega);
   }
   cout << "Marker found: " << TotMarket << endl;
 
-  Group.setNamedTarget("LowPose");  // PROBLEMA COLLISIONE??
+  Group.setNamedTarget("LowPose");
   Group.move();
   sleep(0.5);
   cout << "LowPose" << endl;
@@ -117,7 +118,7 @@ void MarkerDetectorClass::DetectMarker(){
   cout << "GroundPose" << endl;
   // Arm Chassis rotation around the z-axis
   for(Omega.data = 0.0; Omega.data <= 2*M_PI; Omega.data += M_PI/12){
-    Pub_PoseJoint0.publish(Omega);
+    Pub_PoseCamera.publish(Omega);
   }
   cout << "Marker found: " << TotMarket << endl;
 

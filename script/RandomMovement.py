@@ -36,10 +36,11 @@ from assignment2.srv import *
 import math
 
 from moveit_ros_planning_interface import _moveit_move_group_interface
-from std_msgs.msg import Int32MultiArray, Float64
+from std_msgs.msg import Int32, Int32MultiArray, Float64
 
 import Functions as F
 import StateMachine as SM
+import TopologicalMap as T
 
 Active = False
 
@@ -52,8 +53,9 @@ class RandomMovement:
 
         self.Pub_PoseCamera = rospy.Publisher('/A/jointC_position_controller/command', Float64, queue_size=1)
         self.Pub_BLevel = rospy.Publisher('/B_Level', Int32MultiArray, queue_size=1)
-
+        
         self.Sub_Odom = rospy.Subscriber('/odom', Odometry, self.OdomCB)
+        self.Sub_Room = rospy.Subscriber('/Room', Int32, self.RoomCB)
 
         # Inialisation of the MoveBase action client
         self.MBClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
@@ -67,6 +69,8 @@ class RandomMovement:
         self.previous_x = -6.0
         self.previous_y = 11.0
 
+        self.Room = 'E'
+
     # /Movement_Switch service callback
     def MovementSwitchCB(self,req):
         """
@@ -77,27 +81,12 @@ class RandomMovement:
         """
 
         Active = req.data
-
-        rospy.loginfo('Waiting for the MoveBase server ...')
-        self.MBClient.wait_for_server()
-
-        self.Goal.target_pose.header.frame_id = "map"
-        self.Goal.target_pose.pose.orientation.w = 1.0;
-        self.Goal.target_pose.header.stamp = rospy.Time.now()
-
-        # Get list of room coordinates
-        LocationCoord = rospy.get_param('Ids')
-        # Get list of coordinates of each room
-        CoordinatesLoc = rospy.get_param('Coordinate')
-
-
+        
         RoomClient = rospy.ServiceProxy('/room_info', RoomInformation)
         rospy.loginfo('Waiting for the RoomInformation server ...')
         rospy.wait_for_service('/room_info')
 
-        resp = RoomClient()
-        resp.room = F.Destination()
-        self.MoveBaseA(resp.room)
+        self.MoveBaseA(self.Room)       # Move the robot to the choosen location
 
         res = SetBoolResponse()
         res.message = 'FINAL POSITION REACHED'
@@ -112,15 +101,22 @@ class RandomMovement:
 
     def MoveBaseA(self,Loc):
 
-        RoomClient = rospy.ServiceProxy('/room_info', RoomInformation)
+        rospy.loginfo('Waiting for the MoveBase server ...')
+        self.MBClient.wait_for_server(rospy.Duration(30))
+
+        print('NON FUNZIONA')
+
+        self.Goal.target_pose.header.frame_id = "map"
+        self.Goal.target_pose.pose.orientation.w = 1.0;
+        self.Goal.target_pose.header.stamp = rospy.Time.now()
+
         rospy.loginfo(f'Actual position: ({self.previous_x},{self.previous_y})')
 
-        Loc = RoomClient()
-        F.MoveRobot(Loc.room)
-        self.Goal.target_pose.pose.position.x = Loc.x
-        self.Goal.target_pose.pose.position.y = Loc.y
+        F.MoveRobot(Loc)
+    
+        [self.Goal.target_pose.pose.position.x,self.Goal.target_pose.pose.position.y]= T.LocationCoord[Loc].values
 
-        rospy.loginfo(f'Moving to {Loc.room} at ({self.Goal.target_pose.pose.position.x},{self.Goal.target_pose.pose.position.y}) position')
+        rospy.loginfo(f'Moving to {Loc} at ({self.Goal.target_pose.pose.position.x},{self.Goal.target_pose.pose.position.y}) position')
         self.MBClient.send_goal(self.Goal)
 
         rospy.loginfo('Waiting for the result ...')
@@ -129,7 +125,6 @@ class RandomMovement:
         dist = math.sqrt(pow(self.Goal.target_pose.pose.position.x - self.previous_x) +
                     pow(self.Goal.target_pose.pose.position.y - self.previous_y))
         self.Pub_BLevel.publish(dist)
-
 
         B_Low = SM.Battery_State()
         if B_Low == True:
@@ -140,7 +135,7 @@ class RandomMovement:
             self.Group.set_named_target("HomePose")
             self.Group.move()
             # RGB camera rotation around the z-axis
-            for self.Omega.data in range(0.0, math.pi/12, 2*math.pi):
+            for self.Omega.data in range(0.0, 2*math.pi, math.pi/12):
                 self.Pub_PoseCamera.publish(self.Omega)
 
 
@@ -148,6 +143,8 @@ class RandomMovement:
         self.previous_x = data.pose.pose.position.x
         self.previous_y = data.pose.pose.position.y
 
+    def RoomCB(self,Location):
+        self.Room = Location.data   # Choosen location
 
 if __name__ == "__main__":
 
@@ -158,7 +155,7 @@ if __name__ == "__main__":
 
     # When the service /Movement_Switch is called, node manager class is instantiated
     while not rospy.is_shutdown():
-        if Active == False:
+        if Active == False:    
             continue
 
         # Wait for ctrl-c to stop the application

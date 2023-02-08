@@ -30,18 +30,14 @@ import random
 from assignment2.srv import *
 # from armor_api.armor_client import ArmorClient
 from std_srvs.srv import *
+from std_msgs.msg import String
 
 import Functions as F
 
 Battery_Client = None
 Movement_Client = None
 Map_Client = None
-State_ = 1
 B_Low = False
-
-# 1 - TOPOLOGICAL_MAP state
-# 2 - RANDOM_MOVEMENT state
-# 3 - ROOM_E state
 
 # Service callback
 def Battery_State(req):
@@ -61,37 +57,6 @@ def Battery_State(req):
     res = BatteryLowResponse()
     res.B_State = True  # Full battery
     return res
-
-def ChangeState(State):
-    """
-    Function for communicating which node to execute based on the status of the FSM.
-
-    Args:
-        State (int): current status of the FSM
-
-            1. TOPOLOGICAL_MAP
-            2. RANDOM_MOVEMENT
-            3. ROOM_E
-
-    """
-    global Battery_Client, Movement_Client, Map_Client
-    global State_
-    State_ = State
-    # TOPOLOGICAL_MAP state
-    if State_ == 1:
-        resp = Map_Client(True)
-        resp = Battery_Client(False)
-        resp = Movement_Client(False)
-    # RANDOM_MOVEMENT state
-    if State_ == 2:
-        resp = Map_Client(False)
-        resp = Battery_Client(False)
-        resp = Movement_Client(True)
-    # ROOM_E state
-    if State_ == 3:
-        resp = Map_Client(False)
-        resp = Battery_Client(True)
-        resp = Movement_Client(False)
 
 # State TOPOLOGICAL_MAP
 class TOPOLOGICAL_MAP(smach.State):
@@ -118,10 +83,9 @@ class TOPOLOGICAL_MAP(smach.State):
                 - *map_OK*: when map construction ends
 
         """
+        global Map_Client
         rospy.loginfo('Executing state TOPOLOGICAL_MAP')
-        ChangeState(1)
-        time.sleep(1)
-        resp = Map_Client()
+        resp = Map_Client(True)
         if resp.success == True:    # Map construction ends
             return 'map_OK'
         else:
@@ -154,13 +118,14 @@ class CHOOSE_DESTINATION(smach.State):
                 - *destination*: when the location in which the robot is to move is chosen
 
         """
-        global B_Low
+        global B_Low, Pub_Room
         rospy.loginfo('Executing state CHOOSE_DESTINATION')
-        F.Destination()
-        time.sleep(5)
-        if B_Low == True:           # Recharging required
+        time.sleep(2)
+        RoomID = F.Destination()        # Choice of the destination
+        if B_Low == True:               # Recharging required
             return 'b_low'
         else:
+            Pub_Room.publish(RoomID)    
             return 'destination'
 
 # State RANDOM_MOVEMENT
@@ -189,16 +154,15 @@ class RANDOM_MOVEMENT(smach.State):
                 - *wait*: if the room is not reached yet or the goal has been cancelled
         """
         global B_Low
+        global Movement_Client
         rospy.loginfo('Executing state RANDOM_MOVEMENT')
-        ChangeState(2)
-        time.sleep(5)
-        resp = Movement_Client()
+        resp = Movement_Client(True)
         if B_Low == True:               # Recharging required
             return 'b_low'
         elif resp.success == True:      # Room reached
             return 'move'
         else:
-            time.sleep(5)
+            time.sleep(2)
             return 'wait'
 
 # State ROOM_E
@@ -227,9 +191,9 @@ class ROOM_E(smach.State):
 
         """
         global B_Low
+        global Battery_Client
         rospy.loginfo('Executing state ROOM_E')
-        ChangeState(3)
-        time.sleep(5)
+        resp = Battery_Client(True)
         if B_Low == True:       # Recharging required
             return 'b_low'
         else:
@@ -251,6 +215,8 @@ def main():
     Movement_Client = rospy.ServiceProxy('/Movement_Switch', SetBool)
     Map_Client = rospy.ServiceProxy('/Mapping_Switch', SetBool)
     B_srv = rospy.Service('/B_Switch', BatteryLow, Battery_State)
+
+    Pub_Room = rospy.Publisher('/Room', String, queue_size=1)
 
     # Create a SMACH state machine
     SM = smach.StateMachine(outcomes = ['Container'])
