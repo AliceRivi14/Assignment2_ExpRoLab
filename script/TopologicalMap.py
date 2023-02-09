@@ -70,7 +70,8 @@ class Topological_Map:
         CurrentTime = int(time.time())
 
         # Construct lists and dictionaries from infos retrived from the room_info srv
-        for i in range(12, 18):#self.IdList:
+        #for i in self.IdList:
+        for i in range(12, 18): #DEBUG FINCHE' NON LEGGE I MARKER
             resp = RoomClient(i)
             self.Location.append(resp.room)
             self.LocationDict[resp.room] = resp.connections
