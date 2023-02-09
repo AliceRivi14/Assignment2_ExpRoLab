@@ -32,7 +32,7 @@ from actionlib_msgs.msg import GoalStatus
 from nav_msgs.msg import Odometry
 from std_srvs.srv import *
 from assignment2.srv import *
-# from armor_api.armor_client import ArmorClient
+from armor_api.armor_client import ArmorClient
 import math
 
 from moveit_ros_planning_interface import _moveit_move_group_interface
@@ -40,9 +40,16 @@ from std_msgs.msg import Int32, Int32MultiArray, Float64
 
 import Functions as F
 import StateMachine as SM
-import TopologicalMap as T
 
 Active = False
+
+Path = 'ERL_WS/src/assignment2/words/topological_map.owl'
+IRI = 'http://bnc/exp-rob-lab/2022-23'
+Robot = 'Robot1'
+
+Armor_Client_ID = 'User'
+Armor_ReferenceName = 'Ref'
+Armor_Client = ArmorClient(Armor_Client_ID, Armor_ReferenceName)
 
 
 class RandomMovement:
@@ -102,9 +109,7 @@ class RandomMovement:
     def MoveBaseA(self,Loc):
 
         rospy.loginfo('Waiting for the MoveBase server ...')
-        self.MBClient.wait_for_server(rospy.Duration(30))
-
-        print('NON FUNZIONA')
+        self.MBClient.wait_for_server()
 
         self.Goal.target_pose.header.frame_id = "map"
         self.Goal.target_pose.pose.orientation.w = 1.0;
@@ -113,8 +118,9 @@ class RandomMovement:
         rospy.loginfo(f'Actual position: ({self.previous_x},{self.previous_y})')
 
         F.MoveRobot(Loc)
-    
-        [self.Goal.target_pose.pose.position.x,self.Goal.target_pose.pose.position.y]= T.LocationCoord[Loc].values
+        # TODO: modifica con coordinate location ontology
+        self.Goal.target_pose.pose.position.x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))
+        self.Goal.target_pose.pose.position.y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))
 
         rospy.loginfo(f'Moving to {Loc} at ({self.Goal.target_pose.pose.position.x},{self.Goal.target_pose.pose.position.y}) position')
         self.MBClient.send_goal(self.Goal)

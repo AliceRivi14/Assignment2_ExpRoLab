@@ -17,7 +17,7 @@ import time
 import random
 from armor_api.armor_client import ArmorClient
 
-Path = 'ERL_WS/src/assignment1/ontology/Map.owl'
+Path = 'ERL_WS/src/assignment2/worlds/topological_map.owl'
 IRI = 'http://bnc/exp-rob-lab/2022-23'
 Robot = 'Robot1'
 
@@ -54,7 +54,7 @@ def Update_Time():
     Old = str(CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['now', Robot]))[0])
     New = str(round(time.time()))
     # Replacing the previous robot-time with the actual one
-    Armor_Client.call('REPLACE', 'OBJECTPROP', 'IND', ['now', Robot, 'Long', New, Old])
+    Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['now', Robot, 'Long', New, Old])
 
 # REASONER
 def MoveRobot(Location):
@@ -69,14 +69,16 @@ def MoveRobot(Location):
     Old_Loc = CleanList(Old_Loc)[0] # First element of the location list
     # Replacing the previous location with the one the robot moved to
     Armor_Client.call('REPLACE', 'OBJECTPROP', 'IND', ['isIn', Robot, Location, Old_Loc])
+
     # Time when the robot visited the last location
     Old = str(CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['visitedAt', Location]))[0])
     # Time in which the robot visits the current location
     New = str(round(time.time()))
-
     # Replacing the previous location-time with the one the robot moved to
     Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['visitedAt', Location, 'Long', New, Old])
-    
+
+    UrgencyThreshold = str(CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['UrgencyThreshold', Robot]))[0])
+    # Replacing the previous urgency threshold of the rooms
     Old_Urg = CleanList(Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['UrgencyThreshold', Robot]))[0]
     Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['UrgencyThreshold', Robot, 'Long', UrgencyThreshold, Old_Urg])
 
@@ -121,4 +123,3 @@ def Destination():
                 rospy.loginfo('ERROR')
 
     return Target
-

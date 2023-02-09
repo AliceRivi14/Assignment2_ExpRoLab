@@ -26,7 +26,7 @@ import actionlib
 from std_srvs.srv import *
 from assignment2.srv import *
 from armor_api.armor_client import ArmorClient
-from std_msgs.msg import Int32,Int32MultiArray
+from std_msgs.msg import Int32,Int32MultiArray, Float64
 
 Active = False
 
@@ -64,9 +64,7 @@ class Topological_Map:
         rospy.loginfo('Waiting for the RoomInformation server ...')
         rospy.wait_for_service('/room_info')
         RoomClient = rospy.ServiceProxy('/room_info', RoomInformation)
-
-        time.sleep(2)
-
+        
         CurrentTime = int(time.time())
 
         # Construct lists and dictionaries from infos retrived from the room_info srv
@@ -89,10 +87,12 @@ class Topological_Map:
             Connections = self.LocationDict[i]
             Coordinates = self.LocationCoord[i]
             rospy.loginfo(f'{i} coordinates are {Coordinates}')
-            self.Armor_Client.call('ADD', 'OBJECTPROP', 'IND', ['hasCoordinates', i, str(Coordinates[0]) + ',' + str(Coordinates[1])])
+            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['hasCoordinatesX', i, 'Float', str([Coordinates[0]])])
+            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['hasCoordinatesY', i, 'Float', str([Coordinates[1]])])
             for j in Connections:
                 rospy.loginfo(f'{i} connected through door {j.through_door}')
                 self.Armor_Client.call('ADD', 'OBJECTPROP', 'IND', ['hasDoor', i, j.through_door])
+                self.Armor_Client.call('DISJOINT','IND','',j.through_door)
 
 
         # Robot starting room
@@ -103,10 +103,10 @@ class Topological_Map:
         for RC in self.Location:
             self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['visitedAt', RC, 'Long', str(CurrentTime)])
 
-        # Disjoint for individuals
+        # Disjoint for Individuals
         self.Armor_Client.call('DISJOINT','IND','',self.Location)
-        #self.Armor_Client.call('DISJOINT','IND','',self.LocationDict)
 
+        # First Reasoning
         self.Armor_Client.utils.apply_buffered_changes()
         self.Armor_Client.utils.sync_buffered_reasoner()
 
