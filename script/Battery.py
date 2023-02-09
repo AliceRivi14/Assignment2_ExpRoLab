@@ -88,7 +88,7 @@ def main():
 
     while not rospy.is_shutdown():
 
-        if Active == True: # False
+        if Active == False: # False
             if BLev <= 20:
                 rospy.loginfo(f'Battery level = {BLev}%')
                 rospy.loginfo('I NEED TO BE RECHARGED')
