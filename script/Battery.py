@@ -80,7 +80,7 @@ def main():
 
     # Initialisation service, client and subscriber
     Batt_srv = rospy.Service('/Recharging_Switch', SetBool, BatterySwitchCB)
-    B_Client = rospy.ServiceProxy('/B_Switch', BatteryLow)
+    B_Client = rospy.ServiceProxy('/BLevel_Switch', BatteryLow)
 
     Sub_BLevel = rospy.Subscriber('/B_Level', Int32MultiArray, B_LevelCB)
 
@@ -88,7 +88,7 @@ def main():
 
     while not rospy.is_shutdown():
 
-        if Active == False: # False
+        if Active == True: # False
             if BLev <= 20:
                 rospy.loginfo(f'Battery level = {BLev}%')
                 rospy.loginfo('I NEED TO BE RECHARGED')

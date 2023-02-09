@@ -42,6 +42,8 @@ def CleanList(res):
     # Remove timestamp
     List =  [Q.replace('"', '') for Q in List]
     List =  [Q.replace('^^xsd:long', '') for Q in List]
+    # Remove float
+    List =  [Q.replace('f', '') for Q in List]
 
     return List
 

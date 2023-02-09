@@ -214,7 +214,7 @@ def main():
     Battery_Client = rospy.ServiceProxy('/Recharging_Switch', SetBool)
     Movement_Client = rospy.ServiceProxy('/Movement_Switch', SetBool)
     Map_Client = rospy.ServiceProxy('/Mapping_Switch', SetBool)
-    B_srv = rospy.Service('/B_Switch', BatteryLow, Battery_State)
+    B_srv = rospy.Service('/BLevel_Switch', BatteryLow, Battery_State)
 
     Pub_Room = rospy.Publisher('/Room', String, queue_size=1)
 

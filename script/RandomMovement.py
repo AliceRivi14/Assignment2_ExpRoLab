@@ -43,7 +43,7 @@ import StateMachine as SM
 
 Active = False
 
-Path = 'ERL_WS/src/assignment2/words/topological_map.owl'
+Path = 'ERL_WS/src/assignment2/worlds/topological_map.owl'
 IRI = 'http://bnc/exp-rob-lab/2022-23'
 Robot = 'Robot1'
 
@@ -93,6 +93,7 @@ class RandomMovement:
         rospy.loginfo('Waiting for the RoomInformation server ...')
         rospy.wait_for_service('/room_info')
 
+        print("CIAO")
         self.MoveBaseA(self.Room)       # Move the robot to the choosen location
 
         res = SetBoolResponse()
@@ -105,8 +106,9 @@ class RandomMovement:
 
         return res
 
-
+# NAVIGATION
     def MoveBaseA(self,Loc):
+
 
         rospy.loginfo('Waiting for the MoveBase server ...')
         self.MBClient.wait_for_server()
@@ -118,7 +120,7 @@ class RandomMovement:
         rospy.loginfo(f'Actual position: ({self.previous_x},{self.previous_y})')
 
         F.MoveRobot(Loc)
-        # TODO: modifica con coordinate location ontology
+
         self.Goal.target_pose.pose.position.x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))
         self.Goal.target_pose.pose.position.y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))
 

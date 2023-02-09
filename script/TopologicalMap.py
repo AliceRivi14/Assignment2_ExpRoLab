@@ -87,12 +87,11 @@ class Topological_Map:
             Connections = self.LocationDict[i]
             Coordinates = self.LocationCoord[i]
             rospy.loginfo(f'{i} coordinates are {Coordinates}')
-            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['hasCoordinatesX', i, 'Float', str([Coordinates[0]])])
-            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['hasCoordinatesY', i, 'Float', str([Coordinates[1]])])
+            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['hasCoordinatesX', i, 'Float', str(Coordinates[0])])
+            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['hasCoordinatesY', i, 'Float', str(Coordinates[1])])
             for j in Connections:
                 rospy.loginfo(f'{i} connected through door {j.through_door}')
                 self.Armor_Client.call('ADD', 'OBJECTPROP', 'IND', ['hasDoor', i, j.through_door])
-                self.Armor_Client.call('DISJOINT','IND','',j.through_door)
 
 
         # Robot starting room
@@ -104,7 +103,8 @@ class Topological_Map:
             self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['visitedAt', RC, 'Long', str(CurrentTime)])
 
         # Disjoint for Individuals
-        self.Armor_Client.call('DISJOINT','IND','',self.Location)
+        self.Armor_Client.call('DISJOINT','IND','CLASS', ['LOCATION'])
+        self.Armor_Client.call('DISJOINT','IND','CLASS', ['DOOR'])
 
         # First Reasoning
         self.Armor_Client.utils.apply_buffered_changes()
