@@ -102,11 +102,10 @@ class Topological_Map:
         for RC in self.Location:
             self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['visitedAt', RC, 'Long', str(CurrentTime)])
 
-        # Disjoint for Individuals understanding
+        # Disjoint for individuals
         self.Armor_Client.call('DISJOINT','IND','',self.Location)
-        self.Armor_Client.call('DISJOINT','IND','',self.LocationDict)
+        #self.Armor_Client.call('DISJOINT','IND','',self.LocationDict)
 
-        # First Reasoning
         self.Armor_Client.utils.apply_buffered_changes()
         self.Armor_Client.utils.sync_buffered_reasoner()
 
