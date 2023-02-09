@@ -75,7 +75,10 @@ def MoveRobot(Location):
     New = str(round(time.time()))
 
     # Replacing the previous location-time with the one the robot moved to
-    Armor_Client.call('REPLACE', 'OBJECTPROP', 'IND', ['visitedAt', Location, 'Long', New, Old])
+    Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['visitedAt', Location, 'Long', New, Old])
+    
+    Old_Urg = CleanList(Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['UrgencyThreshold', Robot]))[0]
+    Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['UrgencyThreshold', Robot, 'Long', UrgencyThreshold, Old_Urg])
 
     rospy.loginfo(f'Go to location {Location}')
 
