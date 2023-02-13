@@ -16,16 +16,12 @@ find_package(catkin REQUIRED COMPONENTS
   aruco
   cv_bridge
   urdf
-  controller_manager
-  joint_state_controller
-  robot_state_publisher
   actionlib
   actionlib_msgs
   move_base
   geometry_msgs
   nav_msgs
   std_msgs
-  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -151,7 +147,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
  add_executable(marker_server src/marker_server.cpp)
- add_executable(Marker_Detector src/Marker_Detector.cpp)
+ add_executable(marker_detector src/marker_detector.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -162,14 +158,14 @@ include_directories(
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(marker_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(Marker_Detector ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(marker_detector ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
  target_link_libraries(marker_server
 
    ${catkin_LIBRARIES}
  )
-  target_link_libraries(Marker_Detector
+  target_link_libraries(marker_detector
 
    ${catkin_LIBRARIES}
    ${OpenCV_LIBRARIES}

@@ -18,17 +18,14 @@ Service:
 
 """
 
-import random
 import roslib
+import random
 import time
 import rospy
-import actionlib
-from std_srvs.srv import *
+from std_srvs.srv import TriggerResponse, Trigger
 from assignment2.srv import *
 from armor_api.armor_client import ArmorClient
-from std_msgs.msg import Int32,Int32MultiArray, Float64
-
-Active = False
+from std_msgs.msg import Int32MultiArray
 
 Path = 'ERL_WS/src/assignment2/worlds/topological_map.owl'
 IRI = 'http://bnc/exp-rob-lab/2022-23'
@@ -39,7 +36,7 @@ class Topological_Map:
 
         # Initialisation service and subscriber
         rospy.Subscriber("/MarkerList", Int32MultiArray, self.IDCallback)
-        Map_srv = rospy.Service('/Mapping_Switch', SetBool, self.MappingSwitchCB)
+        Map_srv = rospy.Service('/Mapping_Switch', Trigger, self.MappingSwitchCB)
 
         self.Armor_Client_ID = 'User'
         self.Armor_ReferenceName = 'Ref'
@@ -56,20 +53,17 @@ class Topological_Map:
         """
         Function to load the topological map using the aRMOR client.
         """
-        Active = req.data
 
-        rospy.loginfo('Waiting for the Armor server ...')
+        print('Waiting for the Armor server ...')
         rospy.wait_for_service('armor_interface_srv')
 
-        rospy.loginfo('Waiting for the RoomInformation server ...')
+        print('Waiting for the RoomInformation server ...')
         rospy.wait_for_service('/room_info')
         RoomClient = rospy.ServiceProxy('/room_info', RoomInformation)
-        
-        CurrentTime = int(time.time())
 
         # Construct lists and dictionaries from infos retrived from the room_info srv
         #for i in self.IdList:
-        for i in range(12, 18): #DEBUG FINCHE' NON LEGGE I MARKER
+        for i in range(11, 18): #DEBUG FINCHE' NON LEGGE I MARKER
             resp = RoomClient(i)
             self.Location.append(resp.room)
             self.LocationDict[resp.room] = resp.connections
@@ -77,6 +71,7 @@ class Topological_Map:
             self.CoordinatesLoc[str(resp.x) + ',' + str(resp.y)] = resp.room
 
         time.sleep(0.5)
+        StartTime = str(0)
 
         # Load ontology
         self.Armor_Client.utils.load_ref_from_file(Path, IRI, buffered_manipulation=False, reasoner='PELLET', buffered_reasoner=False, mounted=False)
@@ -86,22 +81,22 @@ class Topological_Map:
         for i in self.Location:
             Connections = self.LocationDict[i]
             Coordinates = self.LocationCoord[i]
-            rospy.loginfo(f'{i} coordinates are {Coordinates}')
+            print(f'{i} coordinates are {Coordinates}')
             self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['hasCoordinatesX', i, 'Float', str(Coordinates[0])])
             self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['hasCoordinatesY', i, 'Float', str(Coordinates[1])])
             for j in Connections:
-                rospy.loginfo(f'{i} connected through door {j.through_door}')
+                print(f'{i} connected through door {j.through_door}')
                 self.Armor_Client.call('ADD', 'OBJECTPROP', 'IND', ['hasDoor', i, j.through_door])
 
 
         # Robot starting room
         self.Armor_Client.call('ADD', 'OBJECTPROP', 'IND', ['isIn', Robot, 'E'])
-        rospy.loginfo(f'{Robot} starting room is ROOM E')
+        print(f'{Robot} starting room is ROOM E')
 
         # Set all rooms and corridors visited at CurrentTime time instant
         for RC in self.Location:
-            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['visitedAt', RC, 'Long', str(CurrentTime)])
-
+            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['visitedAt', RC, 'Long', str(StartTime)])
+        
         # Disjoint for Individuals
         self.Armor_Client.call('DISJOINT','IND','CLASS', ['LOCATION'])
         self.Armor_Client.call('DISJOINT','IND','CLASS', ['DOOR'])
@@ -110,13 +105,11 @@ class Topological_Map:
         self.Armor_Client.utils.apply_buffered_changes()
         self.Armor_Client.utils.sync_buffered_reasoner()
 
-        res = SetBoolResponse()
+        res = TriggerResponse()
         res.message = 'MAP BUILT'
         res.success = True
 
-        rospy.loginfo(f'{res.message}')
-
-        Active = False
+        print(f'{res.message}')
 
         return res
 
@@ -135,11 +128,5 @@ if __name__ == "__main__":
 
     TopMap = Topological_Map()
 
-    # When the service /Mapping_Switch is called, node manager class is instantiated
-    while not rospy.is_shutdown():
-        if Active == False:
-            continue
-
-
-        # Wait for ctrl-c to stop the application
-        rospy.spin()
+    # Wait for ctrl-c to stop the application
+    rospy.spin()

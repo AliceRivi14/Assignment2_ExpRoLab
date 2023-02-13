@@ -43,51 +43,12 @@ def CleanList(res):
     List =  [Q.replace('"', '') for Q in List]
     List =  [Q.replace('^^xsd:long', '') for Q in List]
     # Remove float
-    List =  [Q.replace('f', '') for Q in List]
+    List =  [Q.replace('^^xsd:float', '') for Q in List]
 
     return List
 
-def Update_Time():
-    """
-    Function to update robot times.
-    """
-    Armor_Client.call('REASON', '', '', [''])
-    # Robot time
-    Old = str(CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['now', Robot]))[0])
-    New = str(round(time.time()))
-    # Replacing the previous robot-time with the actual one
-    Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['now', Robot, 'Long', New, Old])
 
 # REASONER
-def MoveRobot(Location):
-    """
-    Function to update information about the chosen location where the robot is to move.
-
-    Args:
-        Location (string): location where the robot is to move
-    """
-    # Robot location
-    Old_Loc = Armor_Client.call('QUERY', 'OBJECTPROP', 'IND', ['isIn', Robot])
-    Old_Loc = CleanList(Old_Loc)[0] # First element of the location list
-    # Replacing the previous location with the one the robot moved to
-    Armor_Client.call('REPLACE', 'OBJECTPROP', 'IND', ['isIn', Robot, Location, Old_Loc])
-
-    # Time when the robot visited the last location
-    Old = str(CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['visitedAt', Location]))[0])
-    # Time in which the robot visits the current location
-    New = str(round(time.time()))
-    # Replacing the previous location-time with the one the robot moved to
-    Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['visitedAt', Location, 'Long', New, Old])
-
-    UrgencyThreshold = str(CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['UrgencyThreshold', Robot]))[0])
-    # Replacing the previous urgency threshold of the rooms
-    Old_Urg = CleanList(Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['UrgencyThreshold', Robot]))[0]
-    Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['UrgencyThreshold', Robot, 'Long', UrgencyThreshold, Old_Urg])
-
-    rospy.loginfo(f'Go to location {Location}')
-
-    Update_Time()
-
 def Destination():
     """
     Function to decide in which location the robot should move according to the Urgency.
@@ -96,7 +57,7 @@ def Destination():
         A number that corresponds to the marker id associated with the location Target
     """
 
-    rospy.loginfo('Waiting for the Armor server ...')
+    print('Waiting for the Armor server ...')
     rospy.wait_for_service('armor_interface_srv')
 
     Rooms = CleanList(Armor_Client.call('QUERY', 'IND', 'CLASS', ['ROOM']))
@@ -121,7 +82,51 @@ def Destination():
     # If no corridor is reachable, randomly choose a reachable location
         else:
             Target = random.choice(Reachable)
-            if not Target:
-                rospy.loginfo('ERROR')
 
+    print(f'Choose location {Target}')
     return Target
+
+def MoveRobot(Location):
+    """
+    Function to update information about the chosen location where the robot is to move.
+
+    Args:
+        Location (string): location where the robot is to move
+    """
+    # Robot location
+    Old_Loc = Armor_Client.call('QUERY', 'OBJECTPROP', 'IND', ['isIn', Robot])
+    Old_Loc = CleanList(Old_Loc)[0] # First element of the location list
+    # Replacing the previous location with the one the robot moved to
+    Armor_Client.call('REPLACE', 'OBJECTPROP', 'IND', ['isIn', Robot, Location, Old_Loc])
+
+    # Time when the robot visited the last location
+    Old = str(CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['visitedAt', Location]))[0])
+    # Time in which the robot visits the current location
+    New = str(round(time.time()))
+    # Replacing the previous location-time with the one the robot moved to
+    Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['visitedAt', Location, 'Long', New, Old])
+
+    print(f'Go to location {Location}')
+
+    Update_Time()
+
+
+def Update_Time():
+    """
+    Function to update robot times.
+    """
+    Armor_Client.call('REASON', '', '', [''])
+    # Robot time
+    Old = str(CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['now', Robot]))[0])
+    New = str(round(time.time()))
+    # Replacing the previous robot-time with the actual one
+    Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['now', Robot, 'Long', New, Old])
+
+    UrgencyThreshold = str(150)
+    # Replacing the previous urgency threshold
+    Old_Urg = CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['urgencyThreshold', Robot]))[0]
+    Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['urgencyThreshold', Robot, 'Long', UrgencyThreshold, Old_Urg])
+
+
+
+

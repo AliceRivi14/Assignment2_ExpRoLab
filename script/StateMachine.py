@@ -25,11 +25,10 @@ import rospy
 import smach
 import smach_ros
 import time
-import random
 
 from assignment2.srv import *
 # from armor_api.armor_client import ArmorClient
-from std_srvs.srv import *
+from std_srvs.srv import Trigger
 from std_msgs.msg import String
 
 import Functions as F
@@ -37,7 +36,8 @@ import Functions as F
 Battery_Client = None
 Movement_Client = None
 Map_Client = None
-B_Low = False
+Pub_Room = None
+BLev = 100
 
 # Service callback
 def Battery_State(req):
@@ -45,18 +45,28 @@ def Battery_State(req):
     Service callback.
 
     Args:
-        req (bool): notifies that the battery is low
+        req (float): notifies that the battery level
     Returns:
-        res (bool): indicates successful run of triggered service
+        res (bool): 
 
     """
-    global B_Low
-
-    rospy.loginfo('RECHARGE REQUEST')
-    B_Low = req.B_Low
+    global BLev
     res = BatteryLowResponse()
-    res.B_State = True  # Full battery
+
+    BLev -= req.LevelI
+    print(f'Battery level = {abs(BLev)}%')
+  
+    if abs(BLev) < 30:
+        res.LevelF = abs(BLev)      # Battery level when the final destination is reached
+        print(f'\u001b[31mI NEED TO BE RECHARGED')
+        # TODO: controlla quando va in ROOM E
+        time.sleep(5)
+    else:
+        res.LevelF = abs(BLev)
+
     return res
+
+
 
 # State TOPOLOGICAL_MAP
 class TOPOLOGICAL_MAP(smach.State):
@@ -84,12 +94,15 @@ class TOPOLOGICAL_MAP(smach.State):
 
         """
         global Map_Client
-        rospy.loginfo('Executing state TOPOLOGICAL_MAP')
-        resp = Map_Client(True)
-        if resp.success == True:    # Map construction ends
+
+        print('Executing state TOPOLOGICAL_MAP')
+        time.sleep(0.5)
+        respM = Map_Client()
+
+        if respM.success == True:    # Map construction ends
             return 'map_OK'
         else:
-            time.sleep(5)
+            time.sleep(1)
             return 'wait'
 
 # State RANDOM_MOVEMENT
@@ -118,11 +131,14 @@ class CHOOSE_DESTINATION(smach.State):
                 - *destination*: when the location in which the robot is to move is chosen
 
         """
-        global B_Low, Pub_Room
-        rospy.loginfo('Executing state CHOOSE_DESTINATION')
-        time.sleep(2)
+        global Pub_Room, BLev
+
+        print('Executing state CHOOSE_DESTINATION')
+        time.sleep(0.5)
         RoomID = F.Destination()        # Choice of the destination
-        if B_Low == True:               # Recharging required
+        time.sleep(1)
+        # TODO: controlla funzionamento dopo ROOM E
+        if BLev < 30:                   # Recharging required
             return 'b_low'
         else:
             Pub_Room.publish(RoomID)    
@@ -151,18 +167,21 @@ class RANDOM_MOVEMENT(smach.State):
             Transition of the FSM to be carried out
                 - *b_low*: if the robot needs to be recharged
                 - *move*: if the robot can move between the rooms
-                - *wait*: if the room is not reached yet or the goal has been cancelled
         """
-        global B_Low
+
         global Movement_Client
-        rospy.loginfo('Executing state RANDOM_MOVEMENT')
-        resp = Movement_Client(True)
-        if B_Low == True:               # Recharging required
+        global BLev
+
+        print('Executing state RANDOM_MOVEMENT')
+        time.sleep(0.5)
+        respR = Movement_Client()
+        time.sleep(1)
+
+        if BLev < 30:                       # Recharging required
             return 'b_low'
-        elif resp.success == True:      # Room reached
+        elif respR.success == True:          # Room reached
             return 'move'
         else:
-            time.sleep(2)
             return 'wait'
 
 # State ROOM_E
@@ -177,7 +196,7 @@ class ROOM_E(smach.State):
 
         """
         smach.State.__init__(self,
-                            outcomes = ['move', 'b_low'])
+                            outcomes = ['move', 'wait'])
     # Execution function
     def execute(self, userdata):
         """
@@ -186,18 +205,22 @@ class ROOM_E(smach.State):
 
         Returns:
             Transition of the FSM to be carried out
-                - *b_low*: if the robot needs to be recharged
+                - *wait*: if the battery isn't full yet
                 - *move*: if the robot can move between the rooms
 
         """
-        global B_Low
         global Battery_Client
-        rospy.loginfo('Executing state ROOM_E')
-        resp = Battery_Client(True)
-        if B_Low == True:       # Recharging required
-            return 'b_low'
-        else:
+        
+        print('Executing state ROOM_E')
+        time.sleep(0.5)
+        respB = Battery_Client()
+        time.sleep(1)
+
+        if respB.success == True:      # Battery full
             return 'move'
+        else:
+            time.sleep(3)
+            return 'wait'
 
 def main():
     """
@@ -206,16 +229,18 @@ def main():
 
     """
     global Battery_Client, Movement_Client, Map_Client
+    global B_srv, Pub_Room
 
     # Initialisation node
     rospy.init_node('Robot_State_Machine')
 
-    # Initialisation clients and service
-    Battery_Client = rospy.ServiceProxy('/Recharging_Switch', SetBool)
-    Movement_Client = rospy.ServiceProxy('/Movement_Switch', SetBool)
-    Map_Client = rospy.ServiceProxy('/Mapping_Switch', SetBool)
-    B_srv = rospy.Service('/BLevel_Switch', BatteryLow, Battery_State)
-
+    # Initialisation clients
+    Battery_Client = rospy.ServiceProxy('/Recharging_Switch', Trigger)
+    Movement_Client = rospy.ServiceProxy('/Movement_Switch', Trigger)
+    Map_Client = rospy.ServiceProxy('/Mapping_Switch', Trigger)
+    # Initilisation service
+    B_srv = rospy.Service('/BLevel', BatteryLow, Battery_State)
+    # Initialisation publisher
     Pub_Room = rospy.Publisher('/Room', String, queue_size=1)
 
     # Create a SMACH state machine
@@ -247,7 +272,7 @@ def main():
 
         smach.StateMachine.add('ROOM_E', ROOM_E(),
                                transitions = {'move': 'SURVEILLANCE',
-                                              'b_low': 'ROOM_E'})
+                                              'wait': 'ROOM_E'})
 
     # Create and start the introspection server for visualization
     sis = smach_ros.IntrospectionServer('Introspection', SM, '/SM_ROOT')

@@ -22,90 +22,64 @@ Service:
 
 import roslib
 import rospy
-import time
-import random
-from std_srvs.srv import *
-from std_msgs.msg import Int32MultiArray
+from std_srvs.srv import Trigger, TriggerResponse
 from assignment2.srv import *
-from armor_api.armor_client import ArmorClient
+#from armor_api.armor_client import ArmorClient
 
-import Functions as F
 import RandomMovement as RM
 
-B_Client = None
-Active = False
-BLev = 100  
+BLev = 100
 
-# Service callback
-def BatterySwitchCB(req):
-    """
-    Service callback.
+class Battery:
+    def __init__(self):
 
-    Args:
-        req (bool): for enabling/disabling the service related to battery charging simulation
+        # Initialisation service and client
+        self.Batt_srv = rospy.Service('/Recharging_Switch', Trigger, self.BatterySwitchCB)
+        self.B_Client = rospy.ServiceProxy('/BLevel', BatteryLow)        
+    # Service callback
+    def BatterySwitchCB(self, req):
+        """
+        Service callback.
 
-    Returns:
-        res.success (bool): indicates successful run of triggered service
+        Args:
+            req (bool): for enabling/disabling the service related to battery charging simulation
 
-        res.message (string): informational
-    """
-    global Active, res
+        Returns:
+            res.success (bool): indicates successful run of triggered service
 
-    Active = req.data
-    res = SetBoolResponse()
-    res.message = 'ROOM_E state'
-    res.success = True # Service enable
-    return res
+            res.message (string): informational
+        """
+        global BLev 
 
-def B_LevelCB(data):
+        if self.B_Client().LevelF < 30:
+            print('\u001b[31mBATTERY LOW')
+            RM.RandomMovement().MoveBaseA('E')
+            print('\u001b[93mCharging ...')
 
-    global BLev
-    BLev -= data
+            BLev = self.B_Client().LevelF
 
-    return BLev
+            for BLev in range(BLev, 100):
+                ++BLev
+                
+            print(f'Battery_level = {BLev}%')
+            self.B_Client(BLev)
 
-def main():
-    """
-    This function initializes the ROS node, client and service.
+        res = TriggerResponse()
+        res.message = 'BATTERY FULL'
+        res.success = True
 
-    A message is sent to the service /B_switch every random seconds to notify the need for recharging.
+        print(f'\u001b[92m{res.message}')
 
-    When the service /Recharging_Switch is called, battery charging is simulated.
-    """
-    global B_Client
-    global Active, BLev
+        return res
 
+    
+
+if __name__ == "__main__":
+    
     # Initialisation node
     rospy.init_node('Battery')
 
-    # Initialisation service, client and subscriber
-    Batt_srv = rospy.Service('/Recharging_Switch', SetBool, BatterySwitchCB)
-    B_Client = rospy.ServiceProxy('/BLevel_Switch', BatteryLow)
+    Batt = Battery()
 
-    Sub_BLevel = rospy.Subscriber('/B_Level', Int32MultiArray, B_LevelCB)
-
-    Mov = RM.RandomMovement()
-
-    while not rospy.is_shutdown():
-
-        if Active == True: # False
-            if BLev <= 20:
-                rospy.loginfo(f'Battery level = {BLev}%')
-                rospy.loginfo('I NEED TO BE RECHARGED')
-                resp = B_Client(True)                      # Recharging required
-            continue
-        else:
-            rospy.loginfo('BATTERY LOW')
-            Mov.MoveBaseA('E')
-            while (BLev != 100):
-                rospy.loginfo(f'Battery_level = {BLev}%')
-                BLev += 10
-                rospy.loginfo(f'Battery_level = {BLev}%')
-            rospy.loginfo(f'BATTERY FULL')
-            resp = B_Client(False)
-
-        # Wait for ctrl-c to stop the application
-        rospy.spin()
-
-if __name__ == "__main__":
-    main()
+    # Wait for ctrl-c to stop the application
+    rospy.spin()

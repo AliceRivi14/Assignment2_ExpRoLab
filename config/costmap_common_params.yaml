@@ -1,15 +1,17 @@
-max_obstacle_height: 0.60  
-obstacle_range: 3.0
-raytrace_range: 3.0
-robot_radius: 0.15
+footprint: [[0.2, 0.2], [0.2, -0.2], [-0.2, -0.2], [-0.2, 0.2]]
+robot_base_frame: base_link
+update_frequency: 5.0
+publish_frequency: 3.0
+transform_tolerance: 0.5
 
-# voxel map configuration; z-voxels 0 are filled by bumpers and 1 by laser scan (kinect)
-map_type: voxel
-origin_z: 0.0
-z_resolution: 0.2
-z_voxels: 2
-publish_voxel_map: false
+obstacle_range: 5.5
+raytrace_range: 6.0
 
-observation_sources: scan
+#layer definitions
+static_layer:
+    map_topic: /map
+    subscribe_to_updates: true
 
-scan: {data_type: LaserScan, topic: scan, marking: true, clearing: true, min_obstacle_height: 0.05, max_obstacle_height: 0.6}
+obstacle_layer:
+    observation_sources: laser_scan_sensor
+    laser_scan_sensor: {sensor_frame: armbot_laser_scanner, data_type: LaserScan, topic: /armbot_laser_scanner/laser/scan, marking: true, clearing: true}

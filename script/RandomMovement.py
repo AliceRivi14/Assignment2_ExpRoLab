@@ -21,7 +21,6 @@ Service:
     MoveBaseGoal
 
 """
-import random
 import roslib
 import time
 import rospy
@@ -30,19 +29,15 @@ import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from actionlib_msgs.msg import GoalStatus
 from nav_msgs.msg import Odometry
-from std_srvs.srv import *
+from std_srvs.srv import Trigger, TriggerResponse
 from assignment2.srv import *
 from armor_api.armor_client import ArmorClient
 import math
 
 from moveit_ros_planning_interface import _moveit_move_group_interface
-from std_msgs.msg import Int32, Int32MultiArray, Float64
+from std_msgs.msg import String, Float64
 
 import Functions as F
-import StateMachine as SM
-
-Active = False
-
 Path = 'ERL_WS/src/assignment2/worlds/topological_map.owl'
 IRI = 'http://bnc/exp-rob-lab/2022-23'
 Robot = 'Robot1'
@@ -55,14 +50,17 @@ Armor_Client = ArmorClient(Armor_Client_ID, Armor_ReferenceName)
 class RandomMovement:
     def __init__(self):
 
-        # Initialisation service, publisher and subscriber
-        Mov_srv = rospy.Service('/Movement_Switch', SetBool, self.MovementSwitchCB)
+        # Initialisation service
+        Mov_srv = rospy.Service('/Movement_Switch', Trigger, self.MovementSwitchCB)
+
+        self.Battery_Client = rospy.ServiceProxy('/Recharging_Switch', Trigger)
+        self.RoomClient = rospy.ServiceProxy('/room_info', RoomInformation)
+        self.Bat_Client = rospy.ServiceProxy('/BLevel', BatteryLow)
 
         self.Pub_PoseCamera = rospy.Publisher('/A/jointC_position_controller/command', Float64, queue_size=1)
-        self.Pub_BLevel = rospy.Publisher('/B_Level', Int32MultiArray, queue_size=1)
         
         self.Sub_Odom = rospy.Subscriber('/odom', Odometry, self.OdomCB)
-        self.Sub_Room = rospy.Subscriber('/Room', Int32, self.RoomCB)
+        self.Sub_Room = rospy.Subscriber('/Room', String, self.RoomCB)
 
         # Inialisation of the MoveBase action client
         self.MBClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
@@ -78,6 +76,8 @@ class RandomMovement:
 
         self.Room = 'E'
 
+        self.DestReach = True
+
     # /Movement_Switch service callback
     def MovementSwitchCB(self,req):
         """
@@ -86,23 +86,22 @@ class RandomMovement:
 
         If the signal of battery low is sent, the goal is cancelled.
         """
-
-        Active = req.data
         
-        RoomClient = rospy.ServiceProxy('/room_info', RoomInformation)
-        rospy.loginfo('Waiting for the RoomInformation server ...')
+        print('Waiting for the RoomInformation server ...')
         rospy.wait_for_service('/room_info')
 
-        print("CIAO")
         self.MoveBaseA(self.Room)       # Move the robot to the choosen location
 
-        res = SetBoolResponse()
-        res.message = 'FINAL POSITION REACHED'
-        res.success = True
+        res = TriggerResponse()
+        
+        if self.DestReach == True:
+            res.message = 'FINAL POSITION REACHED'
+            res.success = True
+        else:
+            res.message = 'GOAL CANCELLED'
+            res.success = False
 
-        rospy.loginfo(f'{res.message}')
-
-        Active = False
+        print(f'{res.message}')
 
         return res
 
@@ -110,35 +109,42 @@ class RandomMovement:
     def MoveBaseA(self,Loc):
 
 
-        rospy.loginfo('Waiting for the MoveBase server ...')
-        self.MBClient.wait_for_server()
+        print('Waiting for the MoveBase server ...')
+        #self.MBClient.wait_for_server()
 
         self.Goal.target_pose.header.frame_id = "map"
         self.Goal.target_pose.pose.orientation.w = 1.0;
         self.Goal.target_pose.header.stamp = rospy.Time.now()
 
-        rospy.loginfo(f'Actual position: ({self.previous_x},{self.previous_y})')
+        print(f'Actual position: ({self.previous_x},{self.previous_y})')
+
+        self.Goal.target_pose.pose.position.x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]
+        self.Goal.target_pose.pose.position.y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[0]
 
         F.MoveRobot(Loc)
 
-        self.Goal.target_pose.pose.position.x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))
-        self.Goal.target_pose.pose.position.y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))
-
-        rospy.loginfo(f'Moving to {Loc} at ({self.Goal.target_pose.pose.position.x},{self.Goal.target_pose.pose.position.y}) position')
+        print(f'Moving to ({self.Goal.target_pose.pose.position.x},{self.Goal.target_pose.pose.position.y}) position')
+        
         self.MBClient.send_goal(self.Goal)
 
-        rospy.loginfo('Waiting for the result ...')
-        self.MBClient.wait_for_result()
+        print('Waiting for the result ...')
+        #self.MBClient.wait_for_result()
 
-        dist = math.sqrt(pow(self.Goal.target_pose.pose.position.x - self.previous_x) +
-                    pow(self.Goal.target_pose.pose.position.y - self.previous_y))
-        self.Pub_BLevel.publish(dist)
+        dist = math.sqrt(pow(float(self.Goal.target_pose.pose.position.x) - self.previous_x, 2) +
+                    pow(float(self.Goal.target_pose.pose.position.y) - self.previous_y, 2))
+        print(f'To reach {Loc} I need to travel {round(dist)}m')
+        resp = self.Bat_Client(round(dist))
 
-        B_Low = SM.Battery_State()
-        if B_Low == True:
+        time.sleep(0.5)
+        
+        if resp.LevelF < 30:
+            # Cancel goal
             self.MBClient.cancel_goal()
-            print('GOAL CANCELLED \n')
+            self.DestReach = False
+
         elif self.State == GoalStatus.SUCCEEDED:
+            print(f'{Loc} reached')
+            self.DestReach = True
             # Positioning the robotic arm in the 'Home' configuration
             self.Group.set_named_target("HomePose")
             self.Group.move()
@@ -146,7 +152,9 @@ class RandomMovement:
             for self.Omega.data in range(0.0, 2*math.pi, math.pi/12):
                 self.Pub_PoseCamera.publish(self.Omega)
 
+        return self.DestReach
 
+# NON FUNZIONA
     def OdomCB(self,data):
         self.previous_x = data.pose.pose.position.x
         self.previous_y = data.pose.pose.position.y
@@ -158,13 +166,8 @@ if __name__ == "__main__":
 
     # Initialisation node
     rospy.init_node('RandomMovement')
-    # Initialisation service
-    Bat_srv = rospy.Service('/B_Switch', BatteryLow, SM.Battery_State)
 
-    # When the service /Movement_Switch is called, node manager class is instantiated
-    while not rospy.is_shutdown():
-        if Active == False:    
-            continue
+    RandMove = RandomMovement()
 
-        # Wait for ctrl-c to stop the application
-        rospy.spin()
+    # Wait for ctrl-c to stop the application
+    rospy.spin()

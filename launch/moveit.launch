@@ -23,8 +23,7 @@
   MoveIt's "demo" mode replaces the real robot driver with the joint_state_publisher.
   The latter one maintains and publishes the current joint configuration of the simulated robot.
   It also provides a GUI to move the simulated robot around "manually".
-  This corresponds to moving around the real robot without the use of MoveIt.
-  -->
+  This corresponds to moving around the real robot without the use of MoveIt. -->
   <arg name="use_gui" default="false" />
   <arg name="use_rviz" default="true" />
 
@@ -42,19 +41,19 @@
  <!-- Load the URDF into the ROS Parameter Server -->
  <param name="robot_description" textfile = "$(arg urdf_path)"/>
 
-   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -x -6.0 -y 11.0 -z 0.05"
-   respawn="false" output="screen" />
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -x -6.0 -y 11.0 -z 0.05"
+  respawn="false" output="screen" />
 
 
-   <!-- We do not have a robot connected, so publish fake joint states -->
-   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)">
-     <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
-     <rosparam param="source_list">[/joint_states]</rosparam>
-   </node>
-   <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" if="$(arg use_gui)">
-     <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
-     <rosparam param="source_list">[/joint_states]</rosparam>
-   </node>
+  <!-- We do not have a robot connected, so publish fake joint states -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)">
+    <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
+    <rosparam param="source_list">[/joint_states]</rosparam>
+  </node>
+  <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" if="$(arg use_gui)">
+    <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
+    <rosparam param="source_list">[/joint_states]</rosparam>
+  </node>
 
   <!-- Given the published joint states, publish tf for the robot links -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
@@ -72,7 +71,8 @@
 
   <!-- Run Rviz and load the default config to see the state of the move_group node -->
   <include file="$(find MoveIt)/launch/moveit_rviz.launch" if="$(arg use_rviz)">
-    <arg name="rviz_config" value="$(find MoveIt)/launch/moveit.rviz"/>
+    <!-- <arg name="rviz_config" value="$(find MoveIt)/launch/moveit.rviz"/> -->
+    <arg name="rviz_config" value="$(find assignment2)/config/sim.rviz"/>
     <arg name="debug" value="$(arg debug)"/>
   </include>
 
