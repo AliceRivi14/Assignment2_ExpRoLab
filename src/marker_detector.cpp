@@ -88,6 +88,8 @@ void MarkerDetectorClass::DetectMarker(){
   Omega.data = 0.0;
   Pos0.data = 0.0;
 
+  sleep(5);
+
   // Define the joint values for the RGB camera joint
   std::vector<double> RGB_joint = {0.0, 0.0, 0.0};
 
@@ -96,6 +98,8 @@ void MarkerDetectorClass::DetectMarker(){
   sleep(0.5);
   cout << "HomePose" << endl;
   // RGB camera rotation around the z-axis
+
+  // TODO: rotazione telecamera Publisher/Moveit
   while(Omega.data <= 2*M_PI){
     Omega.data += M_PI/4;
     Pub_Joint0.publish(Pos0);
@@ -103,7 +107,7 @@ void MarkerDetectorClass::DetectMarker(){
     Group.setJointValueTarget(RGB_joint);
   }
   
-  cout << RGB_joint << endl;
+  cout << RGB_joint[0] << endl;
   cout << "Marker found: " << TotMarket << endl;
 
   Group.setNamedTarget("LowPose");

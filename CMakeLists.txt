@@ -12,7 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   message_generation
   moveit_ros_planning_interface
-  OpenCV
   aruco
   cv_bridge
   urdf
@@ -23,6 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   std_msgs
 )
+find_package(OpenCV Required)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -82,7 +82,7 @@ generate_messages(
 	  DEPENDENCIES
 	  std_msgs
 	  actionlib_msgs
-    nav_msgs
+	  nav_msgs
 )
 
 ################################################
