@@ -434,7 +434,7 @@
                 </noise>
             </ray>
             <plugin filename="libgazebo_ros_laser.so" name="laser_scanner_controller">
-                <topicName>LaserScan/laser/scan</topicName>
+                <topicName>/scan</topicName>
                 <frameName>LaserScan</frameName>
             </plugin>
         </sensor>
@@ -537,9 +537,9 @@
             <!-- Maximum torque which the wheels can produce, in Nm -->
             <torque>20</torque>
             <!-- Topic to receive geometry_msgs/Twist message commands, defaults to `cmd_vel` -->
-            <commandTopic>mobile_base_controller/cmd_vel</commandTopic>
+            <commandTopic>/cmd_vel</commandTopic>
             <!-- Topic to publish nav_msgs/Odometry messages, defaults to `odom` -->
-            <odometryTopic>mobile_base_controller/odom</odometryTopic>
+            <odometryTopic>/odom</odometryTopic>
             <!-- Odometry frame, defaults to `odom` -->
             <odometryFrame>odom</odometryFrame>
             <odometryRate>20.0</odometryRate>

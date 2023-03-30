@@ -220,7 +220,7 @@
   </xacro:macro>
 
 <!-- LaserScan -->
-  <xacro:macro name="laser_scanner" params="laser_name parent_link *cylinder *origin">
+  <xacro:macro name="LaserScan" params="laser_name parent_link *cylinder *origin">
     <link name="${laser_name}">
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>

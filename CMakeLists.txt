@@ -12,8 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   message_generation
   moveit_ros_planning_interface
-  aruco
-  cv_bridge
   urdf
   actionlib
   actionlib_msgs
@@ -21,8 +19,12 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   nav_msgs
   std_msgs
+  sensor_msgs
+  aruco
+  OpenCV
+  cv_bridge
 )
-find_package(OpenCV Required)
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -117,9 +119,8 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES assignment2
-#  CATKIN_DEPENDS roscpp rospy
+#  CATKIN_DEPENDS rospy actionlib_msgs std_msgs message_runtime
 #  DEPENDS system_lib
-	DEPENDS OpenCV
 )
 
 ###########
@@ -168,7 +169,6 @@ add_dependencies(marker_detector ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
   target_link_libraries(marker_detector
 
    ${catkin_LIBRARIES}
-   ${OpenCV_LIBRARIES}
  )
 
 

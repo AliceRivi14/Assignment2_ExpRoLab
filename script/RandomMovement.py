@@ -59,7 +59,7 @@ class RandomMovement:
 
         self.Pub_PoseCamera = rospy.Publisher('/A/jointC_position_controller/command', Float64, queue_size=1)
         
-        self.Sub_Odom = rospy.Subscriber('/odom', Odometry, self.OdomCB)
+        #self.Sub_Odom = rospy.Subscriber('/odom', Odometry, self.OdomCB)
         self.Sub_Room = rospy.Subscriber('/Room', String, self.RoomCB)
 
         # Inialisation of the MoveBase action client
@@ -77,6 +77,13 @@ class RandomMovement:
         self.Room = 'E'
 
         self.DestReach = True
+
+    def RoomCB(self,Location):
+        self.Room = Location.data   # Choosen location
+
+#    def OdomCB(self,data):
+#        self.previous_x = data.pose.pose.position.x
+#        self.previous_y = data.pose.pose.position.y
 
     # /Movement_Switch service callback
     def MovementSwitchCB(self,req):
@@ -110,7 +117,7 @@ class RandomMovement:
 
 
         print('Waiting for the MoveBase server ...')
-        #self.MBClient.wait_for_server()
+        self.MBClient.wait_for_server()
 
         self.Goal.target_pose.header.frame_id = "map"
         self.Goal.target_pose.pose.orientation.w = 1.0;
@@ -121,6 +128,9 @@ class RandomMovement:
         self.Goal.target_pose.pose.position.x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]
         self.Goal.target_pose.pose.position.y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[0]
 
+        self.Goal.target_pose.pose.position.x = float(self.Goal.target_pose.pose.position.x)
+        self.Goal.target_pose.pose.position.y = float(self.Goal.target_pose.pose.position.y)
+
         F.MoveRobot(Loc)
 
         print(f'Moving to ({self.Goal.target_pose.pose.position.x},{self.Goal.target_pose.pose.position.y}) position')
@@ -128,39 +138,47 @@ class RandomMovement:
         self.MBClient.send_goal(self.Goal)
 
         print('Waiting for the result ...')
-        #self.MBClient.wait_for_result()
 
         dist = math.sqrt(pow(float(self.Goal.target_pose.pose.position.x) - self.previous_x, 2) +
                     pow(float(self.Goal.target_pose.pose.position.y) - self.previous_y, 2))
         print(f'To reach {Loc} I need to travel {round(dist)}m')
         resp = self.Bat_Client(round(dist))
 
-        time.sleep(0.5)
+        # DEBUG
+        print(f'{self.State}')
+
+        self.MBClient.wait_for_result()
+
         
+
         if resp.LevelF < 30:
             # Cancel goal
             self.MBClient.cancel_goal()
             self.DestReach = False
-
+        #BUG: NON FUNZIONA --> robot non preciso
         elif self.State == GoalStatus.SUCCEEDED:
             print(f'{Loc} reached')
             self.DestReach = True
             # Positioning the robotic arm in the 'Home' configuration
             self.Group.set_named_target("HomePose")
             self.Group.move()
-            # RGB camera rotation around the z-axis
+
+            # TODO: RGB camera rotation around the z-axis
+            print('Inspection')
             for self.Omega.data in range(0.0, 2*math.pi, math.pi/12):
                 self.Pub_PoseCamera.publish(self.Omega)
+        else:
+            # Cancel goal
+            self.MBClient.cancel_goal()
+            print('The robot failed to reach the goal for some reason')
+            self.DestReach = False
+
+        self.previous_x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]
+        self.previous_y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[0]
+
 
         return self.DestReach
 
-# NON FUNZIONA
-    def OdomCB(self,data):
-        self.previous_x = data.pose.pose.position.x
-        self.previous_y = data.pose.pose.position.y
-
-    def RoomCB(self,Location):
-        self.Room = Location.data   # Choosen location
 
 if __name__ == "__main__":
 

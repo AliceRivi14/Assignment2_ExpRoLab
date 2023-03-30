@@ -52,23 +52,26 @@ class Battery:
         global BLev 
 
         if self.B_Client().LevelF < 30:
-            print('\u001b[31mBATTERY LOW')
+            print('\033[91mBATTERY LOW\033[0m')
             RM.RandomMovement().MoveBaseA('E')
-            print('\u001b[93mCharging ...')
+            print('Charging ...')
 
             BLev = self.B_Client().LevelF
 
-            for BLev in range(BLev, 100):
+            for BLev in range(BLev, 101):
                 ++BLev
                 
             print(f'Battery_level = {BLev}%')
             self.B_Client(BLev)
+        else:
+            print('...')
+        
 
         res = TriggerResponse()
         res.message = 'BATTERY FULL'
         res.success = True
 
-        print(f'\u001b[92m{res.message}')
+        print(f'\033[92m{res.message}\033[0m')
 
         return res
 

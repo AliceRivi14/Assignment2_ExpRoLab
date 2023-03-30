@@ -52,20 +52,18 @@ def Battery_State(req):
     """
     global BLev
     res = BatteryLowResponse()
-
-    BLev -= req.LevelI
-    print(f'Battery level = {abs(BLev)}%')
+    # BUG: calcolo da sistemare
+    BLev = BLev - req.LevelI
+    print(f'Battery level = {BLev}%')
   
-    if abs(BLev) < 30:
-        res.LevelF = abs(BLev)      # Battery level when the final destination is reached
-        print(f'\u001b[31mI NEED TO BE RECHARGED')
-        # TODO: controlla quando va in ROOM E
-        time.sleep(5)
+    if BLev < 30:
+        res.LevelF = BLev      # Battery level when the final destination is reached
+        print('I NEED TO BE RECHARGED')
+        time.sleep(3)
     else:
-        res.LevelF = abs(BLev)
+        res.LevelF = BLev
 
     return res
-
 
 
 # State TOPOLOGICAL_MAP
@@ -137,7 +135,7 @@ class CHOOSE_DESTINATION(smach.State):
         time.sleep(0.5)
         RoomID = F.Destination()        # Choice of the destination
         time.sleep(1)
-        # TODO: controlla funzionamento dopo ROOM E
+
         if BLev < 30:                   # Recharging required
             return 'b_low'
         else:
@@ -177,6 +175,9 @@ class RANDOM_MOVEMENT(smach.State):
         respR = Movement_Client()
         time.sleep(1)
 
+        # BUG: Dopo essersi ricaricato, ricomincia a selezionare la destinazione, 
+        # ma una volta arrivato qui invoca il server del movement ma risponde quello 
+        # della batteria in modo strano
         if BLev < 30:                       # Recharging required
             return 'b_low'
         elif respR.success == True:          # Room reached
@@ -218,6 +219,7 @@ class ROOM_E(smach.State):
 
         if respB.success == True:      # Battery full
             return 'move'
+           # respB.success = False
         else:
             time.sleep(3)
             return 'wait'

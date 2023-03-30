@@ -70,9 +70,9 @@
 
 
   <!-- Gmapping -->
-  <arg name="scan_topic"  default="LaserScan/laser/scan" />
+  <arg name="scan_topic"  default="/scan" />
   <arg name="base_frame"  default="base_link"/>
-  <arg name="odom_frame"  default="odom"/>
+  <arg name="odom_frame"  default="/odom"/>
 
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
     <param name="base_frame" value="$(arg base_frame)"/>

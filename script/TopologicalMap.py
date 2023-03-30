@@ -31,6 +31,9 @@ Path = 'ERL_WS/src/assignment2/worlds/topological_map.owl'
 IRI = 'http://bnc/exp-rob-lab/2022-23'
 Robot = 'Robot1'
 
+
+# NOTE: FUNZIONA
+
 class Topological_Map:
     def __init__(self):
 
@@ -62,7 +65,7 @@ class Topological_Map:
         RoomClient = rospy.ServiceProxy('/room_info', RoomInformation)
 
         # Construct lists and dictionaries from infos retrived from the room_info srv
-        #for i in self.IdList:
+        # TODO: for i in self.IdList:
         for i in range(11, 18): #DEBUG FINCHE' NON LEGGE I MARKER
             resp = RoomClient(i)
             self.Location.append(resp.room)
