@@ -36,6 +36,10 @@ class Battery:
         # Initialisation service and client
         self.Batt_srv = rospy.Service('/Recharging_Switch', Trigger, self.BatterySwitchCB)
         self.B_Client = rospy.ServiceProxy('/BLevel', BatteryLow)        
+
+        
+
+
     # Service callback
     def BatterySwitchCB(self, req):
         """
@@ -49,6 +53,8 @@ class Battery:
 
             res.message (string): informational
         """
+        print('ROOM_E')
+
         global BLev 
 
         if self.B_Client().LevelF < 30:
@@ -81,7 +87,7 @@ if __name__ == "__main__":
     
     # Initialisation node
     rospy.init_node('Battery')
-
+    
     Batt = Battery()
 
     # Wait for ctrl-c to stop the application

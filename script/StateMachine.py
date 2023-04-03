@@ -175,6 +175,8 @@ class RANDOM_MOVEMENT(smach.State):
         respR = Movement_Client()
         time.sleep(1)
 
+        print(f'Random: {BLev}')
+
         # BUG: Dopo essersi ricaricato, ricomincia a selezionare la destinazione, 
         # ma una volta arrivato qui invoca il server del movement ma risponde quello 
         # della batteria in modo strano
@@ -211,7 +213,7 @@ class ROOM_E(smach.State):
 
         """
         global Battery_Client
-        
+         
         print('Executing state ROOM_E')
         time.sleep(0.5)
         respB = Battery_Client()
@@ -245,6 +247,8 @@ def main():
     # Initialisation publisher
     Pub_Room = rospy.Publisher('/Room', String, queue_size=1)
 
+    print('STATE MACHINE')
+    
     # Create a SMACH state machine
     SM = smach.StateMachine(outcomes = ['Container'])
     # Open the Container

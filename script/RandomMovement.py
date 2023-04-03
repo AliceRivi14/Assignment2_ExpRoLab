@@ -27,8 +27,6 @@ import rospy
 import actionlib
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-from actionlib_msgs.msg import GoalStatus
-from nav_msgs.msg import Odometry
 from std_srvs.srv import Trigger, TriggerResponse
 from assignment2.srv import *
 from armor_api.armor_client import ArmorClient
@@ -58,18 +56,19 @@ class RandomMovement:
         self.Bat_Client = rospy.ServiceProxy('/BLevel', BatteryLow)
 
         self.Pub_PoseCamera = rospy.Publisher('/A/jointC_position_controller/command', Float64, queue_size=1)
-        
+        self.Pub_Joint0 = rospy.Publisher('/A/joint0_position_controller/command', Float64, queue_size=1)
+
         #self.Sub_Odom = rospy.Subscriber('/odom', Odometry, self.OdomCB)
         self.Sub_Room = rospy.Subscriber('/Room', String, self.RoomCB)
 
         # Inialisation of the MoveBase action client
         self.MBClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         self.Goal = MoveBaseGoal()
-        self.State = self.MBClient.get_state()
 
         # MoveIt
         self.Group = _moveit_move_group_interface.MoveGroupInterface("arm", "robot_description", "")
         self.Omega = Float64();
+        self.Omega.data = 0.0
 
         self.previous_x = -6.0
         self.previous_y = 11.0
@@ -93,6 +92,7 @@ class RandomMovement:
 
         If the signal of battery low is sent, the goal is cancelled.
         """
+        print('RANDOM_MOVEMENT')
         
         print('Waiting for the RoomInformation server ...')
         rospy.wait_for_service('/room_info')
@@ -123,6 +123,11 @@ class RandomMovement:
         self.Goal.target_pose.pose.orientation.w = 1.0;
         self.Goal.target_pose.header.stamp = rospy.Time.now()
 
+        self.previous_x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]
+        self.previous_y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[0]
+        self.previous_x = float(self.previous_x)
+        self.previous_y = float(self.previous_y)
+
         print(f'Actual position: ({self.previous_x},{self.previous_y})')
 
         self.Goal.target_pose.pose.position.x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]
@@ -137,45 +142,47 @@ class RandomMovement:
         
         self.MBClient.send_goal(self.Goal)
 
-        print('Waiting for the result ...')
-
         dist = math.sqrt(pow(float(self.Goal.target_pose.pose.position.x) - self.previous_x, 2) +
                     pow(float(self.Goal.target_pose.pose.position.y) - self.previous_y, 2))
         print(f'To reach {Loc} I need to travel {round(dist)}m')
-        resp = self.Bat_Client(round(dist))
 
-        # DEBUG
-        print(f'{self.State}')
-
+        # Positioning the robotic arm in the 'Home' configuration
+        self.Group.set_named_target("HomePose")
+        self.Group.move()
+        
+        print('Waiting for the result ...')
         self.MBClient.wait_for_result()
-
+        resp = self.Bat_Client(round(dist))
         
 
         if resp.LevelF < 30:
             # Cancel goal
             self.MBClient.cancel_goal()
             self.DestReach = False
-        #BUG: NON FUNZIONA --> robot non preciso
-        elif self.State == GoalStatus.SUCCEEDED:
-            print(f'{Loc} reached')
-            self.DestReach = True
+        # TODO: controllare limiti per room E
+        elif self.Goal.target_pose.pose.position.x >= (self.Goal.target_pose.pose.position.x - 1.0) or self.Goal.target_pose.pose.position.x <= (self.Goal.target_pose.pose.position.x + 1.0) or self.Goal.target_pose.pose.position.y >= (self.Goal.target_pose.pose.position.y - 1.0) or self.Goal.target_pose.pose.position.y <= (self.Goal.target_pose.pose.position.y + 1.0):
+            print(f'{Loc} reached'
             # Positioning the robotic arm in the 'Home' configuration
             self.Group.set_named_target("HomePose")
             self.Group.move()
+            self.Pub_PoseCamera.publish(0.0)
 
             # TODO: RGB camera rotation around the z-axis
             print('Inspection')
-            for self.Omega.data in range(0.0, 2*math.pi, math.pi/12):
+            while self.Omega.data <= 2*math.pi:
+                self.Omega.data += math.pi/4
+                print(self.Omega.data)
+                self.Pub_Joint0.publish(0.0)
                 self.Pub_PoseCamera.publish(self.Omega)
+                self.Group.move()   
+                time.sleep(1)
+
+            self.DestReach = True
         else:
             # Cancel goal
             self.MBClient.cancel_goal()
             print('The robot failed to reach the goal for some reason')
             self.DestReach = False
-
-        self.previous_x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]
-        self.previous_y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[0]
-
 
         return self.DestReach
 
@@ -184,7 +191,7 @@ if __name__ == "__main__":
 
     # Initialisation node
     rospy.init_node('RandomMovement')
-
+    
     RandMove = RandomMovement()
 
     # Wait for ctrl-c to stop the application

@@ -32,8 +32,6 @@ IRI = 'http://bnc/exp-rob-lab/2022-23'
 Robot = 'Robot1'
 
 
-# NOTE: FUNZIONA
-
 class Topological_Map:
     def __init__(self):
 
@@ -51,11 +49,14 @@ class Topological_Map:
         self.LocationCoord = {}     # Dictionary of rooms and their coordinates
         self.CoordinatesLoc = {}    # Dictionary of coordinates and their rooms    
 
-    # /Mapping_Swit service callback
+
+    # /Mapping_Switch service callback
     def MappingSwitchCB(self,req):
         """
         Function to load the topological map using the aRMOR client.
         """
+
+        print('TOPOLOGICAL_MAP')
 
         print('Waiting for the Armor server ...')
         rospy.wait_for_service('armor_interface_srv')
@@ -128,7 +129,7 @@ if __name__ == "__main__":
 
     # Initialisation ROS node
     rospy.init_node('TopologicalMap')
-
+    
     TopMap = Topological_Map()
 
     # Wait for ctrl-c to stop the application
