@@ -27,7 +27,7 @@
     </link>
 
     <joint name="${camera_name}_joint" type="continuous">
-      <axis xyz="0 0 1" /> <!-- Yaw -->
+      <axis xyz="0 0 1" /> 
       <xacro:insert_block name="origin"/>
       <parent link="${parent_link}"/>
       <child link="${camera_name}"/>
@@ -280,7 +280,7 @@
           </noise>
         </ray>
         <plugin name="laser_scanner_controller" filename="libgazebo_ros_laser.so">
-          <topicName>${laser_name}/laser/scan</topicName>
+          <topicName>/scan</topicName>
           <frameName>${laser_name}</frameName>
         </plugin>
       </sensor>

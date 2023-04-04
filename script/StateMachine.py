@@ -175,8 +175,6 @@ class RANDOM_MOVEMENT(smach.State):
         respR = Movement_Client()
         time.sleep(1)
 
-        print(f'Random: {BLev}')
-
         # BUG: Dopo essersi ricaricato, ricomincia a selezionare la destinazione, 
         # ma una volta arrivato qui invoca il server del movement ma risponde quello 
         # della batteria in modo strano

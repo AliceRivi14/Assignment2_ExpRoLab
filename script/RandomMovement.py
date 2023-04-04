@@ -70,9 +70,6 @@ class RandomMovement:
         self.Omega = Float64();
         self.Omega.data = 0.0
 
-        self.previous_x = -6.0
-        self.previous_y = 11.0
-
         self.Room = 'E'
 
         self.DestReach = True
@@ -115,20 +112,14 @@ class RandomMovement:
 # NAVIGATION
     def MoveBaseA(self,Loc):
 
-
         print('Waiting for the MoveBase server ...')
-        self.MBClient.wait_for_server()
+        #self.MBClient.wait_for_server()
 
         self.Goal.target_pose.header.frame_id = "map"
         self.Goal.target_pose.pose.orientation.w = 1.0;
         self.Goal.target_pose.header.stamp = rospy.Time.now()
 
-        self.previous_x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]
-        self.previous_y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[0]
-        self.previous_x = float(self.previous_x)
-        self.previous_y = float(self.previous_y)
-
-        print(f'Actual position: ({self.previous_x},{self.previous_y})')
+        print(f'Actual position: ({previous_x},{previous_y})')
 
         self.Goal.target_pose.pose.position.x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]
         self.Goal.target_pose.pose.position.y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[0]
@@ -142,8 +133,8 @@ class RandomMovement:
         
         self.MBClient.send_goal(self.Goal)
 
-        dist = math.sqrt(pow(float(self.Goal.target_pose.pose.position.x) - self.previous_x, 2) +
-                    pow(float(self.Goal.target_pose.pose.position.y) - self.previous_y, 2))
+        dist = math.sqrt(pow(float(self.Goal.target_pose.pose.position.x) - previous_x, 2) +
+                    pow(float(self.Goal.target_pose.pose.position.y) - previous_y, 2))
         print(f'To reach {Loc} I need to travel {round(dist)}m')
 
         # Positioning the robotic arm in the 'Home' configuration
@@ -151,7 +142,7 @@ class RandomMovement:
         self.Group.move()
         
         print('Waiting for the result ...')
-        self.MBClient.wait_for_result()
+        #self.MBClient.wait_for_result()
         resp = self.Bat_Client(round(dist))
         
 
@@ -161,11 +152,12 @@ class RandomMovement:
             self.DestReach = False
         # TODO: controllare limiti per room E
         elif self.Goal.target_pose.pose.position.x >= (self.Goal.target_pose.pose.position.x - 1.0) or self.Goal.target_pose.pose.position.x <= (self.Goal.target_pose.pose.position.x + 1.0) or self.Goal.target_pose.pose.position.y >= (self.Goal.target_pose.pose.position.y - 1.0) or self.Goal.target_pose.pose.position.y <= (self.Goal.target_pose.pose.position.y + 1.0):
-            print(f'{Loc} reached'
+            print(f'{Loc} reached')
             # Positioning the robotic arm in the 'Home' configuration
             self.Group.set_named_target("HomePose")
             self.Group.move()
             self.Pub_PoseCamera.publish(0.0)
+            self.Pub_Joint0.publish(0.0)
 
             # TODO: RGB camera rotation around the z-axis
             print('Inspection')
@@ -177,12 +169,19 @@ class RandomMovement:
                 self.Group.move()   
                 time.sleep(1)
 
+            self.Pub_PoseCamera.publish(0.0)
             self.DestReach = True
         else:
             # Cancel goal
             self.MBClient.cancel_goal()
             print('The robot failed to reach the goal for some reason')
             self.DestReach = False
+
+
+        previous_x = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[1]
+        previous_y = F.CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[1]
+        previous_x = float(previous_x)
+        previous_y = float(previous_y)
 
         return self.DestReach
 

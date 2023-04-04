@@ -162,7 +162,7 @@
       <collision>
         <origin xyz="0 0 ${posz}" rpy="0 0 0" />
         <geometry>
-          <cylinder radius="${arm_radius}" length="0.2"/>
+          <cylinder radius="${arm_radius}" length="${arm_height}"/>
         </geometry>
       </collision>
       <xacro:cyl_inertia_A/>
@@ -211,9 +211,17 @@
     </visual>
   </link>
 
+  <transmission name="arm_chassis_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="arm_chassis_joint">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="arm_chassis_motor">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+          <mechanicalInterface>1</mechanicalInterface>
+      </actuator>
+  </transmission>
   <joint name="arm_chassis_joint" type="fixed">
-      <axis xyz="0 0 1" />
-      <origin rpy="0 0 0" xyz="0 0 0.08" />
       <parent link="chassis" />
       <child link="arm_chassis" />
   </joint>
@@ -257,15 +265,15 @@
   <xacro:include filename="$(find assignment2)/urdf/sensors.xacro"/>
 
 <!-- LaserScan -->
-  <xacro:LaserScan laser_name="LaserScan" parent_link="chassis">
+  <xacro:laser_scanner laser_name="LaserScan" parent_link="chassis">
     <cylinder length="0.04" radius="0.04"/>
     <origin xyz="${(chassis_length/2)} 0 ${(chassis_height/2)*1.5}" rpy="0 0 0"/>
-  </xacro:LaserScan> 
+  </xacro:laser_scanner>
 
 <!-- RGB Camera -->
 <xacro:RGB_camera camera_name="RGB" parent_link="arm_2">
   <box size="0.08 0.08 0.08"/>
-  <origin xyz="0 0 0.34" rpy="0 0 0"/>
+  <origin xyz="0 0 ${arm_height+0.04}" rpy="0 0 0"/>
 </xacro:RGB_camera>
 
 <!-- GAZEBO Plugins -->
@@ -288,9 +296,9 @@
       <!-- Maximum torque which the wheels can produce, in Nm -->
       <torque>20</torque>
       <!-- Topic to receive geometry_msgs/Twist message commands, defaults to `cmd_vel` -->
-      <commandTopic>/cmd_vel</commandTopic>
+      <commandTopic>mobile_base_controller/cmd_vel</commandTopic>
       <!-- Topic to publish nav_msgs/Odometry messages, defaults to `odom` -->
-      <odometryTopic>/odom</odometryTopic>
+      <odometryTopic>mobile_base_controller/odom</odometryTopic>
       <!-- Odometry frame, defaults to `odom` -->
       <odometryFrame>odom</odometryFrame>
       <odometryRate>20.0</odometryRate>

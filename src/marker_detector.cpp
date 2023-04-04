@@ -120,18 +120,6 @@ void MarkerDetectorClass::DetectMarker(){
     Pub_Joint0.publish(Pos0);
     Pub_PoseCamera.publish(Omega);
   }
-
-  cout << "Marker found: " << TotMarket << endl;
-
-  Group.setNamedTarget("GroundPose");
-  Group.move();
-  sleep(0.5);
-  cout << "GroundPose" << endl;
-  // Arm Chassis rotation around the z-axis
-  while(Omega.data <= 2*M_PI){
-    Omega.data += M_PI/4;
-    Pub_Joint0.publish(Omega);
-  }
   
   cout << "Marker found: " << TotMarket << endl;
 
