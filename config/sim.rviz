@@ -244,7 +244,7 @@ Visualization Manager:
       Value: true
     - Acceleration_Scaling_Factor: 1
       Class: moveit_rviz_plugin/MotionPlanning
-      Enabled: true
+      Enabled: false
       Move Group Namespace: ""
       MoveIt_Allow_Approximate_IK: false
       MoveIt_Allow_External_Program: false
@@ -431,39 +431,13 @@ Visualization Manager:
         Robot Alpha: 1
         Show Robot Collision: false
         Show Robot Visual: true
-      Value: true
+      Value: false
       Velocity_Scaling_Factor: 1
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        LaserScan:
-          Value: true
-        RGB:
-          Value: true
-        arm_1:
-          Value: true
-        arm_2:
-          Value: true
-        arm_chassis:
-          Value: true
-        back_left_wheel:
-          Value: true
-        back_right_wheel:
-          Value: true
-        base_link:
-          Value: true
-        chassis:
-          Value: true
-        front_left_wheel:
-          Value: true
-        front_right_wheel:
-          Value: true
-        map:
-          Value: true
-        odom:
-          Value: true
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
@@ -471,27 +445,9 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          odom:
-            base_link:
-              chassis:
-                LaserScan:
-                  {}
-                arm_chassis:
-                  arm_1:
-                    arm_2:
-                      RGB:
-                        {}
-                back_left_wheel:
-                  {}
-                back_right_wheel:
-                  {}
-                front_left_wheel:
-                  {}
-                front_right_wheel:
-                  {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
     - Class: rviz/Image
       Enabled: true
       Image Topic: /RGB/RGB/image_raw

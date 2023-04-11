@@ -9,6 +9,7 @@ generic_hw_control_loop:
 # Settings for ros_control hardware interface
 hardware_interface:
   joints:
+    - arm_chassis_joint
     - arm_1_joint
     - arm_2_joint
     - RGB_joint
@@ -16,14 +17,23 @@ hardware_interface:
     - back_right_wheel_joint
     - front_left_wheel_joint
     - front_right_wheel_joint
-  sim_control_mode: 0  # 0: position, 1: velocity
+  sim_control_mode: 1  # 0: position, 1: velocity
 # Publish all joint states
 # Creates the /joint_states topic necessary in ROS
 joint_state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
 controller_list:
-  - name: wheel_controller
+  - name: arm_controller
+    action_ns: follow_joint_trajectory
+    default: True
+    type: FollowJointTrajectory
+    joints:
+      - arm_chassis_joint
+      - arm_1_joint
+      - arm_2_joint
+      - RGB_joint
+  - name: wheels_controller
     action_ns: follow_joint_trajectory
     default: True
     type: FollowJointTrajectory
@@ -32,11 +42,3 @@ controller_list:
       - back_right_wheel_joint
       - front_left_wheel_joint
       - front_right_wheel_joint
-  - name: arm_controller
-    action_ns: follow_joint_trajectory
-    default: True
-    type: FollowJointTrajectory
-    joints:
-      - arm_1_joint
-      - arm_2_joint
-      - RGB_joint

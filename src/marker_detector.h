@@ -5,10 +5,9 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "sensor_msgs/Image.h"
 #include <std_msgs/Float64.h>
-#include "std_msgs/MultiArrayLayout.h"
-#include "std_msgs/MultiArrayDimension.h"
 #include "std_msgs/Int32MultiArray.h"
 
 class MarkerDetectorClass
@@ -29,6 +28,15 @@ public:
   void CallbackCamera(const sensor_msgs::Image::ConstPtr& msg);
 
   int TotMarket;
+
+   // ArUco stuff
+  aruco::MarkerDetector MDetector;
+  std::vector<aruco::Marker> Markers;
+  aruco::CameraParameters CamParam;
+  double MSize = 0.05;
+
+  // CvImagePtr to convert the ROS image message in a CvImage suitable for working with OpenCV
+  cv_bridge::CvImagePtr CvPtr;
 
 };
 #endif

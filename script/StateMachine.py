@@ -8,6 +8,9 @@
 
 ROS node for implementing a finite state machine FSM.
 
+Publishes to:
+    /Room per informare la destinazione scelta
+
 Client:
     /Battery_Switch to active the ROOM_E state
 
@@ -16,7 +19,7 @@ Client:
     /Mapping_Switch to active the TOPOLOGICAL_MAP state
 
 Service:
-    /B_Switch to communicate the need for recharging the battery
+    /B_Switch to communicate the state of the battery
 
 """
 
@@ -39,21 +42,20 @@ Map_Client = None
 Pub_Room = None
 BLev = 100
 
-# Service callback
+# BLevel service callback
 def Battery_State(req):
     """
-    Service callback.
+    Funzione per controllare il livello di batteria del robot
 
     Args:
-        req (float): notifies that the battery level
+        req (float): livello iniziale della batteria
     Returns:
-        res (bool): 
+        res (bool): livello finale della batteria
 
     """
     global BLev
     res = BatteryLowResponse()
-    # BUG: calcolo da sistemare
-    BLev = BLev - req.LevelI
+    BLev = abs(BLev - req.LevelI)
     print(f'Battery level = {BLev}%')
   
     if BLev < 30:
@@ -121,7 +123,7 @@ class CHOOSE_DESTINATION(smach.State):
     def execute(self, userdata):
         """
         Function that executes the status of the FSM by executing a function
-        to decide in which location the robot should move according to  the urgency.
+        to decide in which location the robot should move according to the urgency.
 
         Returns:
             Transition of the FSM to be carried out
@@ -165,6 +167,7 @@ class RANDOM_MOVEMENT(smach.State):
             Transition of the FSM to be carried out
                 - *b_low*: if the robot needs to be recharged
                 - *move*: if the robot can move between the rooms
+                - *wait*: if the goal isn't reached yet
         """
 
         global Movement_Client
@@ -175,9 +178,6 @@ class RANDOM_MOVEMENT(smach.State):
         respR = Movement_Client()
         time.sleep(1)
 
-        # BUG: Dopo essersi ricaricato, ricomincia a selezionare la destinazione, 
-        # ma una volta arrivato qui invoca il server del movement ma risponde quello 
-        # della batteria in modo strano
         if BLev < 30:                       # Recharging required
             return 'b_low'
         elif respR.success == True:          # Room reached
@@ -214,6 +214,7 @@ class ROOM_E(smach.State):
          
         print('Executing state ROOM_E')
         time.sleep(0.5)
+        Pub_Room.publish('E') 
         respB = Battery_Client()
         time.sleep(1)
 

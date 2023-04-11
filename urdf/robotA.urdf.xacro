@@ -211,7 +211,17 @@
     </visual>
   </link>
 
-  <joint name="arm_chassis_joint" type="fixed">
+  <transmission name="arm_chassis_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="arm_chassis_joint">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="arm_chassis_motor">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+          <mechanicalInterface>1</mechanicalInterface>
+      </actuator>
+  </transmission>
+  <joint name="arm_chassis_joint" type="continuous">
       <axis xyz="0 0 1" />
       <origin rpy="0 0 0" xyz="0 0 0.08" />
       <parent link="chassis" />
@@ -224,7 +234,6 @@
 
 <!-- Arm 1 -->
   <xacro:arm number="1" posz="${arm_height/2}"/>
-  <!-- posz = 0 0 0 ???? -->
 
   <joint name="arm_1_joint" type="revolute">
   	<axis xyz="0 1 0"/>

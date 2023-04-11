@@ -10,6 +10,9 @@ ROS node for implementing the TOPOLOGICAL_MAP state of the finite state machine 
 
 This node allows the map to be constructed by loading the ontology.
 
+Subscribes to:
+    /MarkerList pto retrive codes from ArUco markers
+
 Client:
     ArmorClient
 
@@ -33,8 +36,13 @@ Robot = 'Robot1'
 
 
 class Topological_Map:
+    """
+    Classe relativa al caricamento della mappa nell'ontologia
+    """
     def __init__(self):
-
+        """
+        Initialisation function
+        """
         # Initialisation service and subscriber
         rospy.Subscriber("/MarkerList", Int32MultiArray, self.IDCallback)
         Map_srv = rospy.Service('/Mapping_Switch', Trigger, self.MappingSwitchCB)
@@ -49,13 +57,29 @@ class Topological_Map:
         self.LocationCoord = {}     # Dictionary of rooms and their coordinates
         self.CoordinatesLoc = {}    # Dictionary of coordinates and their rooms    
 
+    # Marker service callback
+    def IDCallback(self,lst):
+        """
+        Callback to retrive codes from ArUco markers and stuck them in a list
+
+        Args:
+            lst (int): marker number
+        """
+        if(lst.data not in self.IdList):
+            self.IdList.append(lst.data)
+
 
     # /Mapping_Switch service callback
-    def MappingSwitchCB(self,req):
+    def MappingSwitchCB(self):
         """
-        Function to load the topological map using the aRMOR client.
-        """
+        Funzione per informare la finita macchina a stati FSM che l'ontologia è stata caricata con le relative informazione riguardo le stanze.
+        
+        Returns:
+            res.success (bool): indicates successful run of triggered service
 
+            res.message (string): informational
+        
+        """
         print('TOPOLOGICAL_MAP')
 
         print('Waiting for the Armor server ...')
@@ -116,14 +140,6 @@ class Topological_Map:
         print(f'{res.message}')
 
         return res
-
-    # Marker service callback
-    def IDCallback(self,lst):
-        """
-        Callback of the ROS message on the topic /MarkerList to retrive codes from ArUco markers and stuck them in a list
-        """
-        if(lst.data not in self.IdList):
-            self.IdList.append(lst.data)
 
 if __name__ == "__main__":
 

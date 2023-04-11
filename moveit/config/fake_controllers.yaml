@@ -1,17 +1,18 @@
 controller_list:
-  - name: fake_wheel_controller
+  - name: fake_arm_controller
+    type: $(arg execution_type)
+    joints:
+      - arm_chassis_joint
+      - arm_1_joint
+      - arm_2_joint
+      - RGB_joint
+  - name: fake_wheels_controller
     type: $(arg execution_type)
     joints:
       - back_left_wheel_joint
       - back_right_wheel_joint
       - front_left_wheel_joint
       - front_right_wheel_joint
-  - name: fake_arm_controller
-    type: $(arg execution_type)
-    joints:
-      - arm_1_joint
-      - arm_2_joint
-      - RGB_joint
 initial:  # Define initial robot poses.
   - group: arm
     pose: HomePose

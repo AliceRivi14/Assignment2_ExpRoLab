@@ -274,7 +274,17 @@
             <material name="red" />
         </visual>
     </link>
-    <joint name="arm_chassis_joint" type="fixed">
+    <transmission name="arm_chassis_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="arm_chassis_joint">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="arm_chassis_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalInterface>1</mechanicalInterface>
+        </actuator>
+    </transmission>
+    <joint name="arm_chassis_joint" type="continuous">
         <axis xyz="0 0 1" />
         <origin rpy="0 0 0" xyz="0 0 0.08" />
         <parent link="chassis" />
@@ -317,7 +327,6 @@
             <mechanicalInterface>1</mechanicalInterface>
         </actuator>
     </transmission>
-    <!-- posz = 0 0 0 ???? -->
     <joint name="arm_1_joint" type="revolute">
         <axis xyz="0 1 0" />
         <limit effort="1000.0" lower="-1.8" upper="1.8" velocity="0.2" />
@@ -598,6 +607,16 @@
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
         <actuator name="back_right_wheel_joint_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_arm_chassis_joint">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="arm_chassis_joint">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="arm_chassis_joint_motor">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
             <mechanicalReduction>1</mechanicalReduction>
         </actuator>
