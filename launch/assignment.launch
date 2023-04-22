@@ -1,5 +1,4 @@
 <launch>
-
   <!-- MarkerDetector -->
  <node name="marker_server" pkg="assignment2" type="marker_server" />
  <node name="marker_detector" pkg="assignment2" type="marker_detector" launch-prefix="gnome-terminal --command"   output = "screen"/>

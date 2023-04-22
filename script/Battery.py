@@ -8,7 +8,6 @@
 
 ROS node for implementing the ROOM_E state of the finite state machine FSM.
 
-Attraverso questo nodo viene simulata la ricarica della batteria del robot.
 
 Client:
     /BLevel per gestire il livello di batteria del robot
@@ -40,7 +39,7 @@ class Battery:
         self.Movement_Client = rospy.ServiceProxy('/Movement_Switch', Trigger)
 
     # /Recharging_switch service callback
-    def BatterySwitchCB(self):
+    def BatterySwitchCB(self,req):
         """
         Funzione per informare la finita macchina a stati FSM il ricaricamento della batteria del robot
         Returns:
@@ -65,10 +64,11 @@ class Battery:
                     ++BLev
                     for i in range(0,10):
                         i += 10
-                        print('\033[93m###\033[0m]')
+                        print('\033[93m###\033[0m', end='')
                     
                 print(f'Battery_level = {BLev}%')
-                self.B_Client(BLev)
+                BTot = BLev + self.B_Client().LevelF
+                self.B_Client(BTot)
 
                 res = TriggerResponse()
                 res.message = 'BATTERY FULL'

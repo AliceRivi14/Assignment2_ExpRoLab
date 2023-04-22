@@ -8,13 +8,16 @@
 
 ROS node for implementing the RANDOM_MOVEMENT state of the finite state machine FSM.
 
-???
+This node manages the movement of the robot based on information obtained about the 
+target room chosen by the FSM. 
+Based on the position and battery status it informs the FSM if the final position has 
+been reached or if the goal has been cancelled.
 
 Publishes to:
-    /A/jointC_position_controller/command per pubblicare la posizione della camera
+    /A/jointC_position_controller/command to publish the camera joint position 
 
 Subscribes to:
-    /Room per determinare la stanza di destinazione
+    /Room to establish the target room
 
     /odom where the simulator publishes the robot position
 
@@ -23,9 +26,7 @@ Client:
 
     MoveBaseAction
 
-    /BLevel per gestire il livello di batteria del robot
-
-    /room_info ???
+    /BLevel to manage the robot's battery level
 
 Service:
     /Mapping_Switch to active the RANDOM_MOVEMENT state
@@ -60,7 +61,21 @@ Armor_Client = ArmorClient(Armor_Client_ID, Armor_ReferenceName)
 
 class RandomMovement:
     """
-    Classe relativa al controllo del movimento del robot
+    Class representing the robot's movement based on information about the target room 
+    chosen by the FSM.
+    Once the final position of the robot is defined, the distance between the starting 
+    point and the goal is calculated and thus the battery consumption for that path is 
+    defined.
+    If the robot reaches the final position, the FSM is informed that the destination 
+    has been reached, but if the battery level is not sufficient, the goal is cancelled 
+    and the robot is sent to room E to recharge.
+    ...
+    Methods
+    ----------
+    __init__(self)
+    RoomCB(self,Location)
+    OdomCB(self,data)
+    MovementSwitchCB(self,req)
     """
     def __init__(self):
         """
@@ -71,7 +86,6 @@ class RandomMovement:
         Mov_srv = rospy.Service('/Movement_Switch', Trigger, self.MovementSwitchCB)
         # Initialisation client
         self.Bat_Client = rospy.ServiceProxy('/BLevel', BatteryLow)
-        self.RoomClient = rospy.ServiceProxy('/room_info', RoomInformation)
         # Initialisation publisher and subscriber
         self.Pub_PoseCamera = rospy.Publisher('/A/jointC_position_controller/command', Float64, queue_size=1)
         self.Sub_Room = rospy.Subscriber('/Room', String, self.RoomCB)
@@ -96,21 +110,22 @@ class RandomMovement:
     # Room callback
     def RoomCB(self,Location):
         """
-        Callback per ottenere le informazioni riguardo alla location di destinazione del robot.
+        Callback to obtain information about the robot's target location.
         
         Args:
-            Location (string): location scelta come destinazione del robot attraverso l'ontologia
+            Location (string): location chosen as destination of the robot via the ontology
+        
         """
         self.Room = Location.data   # Choosen location
 
     # Odometry callback
     def OdomCB(self,data):
         """
-        Callback per ottenere l'effettiva posizione attuale del robot attraverso l'odometria.
+        Callback to obtain the actual position of the robot via odometry. 
         
         Args:
-            data (float): informazione riguardo l'odometria
-        
+            data (float): information about the odometry
+
         """
         global actual_x, actual_y
 
@@ -118,10 +133,10 @@ class RandomMovement:
         actual_y = data.pose.pose.position.y
 
     # /Movement_Switch service callback
-    def MovementSwitchCB(self):
+    def MovementSwitchCB(self,req):
         """
-        Funzione per informare la finita macchina a stati FSM se il robot ha raggiunto la posizione finale.
-        
+        Function to inform the finished state machine FSM if the robot has reached the final position.
+       
         Returns:
             res.success (bool): indicates successful run of triggered service
 
@@ -129,20 +144,16 @@ class RandomMovement:
         
         """
         print('RANDOM_MOVEMENT')
-        
-        # BUG: NECESSARIO???
-        print('Waiting for the RoomInformation server ...')
-        rospy.wait_for_service('/room_info')
 
         self.MoveBaseA(self.Room)       # Move the robot to the choosen location
 
         res = TriggerResponse()
         
         if self.DestReach == True:
-            res.message = 'FINAL POSITION REACHED'
+            res.message = '\033[92mFINAL POSITION REACHED\033[0m'
             res.success = True
         else:
-            res.message = 'GOAL CANCELLED'
+            res.message = '\033[91mGOAL CANCELLED\033[0m'
             res.success = False
 
         print(f'{res.message}')
@@ -152,19 +163,19 @@ class RandomMovement:
 # NAVIGATION
     def MoveBaseA(self,Loc):
         """
-        Funzione per controllare il movimentod del robot.
+        Function to control the movement of the robot.
 
-        Quando il robot raggiunge la posizione finale, esegue l'ispezione della stanza.
+        When the robot reaches the final position, it inspects the room.
 
-        Il goal viene cancellato nel caso in cui la batteria sia inferiore al 30%. Il controllo della batteria viene effettuato considerando la distanza che percorre il robot
+        The goal is cancelled if the battery is less than 30%. The battery check is performed considering the distance the robot travels
         
         Args:
-            Loc (string): location in cui deve arrivare il robot
+            Loc (string): location where the robot is to arrive
 
         Returns:
-            DestReach (bool): raggiungimento della destinazione finale
-        """
+            DestReach (bool): reaching the final destination
 
+        """
         global actual_x, actual_y
 
         print('Waiting for the MoveBase server ...')
@@ -188,8 +199,8 @@ class RandomMovement:
         
         self.MBClient.send_goal(self.Goal)
 
-        dist = math.sqrt(pow(float(self.Goal.target_pose.pose.position.x) - self.previous_x, 2) +
-                    pow(float(self.Goal.target_pose.pose.position.y) - self.previous_y, 2))
+        dist = math.sqrt(pow(self.Goal.target_pose.pose.position.x - self.previous_x, 2) +
+                    pow(self.Goal.target_pose.pose.position.y - self.previous_y, 2))
         print(f'To reach {Loc} I need to travel {round(dist)}m')
 
         # Positioning the robotic arm in the 'Home' configuration
@@ -197,15 +208,18 @@ class RandomMovement:
         self.Group.move()
         
         print('Waiting for the result ...')
+
         self.MBClient.wait_for_result()
         resp = self.Bat_Client(round(dist))
-        
+
+        x = abs(self.Goal.target_pose.pose.position.x - actual_x)
+        y = abs(self.Goal.target_pose.pose.position.y - actual_y)        
 
         if resp.LevelF < 30 and Loc != 'E':
             # Cancel goal
             self.MBClient.cancel_goal()
             self.DestReach = False
-        elif (actual_x >= self.Goal.target_pose.pose.position.x - 1.0 and actual_x <= self.Goal.target_pose.pose.position.x + 1.0) or (actual_y >= self.Goal.target_pose.pose.position.y - 1.0 and actual_y <= self.Goal.target_pose.pose.position.y + 1.0) or Loc == 'E':
+        elif (x <= 1 and y <= 1) or Loc == 'E':
             print(f'{Loc} reached')
             self.Omega.data = 0.0
             self.Pub_PoseCamera.publish(self.Omega)

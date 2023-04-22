@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "sensor_msgs/Image.h"
 #include <std_msgs/Float64.h>
-#include "std_msgs/Int32MultiArray.h"
+#include "std_msgs/Int32.h"
 
 class MarkerDetectorClass
 {
@@ -25,7 +25,7 @@ public:
   ros::ServiceClient IDClient;
 
   void DetectMarker();
-  void CallbackCamera(const sensor_msgs::Image::ConstPtr& msg);
+  void CallbackCamera(const sensor_msgs::Image::ConstPtr& ImFeed);
 
   int TotMarket;
 

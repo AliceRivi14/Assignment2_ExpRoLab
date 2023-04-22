@@ -8,10 +8,12 @@
 
 ROS node for implementing the TOPOLOGICAL_MAP state of the finite state machine FSM.
 
-This node allows the map to be constructed by loading the ontology.
+This node allows the map to be constructed by loading the ontology, based on the 
+information obtained from the markers.
+Once the map is constructed, a signal is sent to the FSM.
 
 Subscribes to:
-    /MarkerList pto retrive codes from ArUco markers
+    /MarkerList to retrive information from ArUco markers
 
 Client:
     ArmorClient
@@ -28,7 +30,7 @@ import rospy
 from std_srvs.srv import TriggerResponse, Trigger
 from assignment2.srv import *
 from armor_api.armor_client import ArmorClient
-from std_msgs.msg import Int32MultiArray
+from std_msgs.msg import Int32
 
 Path = 'ERL_WS/src/assignment2/worlds/topological_map.owl'
 IRI = 'http://bnc/exp-rob-lab/2022-23'
@@ -37,14 +39,23 @@ Robot = 'Robot1'
 
 class Topological_Map:
     """
-    Classe relativa al caricamento della mappa nell'ontologia
+    Class representing the initial state of the FSM, which loads the ontology initialised 
+    with the description of the environment and the robot's starting point. 
+    Ontology initialised with the description of the environment and the starting point 
+    of the robot.
+    ...
+    Methods
+    ----------
+    __init__(self)
+    IDCallback(self,lst)
+    MappingSwitchCB(self,req)
     """
     def __init__(self):
         """
         Initialisation function
         """
         # Initialisation service and subscriber
-        rospy.Subscriber("/MarkerList", Int32MultiArray, self.IDCallback)
+        rospy.Subscriber("/MarkerList", Int32, self.IDCallback)
         Map_srv = rospy.Service('/Mapping_Switch', Trigger, self.MappingSwitchCB)
 
         self.Armor_Client_ID = 'User'
@@ -70,9 +81,11 @@ class Topological_Map:
 
 
     # /Mapping_Switch service callback
-    def MappingSwitchCB(self):
+    def MappingSwitchCB(self,req):
         """
-        Funzione per informare la finita macchina a stati FSM che l'ontologia è stata caricata con le relative informazione riguardo le stanze.
+        Function to inform the finished FSM state machine that the ontology has been 
+        loaded with the relevant information about the rooms and the initial position 
+        of the robot.
         
         Returns:
             res.success (bool): indicates successful run of triggered service
@@ -89,9 +102,11 @@ class Topological_Map:
         rospy.wait_for_service('/room_info')
         RoomClient = rospy.ServiceProxy('/room_info', RoomInformation)
 
-        # Construct lists and dictionaries from infos retrived from the room_info srv
-        # TODO: for i in self.IdList:
-        for i in range(11, 18): #DEBUG FINCHE' NON LEGGE I MARKER
+        # Construct lists and dictionaries from infos retrived from the room_info server
+        while len(self.IdList) != 7:
+            time.sleep(0.5)
+        for i in self.IdList:
+        #for i in range(11, 18): #DEBUG FINCHE' NON LEGGE I MARKER
             resp = RoomClient(i)
             self.Location.append(resp.room)
             self.LocationDict[resp.room] = resp.connections
@@ -99,7 +114,7 @@ class Topological_Map:
             self.CoordinatesLoc[str(resp.x) + ',' + str(resp.y)] = resp.room
 
         time.sleep(0.5)
-        StartTime = str(0)
+        CurrentTime = int(time.time())
 
         # Load ontology
         self.Armor_Client.utils.load_ref_from_file(Path, IRI, buffered_manipulation=False, reasoner='PELLET', buffered_reasoner=False, mounted=False)
@@ -123,7 +138,7 @@ class Topological_Map:
 
         # Set all rooms and corridors visited at CurrentTime time instant
         for RC in self.Location:
-            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['visitedAt', RC, 'Long', str(StartTime)])
+            self.Armor_Client.call('ADD', 'DATAPROP', 'IND', ['visitedAt', RC, 'Long', str(CurrentTime)])
         
         # Disjoint for Individuals
         self.Armor_Client.call('DISJOINT','IND','CLASS', ['LOCATION'])

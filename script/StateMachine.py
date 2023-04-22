@@ -19,7 +19,7 @@ Client:
     /Mapping_Switch to active the TOPOLOGICAL_MAP state
 
 Service:
-    /B_Switch to communicate the state of the battery
+    /BLevel to communicate the state of the battery
 
 """
 
@@ -45,12 +45,12 @@ BLev = 100
 # BLevel service callback
 def Battery_State(req):
     """
-    Funzione per controllare il livello di batteria del robot
-
+    Function to check the robot's battery level
+ 
     Args:
-        req (float): livello iniziale della batteria
+        req (float): initial battery level
     Returns:
-        res (bool): livello finale della batteria
+        res (bool): final battery level
 
     """
     global BLev
