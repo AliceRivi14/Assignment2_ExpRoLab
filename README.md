@@ -115,7 +115,7 @@ Through the smach viewer it is possible to visualise the behaviour of the FSM:
     
 Running the FSM node in the terminal should show similar output
 
-![SM_Terminal.png]()
+![SM_Terminal.png](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/SM_Terminal.png)
 
 ### TopologicalMap node 
 
@@ -142,7 +142,7 @@ The present class is characterised by 2 methods:
 
 Running the TopologicalMap node in the terminal should show similar output
 
-![TM_Terminal.png]()
+![TM_Terminal.png](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/TM_Terminal.png)
 
 ### RandomMovement node 
 
@@ -364,7 +364,7 @@ Working Hypothesis and Environment
 
 The scenario involves a survillance robot operating in a 2D indoor environment, without obstacles, made of 4 rooms (R1, R2, R3, R4), with only one door, and 3 corridors (E, C1, C2), with multiple doors.
 
-![Map]()
+![Environment](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/Environment.png)
 
 The behavior of the robot is divided into 2 phases:
 
@@ -373,7 +373,7 @@ The behavior of the robot is divided into 2 phases:
 2. The robot through the movement of the camera must detect the markers in the room and gathers information about the environment;
 3. The robot constructs the "semantic" map of the environment.
 
-![Marker.png]()
+![Marker.png](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/Marker.png)
 
 **Phase 2**:
 1. The robot moves around locations following a surveillance policy:
