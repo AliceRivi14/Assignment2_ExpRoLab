@@ -22,7 +22,8 @@ There are 5 nodes in this software architecture:
 * [RandomMovement](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/RandomMovement.py)
 * [Battery](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/Battery.py)
 
-* [Marker Detector]()
+* [Marker Detector](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/src/marker_detector.cpp)
+* [Marker Server](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/src/marker_server.cpp)
 
 Here we can see the Component-Based Software Engineering diagram:
 ![UML]()
@@ -308,7 +309,20 @@ The present class is characterised by 3 methods:
     This function is used to move the robot joint and to detect the markers.
     
     In particular the robot arm is set in the 'HomePose' configuration and the RGB joint is move looking at the ground from 0 to 3.14. In this way it looks at all markers placed on the ground.
+    
+### Marker Server node
 
+This node contains all the information associated with each room.
+
+* Service:
+
+   `/room_info` to share information about the environment
+
+The present class is characterised by 1 method:
+
+* `markerCallback(req, res)`:
+
+  This function provides information about a room in a building based on an input ID.
 
 > :memo: **Note:** 
 > 
