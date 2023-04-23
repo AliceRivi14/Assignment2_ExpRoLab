@@ -364,7 +364,7 @@ Working Hypothesis and Environment
 
 The scenario involves a survillance robot operating in a 2D indoor environment, without obstacles, made of 4 rooms (R1, R2, R3, R4), with only one door, and 3 corridors (E, C1, C2), with multiple doors.
 
-![Environment](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/Environment.png)
+![Environment .png](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/Environment .png)
 
 The behavior of the robot is divided into 2 phases:
 
