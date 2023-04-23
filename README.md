@@ -115,7 +115,7 @@ Through the smach viewer it is possible to visualise the behaviour of the FSM:
     
 Running the FSM node in the terminal should show similar output
 
-![Terminal_StateMachine.png]()
+![SM_Terminal.png]()
 
 ### TopologicalMap node 
 
@@ -142,7 +142,7 @@ The present class is characterised by 2 methods:
 
 Running the TopologicalMap node in the terminal should show similar output
 
-![.png]()
+![TM_Terminal.png]()
 
 ### RandomMovement node 
 
@@ -373,7 +373,7 @@ The behavior of the robot is divided into 2 phases:
 2. The robot through the movement of the camera must detect the markers in the room and gathers information about the environment;
 3. The robot constructs the "semantic" map of the environment.
 
-![Marker]()
+![Marker.png]()
 
 **Phase 2**:
 1. The robot moves around locations following a surveillance policy:
