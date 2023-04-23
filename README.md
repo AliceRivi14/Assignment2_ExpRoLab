@@ -9,9 +9,9 @@ Introduction
 
 This software architecture has been developed by [Student Robotics](https://studentrobotics.org) in ROS to simulate a surveillance robot.
 
-The software developed uses a [Smach Finite State Machine](http://wiki.ros.org/smach) FSM and builds an ontology with [aRMOR] (https://github.com/EmaroLab/armor) based on the information obtained from the markers via the [ArUco] (https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html) library.
+The software developed uses a [Smach Finite State Machine](http://wiki.ros.org/smach) FSM and builds an ontology with [aRMOR](https://github.com/EmaroLab/armor) based on the information obtained from the markers via the [ArUco](https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html) library.
 
-The robotic arm of the robot is moved using the [MoveIt] (https://moveit.ros.org/) software framework, while the surveillance action is performed using the [SLAM Gmapping] (http://wiki.ros.org/gmapping) algortim and the [MoveBase Navigation] (http://wiki.ros.org/move_base) package.
+The robotic arm of the robot is moved using the [MoveIt](https://moveit.ros.org/) software framework, while the surveillance action is performed using the [SLAM Gmapping](http://wiki.ros.org/gmapping) algortim and the [MoveBase Navigation](http://wiki.ros.org/move_base) package.
  
 
 Software Architecture
@@ -268,7 +268,7 @@ This node allows the robot to recharge its battery in room E. Once the battery i
 
 The present class is characterised by 1 method:
     
-* BatterySwitchCB(req):
+* `BatterySwitchCB(req)`:
 
     Function for recharging the battery and informing the finished state machine FSM.
     
@@ -291,17 +291,18 @@ Through this node, the initial room in which the robot is located is inspected i
    `/MarkerList` in which it is published the markers detected by the robot
 
 * Clients:
+
    `/room_info` to obtain information about the environment 
    
 The present class is characterised by 3 methods:
 
-* CallbackCamera(ImFeed):
+* `CallbackCamera(ImFeed)`:
 
     It reads the information from the camera and thanks to the ArUco libraries processes it and detects the respective ArUco marker. It prints on the terminal the detected marker ID.
     
     Once all the markers are found their ID are published on the topic.
 
-* DetectMarker():
+* `DetectMarker()`:
 
     This function is used to move the robot joint and to detect the markers.
     
@@ -336,7 +337,7 @@ If is not already installed, install smach with
 ```bashscript
 $ sudo apt-get install ros-[ROS-DISTRO]-executive-smach*
 ```
-For everything to work properly, the [MoveIt] (https://ros-planning.github.io/moveit_tutorials/doc/getting_started/getting_started.html), [SLAM Gmapping] (https://github.com/CarmineD8/SLAM_packages), [ArUco] (https://github.com/CarmineD8/aruco_ros), [aRMOR] (https://github.com/EmaroLab/ros_multi_ontology_references) and [MoveBase] (https://github.com/CarmineD8/planning) package must be compiled.
+For everything to work properly, the [MoveIt](https://ros-planning.github.io/moveit_tutorials/doc/getting_started/getting_started.html), [SLAM Gmapping](https://github.com/CarmineD8/SLAM_packages), [ArUco](https://github.com/CarmineD8/aruco_ros), [aRMOR](https://github.com/EmaroLab/ros_multi_ontology_references) and [MoveBase](https://github.com/CarmineD8/planning) package must be compiled.
 
 First, the simulation environment must be run:
 ```bashscript
