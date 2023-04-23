@@ -258,6 +258,7 @@ return self.DestReach
 This node allows the robot to recharge its battery in room E. Once the battery is fully charged, the FSM is informed.
 
 * Client:
+
     `/BLevel` to manage the robot's battery level
 
     `/Movement_Switch` to move the robot into room E where it can recharge itself
