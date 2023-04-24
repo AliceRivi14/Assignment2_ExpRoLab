@@ -110,9 +110,6 @@ return Target
     * `move`: if the robot can move between the rooms
     * `wait`: if the battery isn't full yet
 
-Through the smach viewer it is possible to visualise the behaviour of the FSM:
-![StateMachine](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/StateMachine.png)
-
     
 Running the FSM node in the terminal should show similar output
 
