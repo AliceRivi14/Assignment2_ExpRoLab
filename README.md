@@ -284,7 +284,7 @@ Through this node, the initial room in which the robot is located is inspected i
 
 * Publishes to: 
 
-   `/A/jointC_position_controller/command` to pub the RGB camera joint angle for the robot arm
+   `/A/jointC_position_controller/command` to publish the camera joint position
 
    `/MarkerList` in which it is published the markers detected by the robot
 
@@ -304,7 +304,7 @@ The present class is characterised by 3 methods:
 
     This function is used to move the robot joint and to detect the markers.
     
-    In particular the robot arm is set in the 'HomePose' configuration and the RGB joint is move looking at the ground from 0 to 3.14. In this way it looks at all markers placed on the ground.
+    In particular the robot arm is set in the 'HomePose' configuration and the RGB joint is move looking at the ground from 0 to 3.14. In this way it looks at all markers.
     
 ### Marker Server node
 
@@ -354,7 +354,7 @@ First, the simulation environment must be run:
 ```bashscript
 $ roslaunch assignment2 moveit.launch
 ```
-Then you can run the files for the execution of the algorithm:
+Wait a few seconds and run the files for the execution of the algorithm:
 ```bashscript
 $ roslaunch assignment2 assignment.launch
 ```
@@ -380,7 +380,7 @@ The scenario involves a survillance robot operating in a 2D indoor environment, 
 The behavior of the robot is divided into 2 phases:
 
 **Phase 1**:
-1. The robot starts from room E;
+1. The robot starts from the position (-6.0;11.0);
 2. The robot through the movement of the camera must detect the markers in the room and gathers information about the environment;
 3. The robot constructs the "semantic" map of the environment.
 
@@ -397,7 +397,7 @@ The behavior of the robot is divided into 2 phases:
 
 The main limitation concerns the detection of markers, as the camera does not have a smooth movement and it may happen that even if the marker is seen, its ID is not recognised.
 
-The battery drain is calculated as if each metre travelled by the robot corresponds to a decrease. However, this calculation is made based on the distance between the start and end position, as the crow flies, without taking into account the presence of walls or obstacles, so it does not reflect the real situation.
+The battery drain is calculated as if each meter travelled by the robot corresponds to a decrease. However, this calculation is made based on the distance between the start and end position, as the crow flies, without taking into account the presence of walls or obstacles, so it does not reflect the real situation.
 
 ## Possible Improvement
 
