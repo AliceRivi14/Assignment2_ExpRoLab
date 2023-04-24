@@ -272,7 +272,7 @@ The present class is characterised by 1 method:
     
 Running the Battery node in the terminal should show similar output
 
-![.png]()
+![B_Terminal.png](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/B_Terminal.png)
 
 ### Marker Detector node
 
