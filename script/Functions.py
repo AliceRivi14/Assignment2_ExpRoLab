@@ -64,12 +64,10 @@ def Destination():
     Corridors = CleanList(Armor_Client.call('QUERY', 'IND', 'CLASS', ['CORRIDOR']))
     Urgent = CleanList(Armor_Client.call('QUERY', 'IND', 'CLASS', ['URGENT']))
 
-    # Urgent rooms
-    Urgent = [Idx for Idx in Urgent if Idx not in Corridors]
     # Location reachable by the robot
     Reachable = CleanList(Armor_Client.call('QUERY', 'OBJECTPROP', 'IND', ['canReach', Robot]))
     # Urgent rooms reachable
-    Urgent = [Value for Value in Urgent if Value in Reachable]
+    Urgent = [Value for Value in Reachable if Value in Urgent]
 
     # If several rooms are urgent, choose one randomly
     if Urgent:
@@ -122,7 +120,7 @@ def Update_Time():
     # Replacing the previous robot-time with the actual one
     Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['now', Robot, 'Long', New, Old])
 
-    UrgencyThreshold = str(150)
+    UrgencyThreshold = str(300)
     # Replacing the previous urgency threshold
     Old_Urg = CleanList(Armor_Client.call('QUERY', 'DATAPROP', 'IND', ['urgencyThreshold', Robot]))[0]
     Armor_Client.call('REPLACE', 'DATAPROP', 'IND', ['urgencyThreshold', Robot, 'Long', UrgencyThreshold, Old_Urg])

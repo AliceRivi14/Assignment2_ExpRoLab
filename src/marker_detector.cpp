@@ -16,7 +16,7 @@
 *   /MarkerList Topic in which it is published the markers detected by the robot
 *
 * Clients:
-*   /room_info 
+*   /room_info Topic to obtain information about the environment
 *
 * Description :
 *

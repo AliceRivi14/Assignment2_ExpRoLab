@@ -55,7 +55,7 @@ class Topological_Map:
         Initialisation function
         """
         # Initialisation service and subscriber
-        rospy.Subscriber("/MarkerList", Int32, self.IDCallback)
+        self.SubM = rospy.Subscriber("/MarkerList", Int32, self.IDCallback)
         Map_srv = rospy.Service('/Mapping_Switch', Trigger, self.MappingSwitchCB)
 
         self.Armor_Client_ID = 'User'
