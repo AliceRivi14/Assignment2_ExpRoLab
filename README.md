@@ -68,12 +68,11 @@ There are 4 classes representing the states of the finite state machine. Each st
 This is a piece of code that explains how the location in which the robot moves is chosen:
 ```python
  Urgent = CleanList(Armor_Client.call('QUERY', 'IND', 'CLASS', ['URGENT']))
-# Urgent rooms
-Urgent = [Idx for Idx in Urgent if Idx not in Corridors]
+
 # Location reachable by the robot
 Reachable = CleanList(Armor_Client.call('QUERY', 'OBJECTPROP', 'IND', ['canReach', Robot]))
 # Urgent rooms reachable
-Urgent = [Value for Value in Urgent if Value in Reachable]
+Urgent = [Value for Value in Reachable if Value in Urgent]
 
 # If several rooms are urgent, choose one randomly
 if Urgent:
