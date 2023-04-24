@@ -393,7 +393,7 @@ The behavior of the robot is divided into 2 phases:
 2. The robot moves to a new location and performs a complete scan of the room to visit another location. 
 3. When the robot's battery is low, the robot goes to position E and waits for the battery to be recharged before starting the patrolling behaviour again.
 
-![Monitoring](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/Monitoring.mp4)
+![Monitoring](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/Monitoring.gif)
 
 ## System Limitations
 
