@@ -1,0 +1,199 @@
+\hypertarget{class_topological_map_1_1_topological___map}{}\doxysection{Topological\+Map.\+Topological\+\_\+\+Map Class Reference}
+\label{class_topological_map_1_1_topological___map}\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{class_topological_map_1_1_topological___map_a11d75770add204d8f2c3460ef37f6685}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self)
+\item 
+def \mbox{\hyperlink{class_topological_map_1_1_topological___map_a5c7417ca9c9bc5bda1e6d2bb767d2870}{I\+D\+Callback}} (self, lst)
+\item 
+def \mbox{\hyperlink{class_topological_map_1_1_topological___map_a2dc6d13b8dde2a3df6bc6cd845078b9e}{Mapping\+Switch\+CB}} (self, req)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_topological_map_1_1_topological___map_a25400aa4aa0b9c9e24f0d77996073bf5}{SubM}}
+\item 
+\mbox{\hyperlink{class_topological_map_1_1_topological___map_aa52a141811576ec2e08c7f111a6586f2}{Armor\+\_\+\+Client\+\_\+\+ID}}
+\item 
+\mbox{\hyperlink{class_topological_map_1_1_topological___map_a42999c0d9f0cf4c9f23ea5553abeaf79}{Armor\+\_\+\+Reference\+Name}}
+\item 
+\mbox{\hyperlink{class_topological_map_1_1_topological___map_a1f7a8b4d3ceaa3f3210a82793f1d62ee}{Armor\+\_\+\+Client}}
+\item 
+\mbox{\hyperlink{class_topological_map_1_1_topological___map_ab9559e0d03ad807a1b899d9e6c29d3cf}{Id\+List}}
+\item 
+\mbox{\hyperlink{class_topological_map_1_1_topological___map_a0f8c9b4147281ebf62a85d22163d3bc5}{Location}}
+\item 
+\mbox{\hyperlink{class_topological_map_1_1_topological___map_a3c8467e3352bbb08945f4c20ebaea7f3}{Location\+Dict}}
+\item 
+\mbox{\hyperlink{class_topological_map_1_1_topological___map_a85a5d39830391908d734530ebe6ec851}{Location\+Coord}}
+\item 
+\mbox{\hyperlink{class_topological_map_1_1_topological___map_a1230819c12574b352416e81b99edba7e}{Coordinates\+Loc}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Class representing the initial state of the FSM, which loads the ontology initialised 
+with the description of the environment and the robot's starting point. 
+Ontology initialised with the description of the environment and the starting point 
+of the robot.
+...
+Methods
+----------
+__init__(self)
+IDCallback(self,lst)
+MappingSwitchCB(self,req)
+\end{DoxyVerb}
+ 
+
+Definition at line 40 of file Topological\+Map.\+py.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a11d75770add204d8f2c3460ef37f6685}\label{class_topological_map_1_1_topological___map_a11d75770add204d8f2c3460ef37f6685}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def Topological\+Map.\+Topological\+\_\+\+Map.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Initialisation function
+\end{DoxyVerb}
+ 
+
+Definition at line 53 of file Topological\+Map.\+py.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a5c7417ca9c9bc5bda1e6d2bb767d2870}\label{class_topological_map_1_1_topological___map_a5c7417ca9c9bc5bda1e6d2bb767d2870}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!IDCallback@{IDCallback}}
+\index{IDCallback@{IDCallback}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{IDCallback()}{IDCallback()}}
+{\footnotesize\ttfamily def Topological\+Map.\+Topological\+\_\+\+Map.\+I\+D\+Callback (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{lst }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Callback to retrive codes from ArUco markers and stuck them in a list
+
+Args:
+    lst (int): marker number
+\end{DoxyVerb}
+ 
+
+Definition at line 72 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a2dc6d13b8dde2a3df6bc6cd845078b9e}\label{class_topological_map_1_1_topological___map_a2dc6d13b8dde2a3df6bc6cd845078b9e}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!MappingSwitchCB@{MappingSwitchCB}}
+\index{MappingSwitchCB@{MappingSwitchCB}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{MappingSwitchCB()}{MappingSwitchCB()}}
+{\footnotesize\ttfamily def Topological\+Map.\+Topological\+\_\+\+Map.\+Mapping\+Switch\+CB (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{req }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to inform the finished FSM state machine that the ontology has been 
+loaded with the relevant information about the rooms and the initial position 
+of the robot.
+
+Returns:
+    res.success (bool): indicates successful run of triggered service
+
+    res.message (string): informational\end{DoxyVerb}
+ 
+
+Definition at line 84 of file Topological\+Map.\+py.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a1f7a8b4d3ceaa3f3210a82793f1d62ee}\label{class_topological_map_1_1_topological___map_a1f7a8b4d3ceaa3f3210a82793f1d62ee}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!Armor\_Client@{Armor\_Client}}
+\index{Armor\_Client@{Armor\_Client}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{Armor\_Client}{Armor\_Client}}
+{\footnotesize\ttfamily Topological\+Map.\+Topological\+\_\+\+Map.\+Armor\+\_\+\+Client}
+
+
+
+Definition at line 63 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_aa52a141811576ec2e08c7f111a6586f2}\label{class_topological_map_1_1_topological___map_aa52a141811576ec2e08c7f111a6586f2}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!Armor\_Client\_ID@{Armor\_Client\_ID}}
+\index{Armor\_Client\_ID@{Armor\_Client\_ID}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{Armor\_Client\_ID}{Armor\_Client\_ID}}
+{\footnotesize\ttfamily Topological\+Map.\+Topological\+\_\+\+Map.\+Armor\+\_\+\+Client\+\_\+\+ID}
+
+
+
+Definition at line 61 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a42999c0d9f0cf4c9f23ea5553abeaf79}\label{class_topological_map_1_1_topological___map_a42999c0d9f0cf4c9f23ea5553abeaf79}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!Armor\_ReferenceName@{Armor\_ReferenceName}}
+\index{Armor\_ReferenceName@{Armor\_ReferenceName}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{Armor\_ReferenceName}{Armor\_ReferenceName}}
+{\footnotesize\ttfamily Topological\+Map.\+Topological\+\_\+\+Map.\+Armor\+\_\+\+Reference\+Name}
+
+
+
+Definition at line 62 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a1230819c12574b352416e81b99edba7e}\label{class_topological_map_1_1_topological___map_a1230819c12574b352416e81b99edba7e}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!CoordinatesLoc@{CoordinatesLoc}}
+\index{CoordinatesLoc@{CoordinatesLoc}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{CoordinatesLoc}{CoordinatesLoc}}
+{\footnotesize\ttfamily Topological\+Map.\+Topological\+\_\+\+Map.\+Coordinates\+Loc}
+
+
+
+Definition at line 69 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_ab9559e0d03ad807a1b899d9e6c29d3cf}\label{class_topological_map_1_1_topological___map_ab9559e0d03ad807a1b899d9e6c29d3cf}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!IdList@{IdList}}
+\index{IdList@{IdList}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{IdList}{IdList}}
+{\footnotesize\ttfamily Topological\+Map.\+Topological\+\_\+\+Map.\+Id\+List}
+
+
+
+Definition at line 65 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a0f8c9b4147281ebf62a85d22163d3bc5}\label{class_topological_map_1_1_topological___map_a0f8c9b4147281ebf62a85d22163d3bc5}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!Location@{Location}}
+\index{Location@{Location}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{Location}{Location}}
+{\footnotesize\ttfamily Topological\+Map.\+Topological\+\_\+\+Map.\+Location}
+
+
+
+Definition at line 66 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a85a5d39830391908d734530ebe6ec851}\label{class_topological_map_1_1_topological___map_a85a5d39830391908d734530ebe6ec851}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!LocationCoord@{LocationCoord}}
+\index{LocationCoord@{LocationCoord}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{LocationCoord}{LocationCoord}}
+{\footnotesize\ttfamily Topological\+Map.\+Topological\+\_\+\+Map.\+Location\+Coord}
+
+
+
+Definition at line 68 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a3c8467e3352bbb08945f4c20ebaea7f3}\label{class_topological_map_1_1_topological___map_a3c8467e3352bbb08945f4c20ebaea7f3}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!LocationDict@{LocationDict}}
+\index{LocationDict@{LocationDict}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{LocationDict}{LocationDict}}
+{\footnotesize\ttfamily Topological\+Map.\+Topological\+\_\+\+Map.\+Location\+Dict}
+
+
+
+Definition at line 67 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{class_topological_map_1_1_topological___map_a25400aa4aa0b9c9e24f0d77996073bf5}\label{class_topological_map_1_1_topological___map_a25400aa4aa0b9c9e24f0d77996073bf5}} 
+\index{TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}!SubM@{SubM}}
+\index{SubM@{SubM}!TopologicalMap.Topological\_Map@{TopologicalMap.Topological\_Map}}
+\doxysubsubsection{\texorpdfstring{SubM}{SubM}}
+{\footnotesize\ttfamily Topological\+Map.\+Topological\+\_\+\+Map.\+SubM}
+
+
+
+Definition at line 58 of file Topological\+Map.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+script/\mbox{\hyperlink{_topological_map_8py}{Topological\+Map.\+py}}\end{DoxyCompactItemize}

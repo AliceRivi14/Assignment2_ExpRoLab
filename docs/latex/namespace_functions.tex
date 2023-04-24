@@ -1,0 +1,166 @@
+\hypertarget{namespace_functions}{}\doxysection{Functions Namespace Reference}
+\label{namespace_functions}\index{Functions@{Functions}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespace_functions_afc7a6eba739623669e19eee62580127b}{Clean\+List}} (res)
+\item 
+def \mbox{\hyperlink{namespace_functions_a5fb18ac3019507966ce334e764117002}{Destination}} ()
+\item 
+def \mbox{\hyperlink{namespace_functions_aa249483d64ea3dd31412d3bdc85d0346}{Move\+Robot}} (Location)
+\item 
+def \mbox{\hyperlink{namespace_functions_ae3d75d454bed688881710709acb9812a}{Update\+\_\+\+Time}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{namespace_functions_aeb20f4a7261fd2df34ba06e1ed005d21}{Path}} = \textquotesingle{}E\+R\+L\+\_\+\+WS/src/assignment2/worlds/topological\+\_\+map.\+owl\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_functions_a4166c0e699d6a34901b461b51fa6ea41}{I\+RI}} = \textquotesingle{}http\+://bnc/exp-\/rob-\/lab/2022-\/23\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_functions_a4b245ec7d171755282a6223e34be4782}{Robot}} = \textquotesingle{}Robot1\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_functions_af858d485d07214e6be38511794c579bc}{Armor\+\_\+\+Client\+\_\+\+ID}} = \textquotesingle{}User\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_functions_a8c6d126646f29385f526549c0355b53b}{Armor\+\_\+\+Reference\+Name}} = \textquotesingle{}Ref\textquotesingle{}
+\item 
+\mbox{\hyperlink{namespace_functions_af45b0ddc3e33a691ed579ab1d2b8ab75}{Armor\+\_\+\+Client}} = Armor\+Client(\mbox{\hyperlink{namespace_functions_af858d485d07214e6be38511794c579bc}{Armor\+\_\+\+Client\+\_\+\+ID}}, \mbox{\hyperlink{namespace_functions_a8c6d126646f29385f526549c0355b53b}{Armor\+\_\+\+Reference\+Name}})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}.. module:: Functions
+    :platform: Unix
+    :synopsis: Python module for the Finite State Machine
+.. moduleauthor:: Alice Rivi S5135011@studenti.unige.it
+
+Script defining various functions used by ROS nodes
+
+Client:
+    ArmorClient\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_functions_afc7a6eba739623669e19eee62580127b}\label{namespace_functions_afc7a6eba739623669e19eee62580127b}} 
+\index{Functions@{Functions}!CleanList@{CleanList}}
+\index{CleanList@{CleanList}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{CleanList()}{CleanList()}}
+{\footnotesize\ttfamily def Functions.\+Clean\+List (\begin{DoxyParamCaption}\item[{}]{res }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to clean outputs of the list.
+
+Args:
+    res: Armor_Client.call response
+
+Returns:
+    List (string): list of strings
+\end{DoxyVerb}
+ 
+
+Definition at line 28 of file Functions.\+py.
+
+\mbox{\Hypertarget{namespace_functions_a5fb18ac3019507966ce334e764117002}\label{namespace_functions_a5fb18ac3019507966ce334e764117002}} 
+\index{Functions@{Functions}!Destination@{Destination}}
+\index{Destination@{Destination}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{Destination()}{Destination()}}
+{\footnotesize\ttfamily def Functions.\+Destination (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to decide in which location the robot should move according to the Urgency.
+
+Returns:
+    A number that corresponds to the marker id associated with the location Target
+\end{DoxyVerb}
+ 
+
+Definition at line 52 of file Functions.\+py.
+
+\mbox{\Hypertarget{namespace_functions_aa249483d64ea3dd31412d3bdc85d0346}\label{namespace_functions_aa249483d64ea3dd31412d3bdc85d0346}} 
+\index{Functions@{Functions}!MoveRobot@{MoveRobot}}
+\index{MoveRobot@{MoveRobot}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{MoveRobot()}{MoveRobot()}}
+{\footnotesize\ttfamily def Functions.\+Move\+Robot (\begin{DoxyParamCaption}\item[{}]{Location }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to update information about the chosen location where the robot is to move.
+
+Args:
+    Location (string): location where the robot is to move
+\end{DoxyVerb}
+ 
+
+Definition at line 87 of file Functions.\+py.
+
+\mbox{\Hypertarget{namespace_functions_ae3d75d454bed688881710709acb9812a}\label{namespace_functions_ae3d75d454bed688881710709acb9812a}} 
+\index{Functions@{Functions}!Update\_Time@{Update\_Time}}
+\index{Update\_Time@{Update\_Time}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{Update\_Time()}{Update\_Time()}}
+{\footnotesize\ttfamily def Functions.\+Update\+\_\+\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to update robot times.
+\end{DoxyVerb}
+ 
+
+Definition at line 112 of file Functions.\+py.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_functions_af45b0ddc3e33a691ed579ab1d2b8ab75}\label{namespace_functions_af45b0ddc3e33a691ed579ab1d2b8ab75}} 
+\index{Functions@{Functions}!Armor\_Client@{Armor\_Client}}
+\index{Armor\_Client@{Armor\_Client}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{Armor\_Client}{Armor\_Client}}
+{\footnotesize\ttfamily Functions.\+Armor\+\_\+\+Client = Armor\+Client(\mbox{\hyperlink{namespace_functions_af858d485d07214e6be38511794c579bc}{Armor\+\_\+\+Client\+\_\+\+ID}}, \mbox{\hyperlink{namespace_functions_a8c6d126646f29385f526549c0355b53b}{Armor\+\_\+\+Reference\+Name}})}
+
+
+
+Definition at line 26 of file Functions.\+py.
+
+\mbox{\Hypertarget{namespace_functions_af858d485d07214e6be38511794c579bc}\label{namespace_functions_af858d485d07214e6be38511794c579bc}} 
+\index{Functions@{Functions}!Armor\_Client\_ID@{Armor\_Client\_ID}}
+\index{Armor\_Client\_ID@{Armor\_Client\_ID}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{Armor\_Client\_ID}{Armor\_Client\_ID}}
+{\footnotesize\ttfamily string Functions.\+Armor\+\_\+\+Client\+\_\+\+ID = \textquotesingle{}User\textquotesingle{}}
+
+
+
+Definition at line 24 of file Functions.\+py.
+
+\mbox{\Hypertarget{namespace_functions_a8c6d126646f29385f526549c0355b53b}\label{namespace_functions_a8c6d126646f29385f526549c0355b53b}} 
+\index{Functions@{Functions}!Armor\_ReferenceName@{Armor\_ReferenceName}}
+\index{Armor\_ReferenceName@{Armor\_ReferenceName}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{Armor\_ReferenceName}{Armor\_ReferenceName}}
+{\footnotesize\ttfamily string Functions.\+Armor\+\_\+\+Reference\+Name = \textquotesingle{}Ref\textquotesingle{}}
+
+
+
+Definition at line 25 of file Functions.\+py.
+
+\mbox{\Hypertarget{namespace_functions_a4166c0e699d6a34901b461b51fa6ea41}\label{namespace_functions_a4166c0e699d6a34901b461b51fa6ea41}} 
+\index{Functions@{Functions}!IRI@{IRI}}
+\index{IRI@{IRI}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{IRI}{IRI}}
+{\footnotesize\ttfamily string Functions.\+I\+RI = \textquotesingle{}http\+://bnc/exp-\/rob-\/lab/2022-\/23\textquotesingle{}}
+
+
+
+Definition at line 21 of file Functions.\+py.
+
+\mbox{\Hypertarget{namespace_functions_aeb20f4a7261fd2df34ba06e1ed005d21}\label{namespace_functions_aeb20f4a7261fd2df34ba06e1ed005d21}} 
+\index{Functions@{Functions}!Path@{Path}}
+\index{Path@{Path}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{Path}{Path}}
+{\footnotesize\ttfamily string Functions.\+Path = \textquotesingle{}E\+R\+L\+\_\+\+WS/src/assignment2/worlds/topological\+\_\+map.\+owl\textquotesingle{}}
+
+
+
+Definition at line 20 of file Functions.\+py.
+
+\mbox{\Hypertarget{namespace_functions_a4b245ec7d171755282a6223e34be4782}\label{namespace_functions_a4b245ec7d171755282a6223e34be4782}} 
+\index{Functions@{Functions}!Robot@{Robot}}
+\index{Robot@{Robot}!Functions@{Functions}}
+\doxysubsubsection{\texorpdfstring{Robot}{Robot}}
+{\footnotesize\ttfamily string Functions.\+Robot = \textquotesingle{}Robot1\textquotesingle{}}
+
+
+
+Definition at line 22 of file Functions.\+py.
+

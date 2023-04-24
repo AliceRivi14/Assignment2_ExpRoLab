@@ -1,0 +1,113 @@
+\hypertarget{marker__detector_8cpp}{}\doxysection{src/marker\+\_\+detector.cpp File Reference}
+\label{marker__detector_8cpp}\index{src/marker\_detector.cpp@{src/marker\_detector.cpp}}
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$aruco/aruco.\+h$>$}\newline
+{\ttfamily \#include $<$aruco/cvdrawingutils.\+h$>$}\newline
+{\ttfamily \#include $<$image\+\_\+transport/image\+\_\+transport.\+h$>$}\newline
+{\ttfamily \#include $<$cv\+\_\+bridge/cv\+\_\+bridge.\+h$>$}\newline
+{\ttfamily \#include $<$opencv2/highgui/highgui.\+hpp$>$}\newline
+{\ttfamily \#include $<$sensor\+\_\+msgs/image\+\_\+encodings.\+h$>$}\newline
+{\ttfamily \#include $<$moveit/move\+\_\+group\+\_\+interface/move\+\_\+group\+\_\+interface.\+h$>$}\newline
+{\ttfamily \#include $<$moveit/robot\+\_\+model\+\_\+loader/robot\+\_\+model\+\_\+loader.\+h$>$}\newline
+{\ttfamily \#include $<$moveit/robot\+\_\+model/robot\+\_\+model.\+h$>$}\newline
+{\ttfamily \#include $<$moveit/robot\+\_\+state/robot\+\_\+state.\+h$>$}\newline
+{\ttfamily \#include $<$assignment2/\+Room\+Information.\+h$>$}\newline
+{\ttfamily \#include $<$assignment2/\+Room\+Connection.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}marker\+\_\+detector.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$list$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$typeinfo$>$}\newline
+Include dependency graph for marker\+\_\+detector.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{marker__detector_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{marker__detector_8cpp_a525335710b53cb064ca56b936120431e}{\+\_\+\+U\+S\+E\+\_\+\+M\+A\+T\+H\+\_\+\+D\+E\+F\+I\+N\+ES}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{marker__detector_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+list$<$ int $>$ \mbox{\hyperlink{marker__detector_8cpp_a7a2a4acd4bde2113ceba70e5cd5d954c}{List}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Alice Rivi 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+05/04/2023
+\end{DoxyDate}
+Subscribes to\+: R\+G\+B/\+R\+G\+B/image\+\_\+raw Topic to retrieve the robot vision through the camera
+
+Publishes to\+: /\+A/joint\+C\+\_\+position\+\_\+controller/command Topic to pub the R\+GB camera joint angle for the robot arm
+
+/\+Marker\+List Topic in which it is published the markers detected by the robot
+
+Clients\+: /room\+\_\+info Topic to obtain information about the environment
+
+Description \+:
+
+Through this node, the initial room in which the robot is located is inspected in order to identify all markers and to be able to derive information about the locations in which the robot will later move. 
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{marker__detector_8cpp_a525335710b53cb064ca56b936120431e}\label{marker__detector_8cpp_a525335710b53cb064ca56b936120431e}} 
+\index{marker\_detector.cpp@{marker\_detector.cpp}!\_USE\_MATH\_DEFINES@{\_USE\_MATH\_DEFINES}}
+\index{\_USE\_MATH\_DEFINES@{\_USE\_MATH\_DEFINES}!marker\_detector.cpp@{marker\_detector.cpp}}
+\doxysubsubsection{\texorpdfstring{\_USE\_MATH\_DEFINES}{\_USE\_MATH\_DEFINES}}
+{\footnotesize\ttfamily \#define \+\_\+\+U\+S\+E\+\_\+\+M\+A\+T\+H\+\_\+\+D\+E\+F\+I\+N\+ES}
+
+
+
+Definition at line 60 of file marker\+\_\+detector.\+cpp.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{marker__detector_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{marker__detector_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{marker\_detector.cpp@{marker\_detector.cpp}!main@{main}}
+\index{main@{main}!marker\_detector.cpp@{marker\_detector.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+Main 
+\begin{DoxyParams}{Parameters}
+{\em argc} & The number of command line arguments argv The command line arguments\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, non-\/zero on failure
+\end{DoxyReturn}
+This is the main method. It is responsible for making the routing work correctly. The detection process continues until all 7 markers have been detected.
+
+Definition at line 176 of file marker\+\_\+detector.\+cpp.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{marker__detector_8cpp_a7a2a4acd4bde2113ceba70e5cd5d954c}\label{marker__detector_8cpp_a7a2a4acd4bde2113ceba70e5cd5d954c}} 
+\index{marker\_detector.cpp@{marker\_detector.cpp}!List@{List}}
+\index{List@{List}!marker\_detector.cpp@{marker\_detector.cpp}}
+\doxysubsubsection{\texorpdfstring{List}{List}}
+{\footnotesize\ttfamily list$<$int$>$ List}
+
+
+
+Definition at line 62 of file marker\+\_\+detector.\+cpp.
+

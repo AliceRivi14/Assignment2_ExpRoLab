@@ -1,0 +1,139 @@
+\hypertarget{namespace_state_machine}{}\doxysection{State\+Machine Namespace Reference}
+\label{namespace_state_machine}\index{StateMachine@{StateMachine}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_state_machine_1_1_c_h_o_o_s_e___d_e_s_t_i_n_a_t_i_o_n}{C\+H\+O\+O\+S\+E\+\_\+\+D\+E\+S\+T\+I\+N\+A\+T\+I\+ON}}
+\item 
+class \mbox{\hyperlink{class_state_machine_1_1_r_a_n_d_o_m___m_o_v_e_m_e_n_t}{R\+A\+N\+D\+O\+M\+\_\+\+M\+O\+V\+E\+M\+E\+NT}}
+\item 
+class \mbox{\hyperlink{class_state_machine_1_1_r_o_o_m___e}{R\+O\+O\+M\+\_\+E}}
+\item 
+class \mbox{\hyperlink{class_state_machine_1_1_t_o_p_o_l_o_g_i_c_a_l___m_a_p}{T\+O\+P\+O\+L\+O\+G\+I\+C\+A\+L\+\_\+\+M\+AP}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespace_state_machine_a5e58a925fc1cf84e83586d45bb5fb2f9}{Battery\+\_\+\+State}} (req)
+\item 
+def \mbox{\hyperlink{namespace_state_machine_af250f5d4523137c44100e30860cd12b2}{main}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespace_state_machine_a02f1acd16426f99ea54ba536f4ac0bff}{Battery\+\_\+\+Client}} = None
+\item 
+\mbox{\hyperlink{namespace_state_machine_a8e8ffc22d659a9c3a40cc552a1488f3d}{Movement\+\_\+\+Client}} = None
+\item 
+\mbox{\hyperlink{namespace_state_machine_a20cf9b7c7ada6c33ea014ce5870c7855}{Map\+\_\+\+Client}} = None
+\item 
+\mbox{\hyperlink{namespace_state_machine_aeaff9b3b29c2229d02a78b0e82660846}{Pub\+\_\+\+Room}} = None
+\item 
+int \mbox{\hyperlink{namespace_state_machine_af5d6ec1383ad34d712a8d702c1511930}{B\+Lev}} = 100
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}.. module:: StateMachine
+    :platform: Unix
+    :synopsis: Python module for the Finite State Machine
+.. moduleauthor:: Alice Rivi S5135011@studenti.unige.it
+
+ROS node for implementing a finite state machine FSM.
+
+Publishes to:
+    /Room per informare la destinazione scelta
+
+Client:
+    /Battery_Switch to active the ROOM_E state
+
+    /Movement_Switch to active the RANDOM_MOVEMENT state
+
+    /Mapping_Switch to active the TOPOLOGICAL_MAP state
+
+Service:
+    /BLevel to communicate the state of the battery\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_state_machine_a5e58a925fc1cf84e83586d45bb5fb2f9}\label{namespace_state_machine_a5e58a925fc1cf84e83586d45bb5fb2f9}} 
+\index{StateMachine@{StateMachine}!Battery\_State@{Battery\_State}}
+\index{Battery\_State@{Battery\_State}!StateMachine@{StateMachine}}
+\doxysubsubsection{\texorpdfstring{Battery\_State()}{Battery\_State()}}
+{\footnotesize\ttfamily def State\+Machine.\+Battery\+\_\+\+State (\begin{DoxyParamCaption}\item[{}]{req }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to check the robot's battery level
+ 
+Args:
+    req (float): initial battery level
+Returns:
+    res (bool): final battery level\end{DoxyVerb}
+ 
+
+Definition at line 46 of file State\+Machine.\+py.
+
+\mbox{\Hypertarget{namespace_state_machine_af250f5d4523137c44100e30860cd12b2}\label{namespace_state_machine_af250f5d4523137c44100e30860cd12b2}} 
+\index{StateMachine@{StateMachine}!main@{main}}
+\index{main@{main}!StateMachine@{StateMachine}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily def State\+Machine.\+main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}This function initializes the ROS node, clients and service and waits for
+the creation and execution of the FSM.\end{DoxyVerb}
+ 
+
+Definition at line 228 of file State\+Machine.\+py.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_state_machine_a02f1acd16426f99ea54ba536f4ac0bff}\label{namespace_state_machine_a02f1acd16426f99ea54ba536f4ac0bff}} 
+\index{StateMachine@{StateMachine}!Battery\_Client@{Battery\_Client}}
+\index{Battery\_Client@{Battery\_Client}!StateMachine@{StateMachine}}
+\doxysubsubsection{\texorpdfstring{Battery\_Client}{Battery\_Client}}
+{\footnotesize\ttfamily State\+Machine.\+Battery\+\_\+\+Client = None}
+
+
+
+Definition at line 39 of file State\+Machine.\+py.
+
+\mbox{\Hypertarget{namespace_state_machine_af5d6ec1383ad34d712a8d702c1511930}\label{namespace_state_machine_af5d6ec1383ad34d712a8d702c1511930}} 
+\index{StateMachine@{StateMachine}!BLev@{BLev}}
+\index{BLev@{BLev}!StateMachine@{StateMachine}}
+\doxysubsubsection{\texorpdfstring{BLev}{BLev}}
+{\footnotesize\ttfamily int State\+Machine.\+B\+Lev = 100}
+
+
+
+Definition at line 43 of file State\+Machine.\+py.
+
+\mbox{\Hypertarget{namespace_state_machine_a20cf9b7c7ada6c33ea014ce5870c7855}\label{namespace_state_machine_a20cf9b7c7ada6c33ea014ce5870c7855}} 
+\index{StateMachine@{StateMachine}!Map\_Client@{Map\_Client}}
+\index{Map\_Client@{Map\_Client}!StateMachine@{StateMachine}}
+\doxysubsubsection{\texorpdfstring{Map\_Client}{Map\_Client}}
+{\footnotesize\ttfamily State\+Machine.\+Map\+\_\+\+Client = None}
+
+
+
+Definition at line 41 of file State\+Machine.\+py.
+
+\mbox{\Hypertarget{namespace_state_machine_a8e8ffc22d659a9c3a40cc552a1488f3d}\label{namespace_state_machine_a8e8ffc22d659a9c3a40cc552a1488f3d}} 
+\index{StateMachine@{StateMachine}!Movement\_Client@{Movement\_Client}}
+\index{Movement\_Client@{Movement\_Client}!StateMachine@{StateMachine}}
+\doxysubsubsection{\texorpdfstring{Movement\_Client}{Movement\_Client}}
+{\footnotesize\ttfamily State\+Machine.\+Movement\+\_\+\+Client = None}
+
+
+
+Definition at line 40 of file State\+Machine.\+py.
+
+\mbox{\Hypertarget{namespace_state_machine_aeaff9b3b29c2229d02a78b0e82660846}\label{namespace_state_machine_aeaff9b3b29c2229d02a78b0e82660846}} 
+\index{StateMachine@{StateMachine}!Pub\_Room@{Pub\_Room}}
+\index{Pub\_Room@{Pub\_Room}!StateMachine@{StateMachine}}
+\doxysubsubsection{\texorpdfstring{Pub\_Room}{Pub\_Room}}
+{\footnotesize\ttfamily State\+Machine.\+Pub\+\_\+\+Room = None}
+
+
+
+Definition at line 42 of file State\+Machine.\+py.
+

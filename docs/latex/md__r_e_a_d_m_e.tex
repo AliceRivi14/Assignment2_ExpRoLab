@@ -1,0 +1,418 @@
+{\bfseries{A R\+O\+S-\/based assignment for the Experimental Robotics Laboratory course held at the University of Genoa.}}
+
+\begin{quote}
+📑\+: \mbox{[}Code Documentation\mbox{]}() \end{quote}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md0}{}\doxysection{Introduction}\label{md__r_e_a_d_m_e_autotoc_md0}
+This software architecture has been developed by \href{https://studentrobotics.org}{\texttt{ Student Robotics}} in R\+OS to simulate a surveillance robot.
+
+The software developed uses a \href{http://wiki.ros.org/smach}{\texttt{ Smach Finite State Machine}} F\+SM and builds an ontology with \href{https://github.com/EmaroLab/armor}{\texttt{ a\+R\+M\+OR}} based on the information obtained from the markers via the \href{https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html}{\texttt{ Ar\+Uco}} library.
+
+The robotic arm of the robot is moved using the \href{https://moveit.ros.org/}{\texttt{ Move\+It}} software framework, while the surveillance action is performed using the \href{http://wiki.ros.org/gmapping}{\texttt{ S\+L\+AM Gmapping}} algortim and the \href{http://wiki.ros.org/move_base}{\texttt{ Move\+Base Navigation}} package.\hypertarget{md__r_e_a_d_m_e_autotoc_md1}{}\doxysection{Software Architecture}\label{md__r_e_a_d_m_e_autotoc_md1}
+There are 6 nodes in this software architecture\+:
+\begin{DoxyItemize}
+\item \href{https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/StateMachine.py}{\texttt{ State\+Machine}}
+\item \href{https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/TopologicalMap.py}{\texttt{ Topological\+Map}}
+\item \href{https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/RandomMovement.py}{\texttt{ Random\+Movement}}
+\item \href{https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/Battery.py}{\texttt{ Battery}}
+\item \href{https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/src/marker_detector.cpp}{\texttt{ Marker Detector}}
+\item \href{https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/src/marker_server.cpp}{\texttt{ Marker Server}}
+\end{DoxyItemize}
+
+Here we can see the Component-\/\+Based Software Engineering diagram\+: \hypertarget{md__r_e_a_d_m_e_autotoc_md2}{}\doxysubsection{State\+Machine node}\label{md__r_e_a_d_m_e_autotoc_md2}
+In this node, the state machine and the sub-\/state machine are initialised.
+
+
+\begin{DoxyItemize}
+\item Client\+:
+
+{\ttfamily /\+Battery\+\_\+\+Switch} to active the R\+O\+O\+M\+\_\+E state
+
+{\ttfamily /\+Movement\+\_\+\+Switch} to active the R\+A\+N\+D\+O\+M\+\_\+\+M\+O\+V\+E\+M\+E\+NT state
+
+{\ttfamily /\+Mapping\+\_\+\+Switch} to active the T\+O\+P\+O\+L\+O\+G\+I\+C\+A\+L\+\_\+\+M\+AP state
+\item Service\+:
+
+{\ttfamily /\+B\+Level} to communicate the battery level and the need for recharging the battery
+\end{DoxyItemize}
+
+There are 4 classes representing the states of the finite state machine. Each state is characterised by the initialisation function {\ttfamily \+\_\+\+\_\+init\+\_\+\+\_\+(self)} and the function representing the state execution {\ttfamily execute(self, userdata)}.
+
+
+\begin{DoxyItemize}
+\item {\ttfamily class T\+O\+P\+O\+L\+O\+G\+I\+C\+A\+L\+\_\+\+M\+AP(smach.\+State)}\+: Class implementing F\+SM state concerning the topological map.
+
+Within the execute function, a call is made to the server that connects the F\+SM to the \mbox{\hyperlink{namespace_topological_map}{Topological\+Map}} node and then waits until the map is constructed.
+
+Returns the transition of the F\+SM to be carried out\+:
+\begin{DoxyItemize}
+\item {\ttfamily wait}\+: if the map construction isn\textquotesingle{}t finished
+\item {\ttfamily map\+\_\+\+OK}\+: when map construction ends
+\end{DoxyItemize}
+\item {\ttfamily class C\+H\+O\+O\+S\+E\+\_\+\+D\+E\+S\+T\+I\+N\+A\+T\+I\+ON(samch.\+State)}\+: Class implementing F\+SM state conserning the choise of the destination.
+
+Within the execute function, a call is made to the function {\ttfamily \mbox{\hyperlink{namespace_functions_a5fb18ac3019507966ce334e764117002}{Destination()}}} and 1 second is waited.
+
+Returns the transition of the F\+SM to be carried out\+:
+\begin{DoxyItemize}
+\item {\ttfamily b\+\_\+low}\+: if the robot needs to be recharged
+\item {\ttfamily destination}\+: when the location in which the robot is to move is chosen
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+This is a piece of code that explains how the location in which the robot moves is chosen\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ Urgent = CleanList(Armor\_Client.call('QUERY', 'IND', 'CLASS', ['URGENT']))}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Location reachable by the robot}
+\DoxyCodeLine{Reachable = CleanList(Armor\_Client.call('QUERY', 'OBJECTPROP', 'IND', ['canReach', Robot]))}
+\DoxyCodeLine{\# Urgent rooms reachable}
+\DoxyCodeLine{Urgent = [Value for Value in Reachable if Value in Urgent]}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# If several rooms are urgent, choose one randomly}
+\DoxyCodeLine{if Urgent:}
+\DoxyCodeLine{    Target = random.choice(Urgent)}
+\DoxyCodeLine{\# If no room is urgent, choose a reachable corridor randomly}
+\DoxyCodeLine{else:}
+\DoxyCodeLine{    Target = [Idx for Idx in Reachable if Idx in Corridors]}
+\DoxyCodeLine{    if Target:}
+\DoxyCodeLine{        Target = random.choice(Target)}
+\DoxyCodeLine{\# If no corridor is reachable, randomly choose a reachable location}
+\DoxyCodeLine{    else:}
+\DoxyCodeLine{        Target = random.choice(Reachable)}
+\DoxyCodeLine{}
+\DoxyCodeLine{print(f'Choose location \{Target\}')}
+\DoxyCodeLine{return Target}
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item {\ttfamily class R\+A\+N\+D\+O\+M\+\_\+\+M\+O\+V\+E\+M\+NT(smach.\+State)}\+: Class implementing F\+SM state concerning the random movement.
+
+Within the execute function, a call is made to the server connecting the F\+SM to the \mbox{\hyperlink{namespace_random_movement}{Random\+Movement}} node, and then you wait until the robot arrives at its destination.
+
+Returns the transition of the F\+SM to be carried out\+:
+\begin{DoxyItemize}
+\item {\ttfamily b\+\_\+low}\+: if the robot needs to be recharged
+\item {\ttfamily move}\+: if the robot can move between the rooms
+\item {\ttfamily wait}\+: if the goal isn\textquotesingle{}t reached yet
+\end{DoxyItemize}
+\item {\ttfamily class R\+O\+O\+M\+\_\+E(smach.\+State)}\+: Class implementing F\+SM state concerning the room E.
+
+Within the execute function, a call is made to the server connecting the F\+SM to the \mbox{\hyperlink{namespace_battery}{Battery}} node, and and then wait until the robot arrives in charging room E and the battery is fully recharged.
+
+Returns the transition of the F\+SM to be carried out\+:
+\begin{DoxyItemize}
+\item {\ttfamily move}\+: if the robot can move between the rooms
+\item {\ttfamily wait}\+: if the battery isn\textquotesingle{}t full yet
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+Running the F\+SM node in the terminal should show similar output
+
+\hypertarget{md__r_e_a_d_m_e_autotoc_md3}{}\doxysubsection{Topological\+Map node}\label{md__r_e_a_d_m_e_autotoc_md3}
+This node allows the map to be constructed by loading the ontology, based on the information obtained from the markers. Once the map is constructed, a signal is sent to the F\+SM.
+
+
+\begin{DoxyItemize}
+\item Subscribes to\+:
+
+{\ttfamily /\+Marker\+List} to retrive information from Ar\+Uco markers
+\item Client\+:
+
+{\ttfamily Armor\+Client}
+\end{DoxyItemize}
+
+The present class is characterised by 2 methods\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily I\+D\+Callback(lst)}\+:
+
+Callback to retrieve codes from Ar\+Uco markers and embed them in a list.
+\item {\ttfamily Mapping\+Switch\+C\+B(req)}\+:
+
+Function to inform the F\+SM that the ontology has been build with the relevant information about the rooms and robot\textquotesingle{}s initial position.
+\end{DoxyItemize}
+
+Running the \mbox{\hyperlink{namespace_topological_map}{Topological\+Map}} node in the terminal should show similar output
+
+\hypertarget{md__r_e_a_d_m_e_autotoc_md4}{}\doxysubsection{Random\+Movement node}\label{md__r_e_a_d_m_e_autotoc_md4}
+This node manages the movement of the robot based on information obtained about the target room chosen by the F\+SM.
+
+Based on the position and battery status it informs the F\+SM if the final position has been reached or if the goal has been cancelled.
+
+
+\begin{DoxyItemize}
+\item Publishes to\+:
+
+{\ttfamily /\+A/joint\+C\+\_\+position\+\_\+controller/command} to publish the camera joint position
+\item Subscribes to\+:
+
+{\ttfamily /\+Room} to establish the target room
+
+{\ttfamily /odom} where the simulator publishes the robot position
+\item Client\+:
+
+{\ttfamily Armor\+Client}
+
+{\ttfamily Move\+Base\+Action}
+
+{\ttfamily /\+B\+Level} to manage the robot\textquotesingle{}s battery level
+\item Service\+:
+
+{\ttfamily /\+Mapping\+\_\+\+Switch} to active the R\+A\+N\+D\+O\+M\+\_\+\+M\+O\+V\+E\+M\+E\+NT state
+
+{\ttfamily Move\+Base\+Goal}
+\end{DoxyItemize}
+
+The present class is characterised by 4 methods\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily Room\+C\+B(\+Location)}\+:
+
+Callback to obtain information about the robot\textquotesingle{}s target location.
+\item {\ttfamily Odom\+C\+B(data)}\+:
+
+Callback to obtain the actual position of the robot via odometry.
+\item {\ttfamily Movement\+Switch\+C\+B(req)}\+:
+
+Function to inform the finished state machine F\+SM if the robot has reached the final position.
+\item {\ttfamily Move\+Base\+A(\+Loc)}\+:
+
+Function to control the movement of the robot.
+
+When the robot reaches the final position, it inspects the room. The goal is cancelled if the battery is less than 30\%. The battery check is performed considering the distance the robot travels.
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{print(f'Actual position: (\{self.previous\_x\},\{self.previous\_y\})')}
+\DoxyCodeLine{}
+\DoxyCodeLine{self.Goal.target\_pose.pose.position.x = F.CleanList(Armor\_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]}
+\DoxyCodeLine{self.Goal.target\_pose.pose.position.y = F.CleanList(Armor\_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[0]}
+\DoxyCodeLine{self.Goal.target\_pose.pose.position.x = float(self.Goal.target\_pose.pose.position.x)}
+\DoxyCodeLine{self.Goal.target\_pose.pose.position.y = float(self.Goal.target\_pose.pose.position.y)}
+\DoxyCodeLine{}
+\DoxyCodeLine{F.MoveRobot(Loc)}
+\DoxyCodeLine{}
+\DoxyCodeLine{print(f'Moving to (\{self.Goal.target\_pose.pose.position.x\},\{self.Goal.target\_pose.pose.position.y\}) position')}
+\DoxyCodeLine{self.MBClient.send\_goal(self.Goal)}
+\DoxyCodeLine{}
+\DoxyCodeLine{dist = math.sqrt(pow(self.Goal.target\_pose.pose.position.x -\/ self.previous\_x, 2) +}
+\DoxyCodeLine{            pow(self.Goal.target\_pose.pose.position.y -\/ self.previous\_y, 2))}
+\DoxyCodeLine{print(f'To reach \{Loc\} I need to travel \{round(dist)\}m')}
+\DoxyCodeLine{}
+\DoxyCodeLine{print('Waiting for the result ...')}
+\DoxyCodeLine{self.MBClient.wait\_for\_result()}
+\DoxyCodeLine{resp = self.Bat\_Client(round(dist))}
+\DoxyCodeLine{}
+\DoxyCodeLine{x = abs(self.Goal.target\_pose.pose.position.x -\/ actual\_x)}
+\DoxyCodeLine{y = abs(self.Goal.target\_pose.pose.position.y -\/ actual\_y)        }
+\DoxyCodeLine{}
+\DoxyCodeLine{if resp.LevelF < 30 and Loc != 'E':}
+\DoxyCodeLine{    \# Cancel goal}
+\DoxyCodeLine{    self.MBClient.cancel\_goal()}
+\DoxyCodeLine{    self.DestReach = False}
+\DoxyCodeLine{elif (x <= 1 and y <= 1) or Loc == 'E':}
+\DoxyCodeLine{    print(f'\{Loc\} reached')}
+\DoxyCodeLine{    self.Omega.data = 0.0}
+\DoxyCodeLine{    self.Pub\_PoseCamera.publish(self.Omega)}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \# RGB camera rotation around the z-\/axis}
+\DoxyCodeLine{    print('Inspection')}
+\DoxyCodeLine{    while self.Omega.data <= 2*math.pi:}
+\DoxyCodeLine{        self.Omega.data += math.pi/4}
+\DoxyCodeLine{        print(self.Omega.data)}
+\DoxyCodeLine{        self.Pub\_PoseCamera.publish(self.Omega)}
+\DoxyCodeLine{        self.Group.move()   }
+\DoxyCodeLine{        time.sleep(0.5)}
+\DoxyCodeLine{}
+\DoxyCodeLine{    self.Pub\_PoseCamera.publish(0.0)}
+\DoxyCodeLine{    self.DestReach = True}
+\DoxyCodeLine{else:}
+\DoxyCodeLine{    \# Cancel goal}
+\DoxyCodeLine{    self.MBClient.cancel\_goal()}
+\DoxyCodeLine{    print('The robot failed to reach the goal for some reason')}
+\DoxyCodeLine{    self.DestReach = False}
+\DoxyCodeLine{}
+\DoxyCodeLine{self.previous\_x = F.CleanList(Armor\_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesX', Loc]))[0]}
+\DoxyCodeLine{self.previous\_y = F.CleanList(Armor\_Client.call('QUERY', 'DATAPROP', 'IND', ['hasCoordinatesY', Loc]))[0]}
+\DoxyCodeLine{self.previous\_x = float(self.previous\_x)}
+\DoxyCodeLine{self.previous\_y = float(self.previous\_y)}
+\DoxyCodeLine{}
+\DoxyCodeLine{return self.DestReach}
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md5}{}\doxysubsection{Battery node}\label{md__r_e_a_d_m_e_autotoc_md5}
+This node allows the robot to recharge its battery in room E. Once the battery is fully charged, the F\+SM is informed.
+
+
+\begin{DoxyItemize}
+\item Client\+:
+
+{\ttfamily /\+B\+Level} to manage the robot\textquotesingle{}s battery level
+
+{\ttfamily /\+Movement\+\_\+\+Switch} to move the robot into room E where it can recharge itself
+\item Service\+:
+
+{\ttfamily /\+Recharging\+\_\+\+Switch} to active the R\+O\+O\+M\+\_\+E state
+\end{DoxyItemize}
+
+The present class is characterised by 1 method\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily Battery\+Switch\+C\+B(req)}\+:
+
+Function for recharging the battery and informing the finished state machine F\+SM.
+\end{DoxyItemize}
+
+Running the \mbox{\hyperlink{namespace_battery}{Battery}} node in the terminal should show similar output
+
+\hypertarget{md__r_e_a_d_m_e_autotoc_md6}{}\doxysubsection{Marker Detector node}\label{md__r_e_a_d_m_e_autotoc_md6}
+Through this node, the initial room in which the robot is located is inspected in order to identify all markers and to be able to derive information about the locations in which the robot will later move.
+
+
+\begin{DoxyItemize}
+\item Subscribes to\+:
+
+{\ttfamily R\+G\+B/\+R\+G\+B/image\+\_\+raw} to retrieve the robot vision through the camera
+\item Publishes to\+:
+
+{\ttfamily /\+A/joint\+C\+\_\+position\+\_\+controller/command} to publish the camera joint position
+
+{\ttfamily /\+Marker\+List} in which it is published the markers detected by the robot
+\item Clients\+:
+
+{\ttfamily /room\+\_\+info} to obtain information about the environment
+\end{DoxyItemize}
+
+The present class is characterised by 3 methods\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily Callback\+Camera(\+Im\+Feed)}\+:
+
+It reads the information from the camera and thanks to the Ar\+Uco libraries processes it and detects the respective Ar\+Uco marker. It prints on the terminal the detected marker ID.
+
+Once all the markers are found their ID are published on the topic.
+\item {\ttfamily Detect\+Marker()}\+:
+
+This function is used to move the robot joint and to detect the markers.
+
+In particular the robot arm is set in the \textquotesingle{}Home\+Pose\textquotesingle{} configuration and the R\+GB joint is move looking at the ground from 0 to 3.\+14. In this way it looks at all markers.
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md7}{}\doxysubsection{Marker Server node}\label{md__r_e_a_d_m_e_autotoc_md7}
+This node contains all the information associated with each room.
+
+
+\begin{DoxyItemize}
+\item Service\+:
+
+{\ttfamily /room\+\_\+info} to share information about the environment
+\end{DoxyItemize}
+
+The present class is characterised by 1 method\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily marker\+Callback(req, res)}\+:
+
+This function provides information about a room in a building based on an input ID.
+\end{DoxyItemize}
+
+\begin{quote}
+\+:memo\+: {\bfseries{Note\+:}}
+
+In some files, the python script \href{https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/Functions.py}{\texttt{ Functions.\+py}} is imported.
+
+In this script the various functions used by nodes are defined. \end{quote}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md8}{}\doxysection{Installation and running}\label{md__r_e_a_d_m_e_autotoc_md8}
+In a terminal type the following commands\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ mkdir -\/p ROS\_ws/src/assignment2}
+\DoxyCodeLine{\$ cd ROS\_ws/src/assignment2}
+\DoxyCodeLine{\$ git clone https://github.com/AliceRivi14/Assignment2\_ExpRoLab.git}
+\DoxyCodeLine{\$ cd script}
+\DoxyCodeLine{\$ chmod +x <file\_name>}
+\end{DoxyCode}
+
+
+Before compiling the package, move the moveit folder outside, inside the src folder, and then\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ cd ../../..}
+\DoxyCodeLine{\$ catkin\_make}
+\end{DoxyCode}
+
+
+Add the line {\ttfamily ‘source \mbox{[}ws\+\_\+path\mbox{]}/devel/setup.bash’} in your {\ttfamily .bashrc} file.
+
+If is not already installed, install smach with 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ sudo apt-\/get install ros-\/[ROS-\/DISTRO]-\/executive-\/smach*}
+\end{DoxyCode}
+
+
+For everything to work properly, the \href{https://ros-planning.github.io/moveit_tutorials/doc/getting_started/getting_started.html}{\texttt{ Move\+It}}, \href{https://github.com/CarmineD8/SLAM_packages}{\texttt{ S\+L\+AM Gmapping}}, \href{https://github.com/CarmineD8/aruco_ros}{\texttt{ Ar\+Uco}}, \href{https://github.com/EmaroLab/ros_multi_ontology_references}{\texttt{ a\+R\+M\+OR}} and \href{https://github.com/CarmineD8/planning}{\texttt{ Move\+Base}} package must be compiled.
+
+First, the simulation environment must be run\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ roslaunch assignment2 moveit.launch}
+\end{DoxyCode}
+
+
+Wait a few seconds and run the files for the execution of the algorithm\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ roslaunch assignment2 assignment.launch}
+\end{DoxyCode}
+
+
+So that there are no errors, the a\+R\+M\+OR service is launched separately\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ rosrun armor execute it.emarolab.armor.ARMORMainService}
+\end{DoxyCode}
+
+
+In addition to the terminal in which the file is launched, 5 terminals relating to the R\+OS nodes appear.
+
+\begin{quote}
+📝 {\bfseries{Note\+:}}
+
+Change the Path {\ttfamily ‘\mbox{[}ws\+\_\+path\mbox{]}/assignment\+\_\+2/world/topological\+\_\+map.owl’} in the \href{https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/TopologicalMap.py}{\texttt{ Topological\+Map.\+py}} script. \end{quote}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md9}{}\doxysection{Working Hypothesis and Environment}\label{md__r_e_a_d_m_e_autotoc_md9}
+The scenario involves a survillance robot operating in a 2D indoor environment, without obstacles, made of 4 rooms (R1, R2, R3, R4), with only one door, and 3 corridors (E, C1, C2), with multiple doors.
+
+
+
+The behavior of the robot is divided into 2 phases\+:
+
+{\bfseries{Phase 1}}\+:
+\begin{DoxyEnumerate}
+\item The robot starts from the position (-\/6.\+0;11.\+0);
+\item The robot through the movement of the camera must detect the markers in the room and gathers information about the environment;
+\item The robot constructs the \char`\"{}semantic\char`\"{} map of the environment.
+\end{DoxyEnumerate}
+
+
+
+{\bfseries{Phase 2}}\+:
+\begin{DoxyEnumerate}
+\item The robot moves around locations following a surveillance policy\+:
+\begin{DoxyEnumerate}
+\item It must stay mainly in the corridors,
+\item If a reachable room has not been visited for a certain period of time, it must visit it ({\itshape urgency});
+\end{DoxyEnumerate}
+\item The robot moves to a new location and performs a complete scan of the room to visit another location.
+\item When the robot\textquotesingle{}s battery is low, the robot goes to position E and waits for the battery to be recharged before starting the patrolling behaviour again.
+\end{DoxyEnumerate}
+
+\hypertarget{md__r_e_a_d_m_e_autotoc_md10}{}\doxysection{System Limitations}\label{md__r_e_a_d_m_e_autotoc_md10}
+The main limitation concerns the detection of markers, as the camera does not have a smooth movement and it may happen that even if the marker is seen, its ID is not recognised.
+
+The battery drain is calculated as if each meter travelled by the robot corresponds to a decrease. However, this calculation is made based on the distance between the start and end position, as the crow flies, without taking into account the presence of walls or obstacles, so it does not reflect the real situation.\hypertarget{md__r_e_a_d_m_e_autotoc_md11}{}\doxysection{Possible Improvement}\label{md__r_e_a_d_m_e_autotoc_md11}
+One improvement to be made is definitely to make the battery discharging and charging routine more realistic.
+
+In addition, all the parameters relating to the movement of the robot joints should also be adjusted in order to have a more linear and efficient marker detection.\hypertarget{md__r_e_a_d_m_e_autotoc_md12}{}\doxysection{Author}\label{md__r_e_a_d_m_e_autotoc_md12}
+{\itshape Alice Rivi}
+
+📧\+: $\ast$\href{mailto:S5135011@studenti.unige.it}{\texttt{ S5135011@studenti.\+unige.\+it}}$\ast$ 

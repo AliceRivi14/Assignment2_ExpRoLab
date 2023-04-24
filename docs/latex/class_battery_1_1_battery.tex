@@ -1,0 +1,107 @@
+\hypertarget{class_battery_1_1_battery}{}\doxysection{Battery.\+Battery Class Reference}
+\label{class_battery_1_1_battery}\index{Battery.Battery@{Battery.Battery}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{class_battery_1_1_battery_a45e4da61f2cc86545c918a57aba97bf2}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self)
+\item 
+def \mbox{\hyperlink{class_battery_1_1_battery_a0f5220c31ab98d07060d592c75de30c2}{Battery\+Switch\+CB}} (self, req)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_battery_1_1_battery_a70a1178d0fc25c64133070ab7ed6fa86}{Batt\+\_\+srv}}
+\item 
+\mbox{\hyperlink{class_battery_1_1_battery_ace42a88a1e58445c6324640d1f619c6d}{B\+\_\+\+Client}}
+\item 
+\mbox{\hyperlink{class_battery_1_1_battery_a07ee6d10b181bffaed718b9538ffe836}{Movement\+\_\+\+Client}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Class that allows the robot to be directed to the charging room and complete battery 
+charging.Once the battery reaches 100 per cent, the FSM is informed that it can 
+continue the surveillance action.
+...
+Methods
+----------
+__init__(self)
+BatterySwitchCB(self,req)
+\end{DoxyVerb}
+ 
+
+Definition at line 33 of file Battery.\+py.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_battery_1_1_battery_a45e4da61f2cc86545c918a57aba97bf2}\label{class_battery_1_1_battery_a45e4da61f2cc86545c918a57aba97bf2}} 
+\index{Battery.Battery@{Battery.Battery}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!Battery.Battery@{Battery.Battery}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def Battery.\+Battery.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Initialisation function
+\end{DoxyVerb}
+ 
+
+Definition at line 44 of file Battery.\+py.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_battery_1_1_battery_a0f5220c31ab98d07060d592c75de30c2}\label{class_battery_1_1_battery_a0f5220c31ab98d07060d592c75de30c2}} 
+\index{Battery.Battery@{Battery.Battery}!BatterySwitchCB@{BatterySwitchCB}}
+\index{BatterySwitchCB@{BatterySwitchCB}!Battery.Battery@{Battery.Battery}}
+\doxysubsubsection{\texorpdfstring{BatterySwitchCB()}{BatterySwitchCB()}}
+{\footnotesize\ttfamily def Battery.\+Battery.\+Battery\+Switch\+CB (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{req }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function for recharging the battery and informing the finished state machine FSM.
+       
+Returns:
+    res.success (bool): indicates successful run of triggered service
+
+    res.message (string): informational
+\end{DoxyVerb}
+ 
+
+Definition at line 54 of file Battery.\+py.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_battery_1_1_battery_ace42a88a1e58445c6324640d1f619c6d}\label{class_battery_1_1_battery_ace42a88a1e58445c6324640d1f619c6d}} 
+\index{Battery.Battery@{Battery.Battery}!B\_Client@{B\_Client}}
+\index{B\_Client@{B\_Client}!Battery.Battery@{Battery.Battery}}
+\doxysubsubsection{\texorpdfstring{B\_Client}{B\_Client}}
+{\footnotesize\ttfamily Battery.\+Battery.\+B\+\_\+\+Client}
+
+
+
+Definition at line 50 of file Battery.\+py.
+
+\mbox{\Hypertarget{class_battery_1_1_battery_a70a1178d0fc25c64133070ab7ed6fa86}\label{class_battery_1_1_battery_a70a1178d0fc25c64133070ab7ed6fa86}} 
+\index{Battery.Battery@{Battery.Battery}!Batt\_srv@{Batt\_srv}}
+\index{Batt\_srv@{Batt\_srv}!Battery.Battery@{Battery.Battery}}
+\doxysubsubsection{\texorpdfstring{Batt\_srv}{Batt\_srv}}
+{\footnotesize\ttfamily Battery.\+Battery.\+Batt\+\_\+srv}
+
+
+
+Definition at line 49 of file Battery.\+py.
+
+\mbox{\Hypertarget{class_battery_1_1_battery_a07ee6d10b181bffaed718b9538ffe836}\label{class_battery_1_1_battery_a07ee6d10b181bffaed718b9538ffe836}} 
+\index{Battery.Battery@{Battery.Battery}!Movement\_Client@{Movement\_Client}}
+\index{Movement\_Client@{Movement\_Client}!Battery.Battery@{Battery.Battery}}
+\doxysubsubsection{\texorpdfstring{Movement\_Client}{Movement\_Client}}
+{\footnotesize\ttfamily Battery.\+Battery.\+Movement\+\_\+\+Client}
+
+
+
+Definition at line 51 of file Battery.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+script/\mbox{\hyperlink{_battery_8py}{Battery.\+py}}\end{DoxyCompactItemize}

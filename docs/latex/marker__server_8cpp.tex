@@ -1,0 +1,67 @@
+\hypertarget{marker__server_8cpp}{}\doxysection{src/marker\+\_\+server.cpp File Reference}
+\label{marker__server_8cpp}\index{src/marker\_server.cpp@{src/marker\_server.cpp}}
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$assignment2/\+Room\+Connection.\+h$>$}\newline
+{\ttfamily \#include $<$assignment2/\+Room\+Information.\+h$>$}\newline
+Include dependency graph for marker\+\_\+server.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{marker__server_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{marker__server_8cpp_acb386145eddd7e35588ea2b3a5ec6ca5}{marker\+Callback}} (assignment2\+::\+Room\+Information\+::\+Request \&req, assignment2\+::\+Room\+Information\+::\+Response \&res)
+\item 
+int \mbox{\hyperlink{marker__server_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{marker__server_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{marker__server_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{marker\_server.cpp@{marker\_server.cpp}!main@{main}}
+\index{main@{main}!marker\_server.cpp@{marker\_server.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+The main function for the E\+X\+P\+R\+O\+B\+L\+A\+B\+\_\+\+Assignment2 R\+OS node.
+
+The function initializes the R\+OS node and creates a service server that listens for requests on the \char`\"{}/room\+\_\+info\char`\"{} topic. When a request is received, the marker\+Callback function is called to process the request and provide a response. The function then enters a loop to keep the node running until it is shut down.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & The number of command line arguments argv The command line arguments\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, non-\/zero on failure
+\end{DoxyReturn}
+
+
+Definition at line 112 of file marker\+\_\+server.\+cpp.
+
+\mbox{\Hypertarget{marker__server_8cpp_acb386145eddd7e35588ea2b3a5ec6ca5}\label{marker__server_8cpp_acb386145eddd7e35588ea2b3a5ec6ca5}} 
+\index{marker\_server.cpp@{marker\_server.cpp}!markerCallback@{markerCallback}}
+\index{markerCallback@{markerCallback}!marker\_server.cpp@{marker\_server.cpp}}
+\doxysubsubsection{\texorpdfstring{markerCallback()}{markerCallback()}}
+{\footnotesize\ttfamily bool marker\+Callback (\begin{DoxyParamCaption}\item[{assignment2\+::\+Room\+Information\+::\+Request \&}]{req,  }\item[{assignment2\+::\+Room\+Information\+::\+Response \&}]{res }\end{DoxyParamCaption})}
+
+This function provides information about a room in a building based on an input ID.
+
+The function processes the request by looking at the value of req.\+id and setting the appropriate values in the response message. If the ID does not correspond to any known room, the function sets res.\+room to \char`\"{}no room associated with this marker id\char`\"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em req} & The request message containing the ID of the room res The response message to be filled with information about the room\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the request was successful, false otherwise
+\end{DoxyReturn}
+
+
+Definition at line 10 of file marker\+\_\+server.\+cpp.
+

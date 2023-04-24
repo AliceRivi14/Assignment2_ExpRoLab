@@ -1,0 +1,232 @@
+\hypertarget{class_marker_detector_class}{}\doxysection{Marker\+Detector\+Class Class Reference}
+\label{class_marker_detector_class}\index{MarkerDetectorClass@{MarkerDetectorClass}}
+
+
+{\ttfamily \#include $<$marker\+\_\+detector.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_marker_detector_class_a16911eba932aeecb3e8ae2cd02d4df3f}{Marker\+Detector\+Class}} (ros\+::\+Node\+Handle $\ast$nodehandle)
+\item 
+void \mbox{\hyperlink{class_marker_detector_class_afb0e74a0c6c0c61fb670ab9d7ecc7682}{Detect\+Marker}} ()
+\item 
+void \mbox{\hyperlink{class_marker_detector_class_af251f4e7153ac750c5748fc87f4c601e}{Callback\+Camera}} (const sensor\+\_\+msgs\+::\+Image\+::\+Const\+Ptr \&Im\+Feed)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+ros\+::\+Node\+Handle \mbox{\hyperlink{class_marker_detector_class_a6999fe8a69088774f8a58379c6b8a29d}{nh}}
+\item 
+ros\+::\+Publisher \mbox{\hyperlink{class_marker_detector_class_a8e5b838dd24e001aecf6e0291402de3b}{Pub\+\_\+\+Joint0}}
+\item 
+ros\+::\+Publisher \mbox{\hyperlink{class_marker_detector_class_a9cbda114add0218eedaa9d0d994e81b3}{Pub\+\_\+\+Pose\+Camera}}
+\item 
+ros\+::\+Publisher \mbox{\hyperlink{class_marker_detector_class_a4765c981457e335f9b0c380f3690c9ed}{Pub\+\_\+\+M\+List}}
+\item 
+ros\+::\+Subscriber \mbox{\hyperlink{class_marker_detector_class_a00d02743b149f750768eb2ff20b8fa76}{Sub\+\_\+\+Camera}}
+\item 
+ros\+::\+Service\+Client \mbox{\hyperlink{class_marker_detector_class_ae2ff8b94bdc7bac88fe48048b187c19c}{I\+D\+Client}}
+\item 
+int \mbox{\hyperlink{class_marker_detector_class_ae0a555265913bb005eec53a24499d885}{Tot\+Market}}
+\item 
+aruco\+::\+Marker\+Detector \mbox{\hyperlink{class_marker_detector_class_a6d47effefaba278f1bd09917efa8fbf6}{M\+Detector}}
+\item 
+std\+::vector$<$ aruco\+::\+Marker $>$ \mbox{\hyperlink{class_marker_detector_class_a878239139a0a15fdd6714c0af61cff6a}{Markers}}
+\item 
+aruco\+::\+Camera\+Parameters \mbox{\hyperlink{class_marker_detector_class_ab56a5738241ed201a511ca91dcef2027}{Cam\+Param}}
+\item 
+double \mbox{\hyperlink{class_marker_detector_class_af9d8da033c11ad7dfd970de05b269b69}{M\+Size}} = 0.\+05
+\item 
+cv\+\_\+bridge\+::\+Cv\+Image\+Ptr \mbox{\hyperlink{class_marker_detector_class_a96c7a5b98c5dd46b36d70da0df17d79e}{Cv\+Ptr}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 13 of file marker\+\_\+detector.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_marker_detector_class_a16911eba932aeecb3e8ae2cd02d4df3f}\label{class_marker_detector_class_a16911eba932aeecb3e8ae2cd02d4df3f}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!MarkerDetectorClass@{MarkerDetectorClass}}
+\index{MarkerDetectorClass@{MarkerDetectorClass}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{MarkerDetectorClass()}{MarkerDetectorClass()}}
+{\footnotesize\ttfamily Marker\+Detector\+Class\+::\+Marker\+Detector\+Class (\begin{DoxyParamCaption}\item[{ros\+::\+Node\+Handle $\ast$}]{nodehandle }\end{DoxyParamCaption})}
+
+Contructor of the \mbox{\hyperlink{class_marker_detector_class}{Marker\+Detector\+Class}} 
+\begin{DoxyParams}{Parameters}
+{\em nodehandle} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+This is the constructor of the Marker\+Detect\+Class. It simply initializes publishers and subscribers that will be used in the code.
+
+Definition at line 64 of file marker\+\_\+detector.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_marker_detector_class_af251f4e7153ac750c5748fc87f4c601e}\label{class_marker_detector_class_af251f4e7153ac750c5748fc87f4c601e}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!CallbackCamera@{CallbackCamera}}
+\index{CallbackCamera@{CallbackCamera}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{CallbackCamera()}{CallbackCamera()}}
+{\footnotesize\ttfamily void Marker\+Detector\+Class\+::\+Callback\+Camera (\begin{DoxyParamCaption}\item[{const sensor\+\_\+msgs\+::\+Image\+::\+Const\+Ptr \&}]{Im\+Feed }\end{DoxyParamCaption})}
+
+Callback for the camera 
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 85 of file marker\+\_\+detector.\+cpp.
+
+\mbox{\Hypertarget{class_marker_detector_class_afb0e74a0c6c0c61fb670ab9d7ecc7682}\label{class_marker_detector_class_afb0e74a0c6c0c61fb670ab9d7ecc7682}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!DetectMarker@{DetectMarker}}
+\index{DetectMarker@{DetectMarker}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{DetectMarker()}{DetectMarker()}}
+{\footnotesize\ttfamily void Marker\+Detector\+Class\+::\+Detect\+Marker (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Method to find the marker 
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 139 of file marker\+\_\+detector.\+cpp.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_marker_detector_class_ab56a5738241ed201a511ca91dcef2027}\label{class_marker_detector_class_ab56a5738241ed201a511ca91dcef2027}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!CamParam@{CamParam}}
+\index{CamParam@{CamParam}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{CamParam}{CamParam}}
+{\footnotesize\ttfamily aruco\+::\+Camera\+Parameters Marker\+Detector\+Class\+::\+Cam\+Param}
+
+
+
+Definition at line 35 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_a96c7a5b98c5dd46b36d70da0df17d79e}\label{class_marker_detector_class_a96c7a5b98c5dd46b36d70da0df17d79e}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!CvPtr@{CvPtr}}
+\index{CvPtr@{CvPtr}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{CvPtr}{CvPtr}}
+{\footnotesize\ttfamily cv\+\_\+bridge\+::\+Cv\+Image\+Ptr Marker\+Detector\+Class\+::\+Cv\+Ptr}
+
+
+
+Definition at line 39 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_ae2ff8b94bdc7bac88fe48048b187c19c}\label{class_marker_detector_class_ae2ff8b94bdc7bac88fe48048b187c19c}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!IDClient@{IDClient}}
+\index{IDClient@{IDClient}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{IDClient}{IDClient}}
+{\footnotesize\ttfamily ros\+::\+Service\+Client Marker\+Detector\+Class\+::\+I\+D\+Client}
+
+
+
+Definition at line 25 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_a878239139a0a15fdd6714c0af61cff6a}\label{class_marker_detector_class_a878239139a0a15fdd6714c0af61cff6a}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!Markers@{Markers}}
+\index{Markers@{Markers}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{Markers}{Markers}}
+{\footnotesize\ttfamily std\+::vector$<$aruco\+::\+Marker$>$ Marker\+Detector\+Class\+::\+Markers}
+
+
+
+Definition at line 34 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_a6d47effefaba278f1bd09917efa8fbf6}\label{class_marker_detector_class_a6d47effefaba278f1bd09917efa8fbf6}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!MDetector@{MDetector}}
+\index{MDetector@{MDetector}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{MDetector}{MDetector}}
+{\footnotesize\ttfamily aruco\+::\+Marker\+Detector Marker\+Detector\+Class\+::\+M\+Detector}
+
+
+
+Definition at line 33 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_af9d8da033c11ad7dfd970de05b269b69}\label{class_marker_detector_class_af9d8da033c11ad7dfd970de05b269b69}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!MSize@{MSize}}
+\index{MSize@{MSize}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{MSize}{MSize}}
+{\footnotesize\ttfamily double Marker\+Detector\+Class\+::\+M\+Size = 0.\+05}
+
+
+
+Definition at line 36 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_a6999fe8a69088774f8a58379c6b8a29d}\label{class_marker_detector_class_a6999fe8a69088774f8a58379c6b8a29d}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!nh@{nh}}
+\index{nh@{nh}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{nh}{nh}}
+{\footnotesize\ttfamily ros\+::\+Node\+Handle Marker\+Detector\+Class\+::nh}
+
+
+
+Definition at line 18 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_a8e5b838dd24e001aecf6e0291402de3b}\label{class_marker_detector_class_a8e5b838dd24e001aecf6e0291402de3b}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!Pub\_Joint0@{Pub\_Joint0}}
+\index{Pub\_Joint0@{Pub\_Joint0}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{Pub\_Joint0}{Pub\_Joint0}}
+{\footnotesize\ttfamily ros\+::\+Publisher Marker\+Detector\+Class\+::\+Pub\+\_\+\+Joint0}
+
+
+
+Definition at line 20 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_a4765c981457e335f9b0c380f3690c9ed}\label{class_marker_detector_class_a4765c981457e335f9b0c380f3690c9ed}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!Pub\_MList@{Pub\_MList}}
+\index{Pub\_MList@{Pub\_MList}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{Pub\_MList}{Pub\_MList}}
+{\footnotesize\ttfamily ros\+::\+Publisher Marker\+Detector\+Class\+::\+Pub\+\_\+\+M\+List}
+
+
+
+Definition at line 22 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_a9cbda114add0218eedaa9d0d994e81b3}\label{class_marker_detector_class_a9cbda114add0218eedaa9d0d994e81b3}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!Pub\_PoseCamera@{Pub\_PoseCamera}}
+\index{Pub\_PoseCamera@{Pub\_PoseCamera}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{Pub\_PoseCamera}{Pub\_PoseCamera}}
+{\footnotesize\ttfamily ros\+::\+Publisher Marker\+Detector\+Class\+::\+Pub\+\_\+\+Pose\+Camera}
+
+
+
+Definition at line 21 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_a00d02743b149f750768eb2ff20b8fa76}\label{class_marker_detector_class_a00d02743b149f750768eb2ff20b8fa76}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!Sub\_Camera@{Sub\_Camera}}
+\index{Sub\_Camera@{Sub\_Camera}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{Sub\_Camera}{Sub\_Camera}}
+{\footnotesize\ttfamily ros\+::\+Subscriber Marker\+Detector\+Class\+::\+Sub\+\_\+\+Camera}
+
+
+
+Definition at line 23 of file marker\+\_\+detector.\+h.
+
+\mbox{\Hypertarget{class_marker_detector_class_ae0a555265913bb005eec53a24499d885}\label{class_marker_detector_class_ae0a555265913bb005eec53a24499d885}} 
+\index{MarkerDetectorClass@{MarkerDetectorClass}!TotMarket@{TotMarket}}
+\index{TotMarket@{TotMarket}!MarkerDetectorClass@{MarkerDetectorClass}}
+\doxysubsubsection{\texorpdfstring{TotMarket}{TotMarket}}
+{\footnotesize\ttfamily int Marker\+Detector\+Class\+::\+Tot\+Market}
+
+
+
+Definition at line 30 of file marker\+\_\+detector.\+h.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{marker__detector_8h}{marker\+\_\+detector.\+h}}\item 
+src/\mbox{\hyperlink{marker__detector_8cpp}{marker\+\_\+detector.\+cpp}}\end{DoxyCompactItemize}

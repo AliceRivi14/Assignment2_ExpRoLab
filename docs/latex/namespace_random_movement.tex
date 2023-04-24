@@ -1,0 +1,131 @@
+\hypertarget{namespace_random_movement}{}\doxysection{Random\+Movement Namespace Reference}
+\label{namespace_random_movement}\index{RandomMovement@{RandomMovement}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_random_movement_1_1_random_movement}{Random\+Movement}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{namespace_random_movement_a796d22d027afcb457c785acbd7a50146}{Path}} = \textquotesingle{}E\+R\+L\+\_\+\+WS/src/assignment2/worlds/topological\+\_\+map.\+owl\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_random_movement_aa523313a1b7dac8dccda346feb90d3f9}{I\+RI}} = \textquotesingle{}http\+://bnc/exp-\/rob-\/lab/2022-\/23\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_random_movement_acc16f2fbac68170d03226c1142d8af71}{Robot}} = \textquotesingle{}Robot1\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_random_movement_a2949b47ca393c794a63a4008a745c153}{Armor\+\_\+\+Client\+\_\+\+ID}} = \textquotesingle{}User\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_random_movement_a7a308529606d31b90aac6fa5dd95493f}{Armor\+\_\+\+Reference\+Name}} = \textquotesingle{}Ref\textquotesingle{}
+\item 
+\mbox{\hyperlink{namespace_random_movement_ade81b74b300fbc67a4a573b6267641b8}{Armor\+\_\+\+Client}} = Armor\+Client(\mbox{\hyperlink{namespace_random_movement_a2949b47ca393c794a63a4008a745c153}{Armor\+\_\+\+Client\+\_\+\+ID}}, \mbox{\hyperlink{namespace_random_movement_a7a308529606d31b90aac6fa5dd95493f}{Armor\+\_\+\+Reference\+Name}})
+\item 
+\mbox{\hyperlink{namespace_random_movement_a2b84c914e63f46ed96cf233963507a94}{Rand\+Move}} = \mbox{\hyperlink{class_random_movement_1_1_random_movement}{Random\+Movement}}()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}.. module:: RandomMovement
+:platform: Unix
+:synopsis: Python module for robot random movement
+.. moduleauthor:: Alice Rivi S5135011@studenti.unige.it
+
+ROS node for implementing the RANDOM_MOVEMENT state of the finite state machine FSM.
+
+This node manages the movement of the robot based on information obtained about the 
+target room chosen by the FSM. 
+Based on the position and battery status it informs the FSM if the final position has 
+been reached or if the goal has been cancelled.
+
+Publishes to:
+/A/jointC_position_controller/command to publish the camera joint position 
+
+Subscribes to:
+/Room to establish the target room
+
+/odom where the simulator publishes the robot position
+
+Client:
+ArmorClient
+
+MoveBaseAction
+
+/BLevel to manage the robot's battery level
+
+Service:
+/Mapping_Switch to active the RANDOM_MOVEMENT state
+
+MoveBaseGoal\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_random_movement_ade81b74b300fbc67a4a573b6267641b8}\label{namespace_random_movement_ade81b74b300fbc67a4a573b6267641b8}} 
+\index{RandomMovement@{RandomMovement}!Armor\_Client@{Armor\_Client}}
+\index{Armor\_Client@{Armor\_Client}!RandomMovement@{RandomMovement}}
+\doxysubsubsection{\texorpdfstring{Armor\_Client}{Armor\_Client}}
+{\footnotesize\ttfamily Random\+Movement.\+Armor\+\_\+\+Client = Armor\+Client(\mbox{\hyperlink{namespace_random_movement_a2949b47ca393c794a63a4008a745c153}{Armor\+\_\+\+Client\+\_\+\+ID}}, \mbox{\hyperlink{namespace_random_movement_a7a308529606d31b90aac6fa5dd95493f}{Armor\+\_\+\+Reference\+Name}})}
+
+
+
+Definition at line 59 of file Random\+Movement.\+py.
+
+\mbox{\Hypertarget{namespace_random_movement_a2949b47ca393c794a63a4008a745c153}\label{namespace_random_movement_a2949b47ca393c794a63a4008a745c153}} 
+\index{RandomMovement@{RandomMovement}!Armor\_Client\_ID@{Armor\_Client\_ID}}
+\index{Armor\_Client\_ID@{Armor\_Client\_ID}!RandomMovement@{RandomMovement}}
+\doxysubsubsection{\texorpdfstring{Armor\_Client\_ID}{Armor\_Client\_ID}}
+{\footnotesize\ttfamily string Random\+Movement.\+Armor\+\_\+\+Client\+\_\+\+ID = \textquotesingle{}User\textquotesingle{}}
+
+
+
+Definition at line 57 of file Random\+Movement.\+py.
+
+\mbox{\Hypertarget{namespace_random_movement_a7a308529606d31b90aac6fa5dd95493f}\label{namespace_random_movement_a7a308529606d31b90aac6fa5dd95493f}} 
+\index{RandomMovement@{RandomMovement}!Armor\_ReferenceName@{Armor\_ReferenceName}}
+\index{Armor\_ReferenceName@{Armor\_ReferenceName}!RandomMovement@{RandomMovement}}
+\doxysubsubsection{\texorpdfstring{Armor\_ReferenceName}{Armor\_ReferenceName}}
+{\footnotesize\ttfamily string Random\+Movement.\+Armor\+\_\+\+Reference\+Name = \textquotesingle{}Ref\textquotesingle{}}
+
+
+
+Definition at line 58 of file Random\+Movement.\+py.
+
+\mbox{\Hypertarget{namespace_random_movement_aa523313a1b7dac8dccda346feb90d3f9}\label{namespace_random_movement_aa523313a1b7dac8dccda346feb90d3f9}} 
+\index{RandomMovement@{RandomMovement}!IRI@{IRI}}
+\index{IRI@{IRI}!RandomMovement@{RandomMovement}}
+\doxysubsubsection{\texorpdfstring{IRI}{IRI}}
+{\footnotesize\ttfamily string Random\+Movement.\+I\+RI = \textquotesingle{}http\+://bnc/exp-\/rob-\/lab/2022-\/23\textquotesingle{}}
+
+
+
+Definition at line 54 of file Random\+Movement.\+py.
+
+\mbox{\Hypertarget{namespace_random_movement_a796d22d027afcb457c785acbd7a50146}\label{namespace_random_movement_a796d22d027afcb457c785acbd7a50146}} 
+\index{RandomMovement@{RandomMovement}!Path@{Path}}
+\index{Path@{Path}!RandomMovement@{RandomMovement}}
+\doxysubsubsection{\texorpdfstring{Path}{Path}}
+{\footnotesize\ttfamily string Random\+Movement.\+Path = \textquotesingle{}E\+R\+L\+\_\+\+WS/src/assignment2/worlds/topological\+\_\+map.\+owl\textquotesingle{}}
+
+
+
+Definition at line 53 of file Random\+Movement.\+py.
+
+\mbox{\Hypertarget{namespace_random_movement_a2b84c914e63f46ed96cf233963507a94}\label{namespace_random_movement_a2b84c914e63f46ed96cf233963507a94}} 
+\index{RandomMovement@{RandomMovement}!RandMove@{RandMove}}
+\index{RandMove@{RandMove}!RandomMovement@{RandomMovement}}
+\doxysubsubsection{\texorpdfstring{RandMove}{RandMove}}
+{\footnotesize\ttfamily Random\+Movement.\+Rand\+Move = \mbox{\hyperlink{class_random_movement_1_1_random_movement}{Random\+Movement}}()}
+
+
+
+Definition at line 259 of file Random\+Movement.\+py.
+
+\mbox{\Hypertarget{namespace_random_movement_acc16f2fbac68170d03226c1142d8af71}\label{namespace_random_movement_acc16f2fbac68170d03226c1142d8af71}} 
+\index{RandomMovement@{RandomMovement}!Robot@{Robot}}
+\index{Robot@{Robot}!RandomMovement@{RandomMovement}}
+\doxysubsubsection{\texorpdfstring{Robot}{Robot}}
+{\footnotesize\ttfamily string Random\+Movement.\+Robot = \textquotesingle{}Robot1\textquotesingle{}}
+
+
+
+Definition at line 55 of file Random\+Movement.\+py.
+

@@ -1,0 +1,57 @@
+\hypertarget{namespace_battery}{}\doxysection{Battery Namespace Reference}
+\label{namespace_battery}\index{Battery@{Battery}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_battery_1_1_battery}{Battery}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespace_battery_a3e2e4ff5bcd801dda0634fa415405b47}{B\+Lev}} = 100
+\item 
+\mbox{\hyperlink{namespace_battery_a14122c8646305803979b1e2709232b1c}{Batt}} = \mbox{\hyperlink{class_battery_1_1_battery}{Battery}}()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}.. module:: Battery
+    :platform: Unix
+    :synopsis: Python module for battery control
+.. moduleauthor:: Alice Rivi S5135011@studenti.unige.it
+
+ROS node for implementing the ROOM_E state of the finite state machine FSM.
+
+This node allows the robot to recharge its battery in room E.
+Once the battery is fully charged, the FSM is informed.
+
+Client:
+    /BLevel to manage the robot's battery level
+
+    /Movement_Switch to move the robot into room E where it can recharge itself
+
+Service:
+    /Recharging_Switch to active the ROOM_E state\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_battery_a14122c8646305803979b1e2709232b1c}\label{namespace_battery_a14122c8646305803979b1e2709232b1c}} 
+\index{Battery@{Battery}!Batt@{Batt}}
+\index{Batt@{Batt}!Battery@{Battery}}
+\doxysubsubsection{\texorpdfstring{Batt}{Batt}}
+{\footnotesize\ttfamily Battery.\+Batt = \mbox{\hyperlink{class_battery_1_1_battery}{Battery}}()}
+
+
+
+Definition at line 100 of file Battery.\+py.
+
+\mbox{\Hypertarget{namespace_battery_a3e2e4ff5bcd801dda0634fa415405b47}\label{namespace_battery_a3e2e4ff5bcd801dda0634fa415405b47}} 
+\index{Battery@{Battery}!BLev@{BLev}}
+\index{BLev@{BLev}!Battery@{Battery}}
+\doxysubsubsection{\texorpdfstring{BLev}{BLev}}
+{\footnotesize\ttfamily int Battery.\+B\+Lev = 100}
+
+
+
+Definition at line 31 of file Battery.\+py.
+

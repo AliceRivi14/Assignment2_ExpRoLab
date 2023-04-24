@@ -1,0 +1,83 @@
+\hypertarget{namespace_topological_map}{}\doxysection{Topological\+Map Namespace Reference}
+\label{namespace_topological_map}\index{TopologicalMap@{TopologicalMap}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_topological_map_1_1_topological___map}{Topological\+\_\+\+Map}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{namespace_topological_map_a81fa7f0b93d3c76023918040c89831cd}{Path}} = \textquotesingle{}E\+R\+L\+\_\+\+WS/src/assignment2/worlds/topological\+\_\+map.\+owl\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_topological_map_a7763f6f33315b93014d1a32e5d3b791b}{I\+RI}} = \textquotesingle{}http\+://bnc/exp-\/rob-\/lab/2022-\/23\textquotesingle{}
+\item 
+string \mbox{\hyperlink{namespace_topological_map_a128df3a8c8b43165520ee0caa0aee60e}{Robot}} = \textquotesingle{}Robot1\textquotesingle{}
+\item 
+\mbox{\hyperlink{namespace_topological_map_afe9563d7d45409b5680e198c2dfe565d}{Top\+Map}} = \mbox{\hyperlink{class_topological_map_1_1_topological___map}{Topological\+\_\+\+Map}}()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}.. module:: TopologicalMap
+    :platform: Unix
+    :synopsis: Python module for topologic map construction
+.. moduleauthor:: Alice Rivi S5135011@studenti.unige.it
+
+ROS node for implementing the TOPOLOGICAL_MAP state of the finite state machine FSM.
+
+This node allows the map to be constructed by loading the ontology, based on the 
+information obtained from the markers.
+Once the map is constructed, a signal is sent to the FSM.
+
+Subscribes to:
+    /MarkerList to retrive information from ArUco markers
+
+Client:
+    ArmorClient
+
+Service:
+    /Mapping_Switch to active the TOPOLOGICAL_MAP state\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_topological_map_a7763f6f33315b93014d1a32e5d3b791b}\label{namespace_topological_map_a7763f6f33315b93014d1a32e5d3b791b}} 
+\index{TopologicalMap@{TopologicalMap}!IRI@{IRI}}
+\index{IRI@{IRI}!TopologicalMap@{TopologicalMap}}
+\doxysubsubsection{\texorpdfstring{IRI}{IRI}}
+{\footnotesize\ttfamily string Topological\+Map.\+I\+RI = \textquotesingle{}http\+://bnc/exp-\/rob-\/lab/2022-\/23\textquotesingle{}}
+
+
+
+Definition at line 36 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{namespace_topological_map_a81fa7f0b93d3c76023918040c89831cd}\label{namespace_topological_map_a81fa7f0b93d3c76023918040c89831cd}} 
+\index{TopologicalMap@{TopologicalMap}!Path@{Path}}
+\index{Path@{Path}!TopologicalMap@{TopologicalMap}}
+\doxysubsubsection{\texorpdfstring{Path}{Path}}
+{\footnotesize\ttfamily string Topological\+Map.\+Path = \textquotesingle{}E\+R\+L\+\_\+\+WS/src/assignment2/worlds/topological\+\_\+map.\+owl\textquotesingle{}}
+
+
+
+Definition at line 35 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{namespace_topological_map_a128df3a8c8b43165520ee0caa0aee60e}\label{namespace_topological_map_a128df3a8c8b43165520ee0caa0aee60e}} 
+\index{TopologicalMap@{TopologicalMap}!Robot@{Robot}}
+\index{Robot@{Robot}!TopologicalMap@{TopologicalMap}}
+\doxysubsubsection{\texorpdfstring{Robot}{Robot}}
+{\footnotesize\ttfamily string Topological\+Map.\+Robot = \textquotesingle{}Robot1\textquotesingle{}}
+
+
+
+Definition at line 37 of file Topological\+Map.\+py.
+
+\mbox{\Hypertarget{namespace_topological_map_afe9563d7d45409b5680e198c2dfe565d}\label{namespace_topological_map_afe9563d7d45409b5680e198c2dfe565d}} 
+\index{TopologicalMap@{TopologicalMap}!TopMap@{TopMap}}
+\index{TopMap@{TopMap}!TopologicalMap@{TopologicalMap}}
+\doxysubsubsection{\texorpdfstring{TopMap}{TopMap}}
+{\footnotesize\ttfamily Topological\+Map.\+Top\+Map = \mbox{\hyperlink{class_topological_map_1_1_topological___map}{Topological\+\_\+\+Map}}()}
+
+
+
+Definition at line 164 of file Topological\+Map.\+py.
+
