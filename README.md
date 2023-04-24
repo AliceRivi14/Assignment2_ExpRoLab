@@ -16,7 +16,7 @@ The robotic arm of the robot is moved using the [MoveIt](https://moveit.ros.org/
 
 Software Architecture
 ------------------------
-There are 5 nodes in this software architecture:
+There are 6 nodes in this software architecture:
 * [StateMachine](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/StateMachine.py)
 * [TopologicalMap](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/TopologicalMap.py)
 * [RandomMovement](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/script/RandomMovement.py)
