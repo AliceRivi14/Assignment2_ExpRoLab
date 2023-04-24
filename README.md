@@ -134,7 +134,7 @@ The present class is characterised by 2 methods:
 
 * `MappingSwitchCB(req)`:
 
-    Function to inform the finished FSM state machine that the ontology has been with the relevant information about the robot's rooms and initial position. the robot.
+    Function to inform the FSM that the ontology has been build with the relevant information about the rooms and robot's initial position.
         
 
 Running the TopologicalMap node in the terminal should show similar output
