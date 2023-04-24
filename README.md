@@ -26,7 +26,7 @@ There are 6 nodes in this software architecture:
 * [Marker Server](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/src/marker_server.cpp)
 
 Here we can see the Component-Based Software Engineering diagram:
-![UML.png](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/UML.png)
+![UML.png](https://github.com/AliceRivi14/Assignment2_ExpRoLab/blob/main/images/UML_Diagram.png)
 
 
 ### StateMachine node
