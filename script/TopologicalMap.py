@@ -106,7 +106,6 @@ class Topological_Map:
         while len(self.IdList) != 7:
             time.sleep(0.5)
         for i in self.IdList:
-        #for i in range(11, 18): #DEBUG FINCHE' NON LEGGE I MARKER
             resp = RoomClient(i)
             self.Location.append(resp.room)
             self.LocationDict[resp.room] = resp.connections
