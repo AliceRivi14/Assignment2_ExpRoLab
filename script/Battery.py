@@ -63,7 +63,6 @@ class Battery:
         print('ROOM_E')
 
         global BLev
-        i = 0
 
         if self.B_Client().LevelF < 30:
             print('\033[91mBATTERY LOW\033[0m')
